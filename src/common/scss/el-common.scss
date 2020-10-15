@@ -1,0 +1,56 @@
+.el-table td,
+.el-table th.is-leaf,
+.el-table--border,
+.el-table--group {
+    border-color: var(--border-gray) !important; //#d5dae2;
+}
+.el-table--border th {
+    border-bottom-color: var(--border-gray) !important;
+}
+.el-table--border th,
+.el-table--border td {
+    border-right-color: var(--border-gray) !important;
+}
+.el-table--border {
+    border-left: 1px solid var(--border-gray) !important;
+}
+.el-table--border::after,
+.el-table--group::after,
+.el-table::before {
+    background-color: var(--border-gray) !important; //#d5dae2;
+}
+.el-dialog {
+    margin-top: 10vh !important;
+}
+.el-dialog__body {
+    padding: 10px 10px;
+}
+.el-input.is-disabled .el-input__inner {
+    color: #999;
+}
+.innerDialog {
+    .el-dialog {
+        margin-top: 15vh !important;
+    }
+}
+.el-menu--collapse > div > .el-submenu > .el-submenu__title span {
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    visibility: hidden;
+    display: inline-block;
+}
+.el-menu--collapse > div > .el-submenu > .el-submenu__title .el-submenu__icon-arrow {
+    display: none;
+}
+.el-menu-vertical-demo {
+    width: 100%;
+}
+
+.el-table .warning-row {
+    background: oldlace;
+}
+
+.el-table .success-row {
+    background: #f0f9eb;
+}
