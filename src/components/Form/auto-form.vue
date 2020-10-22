@@ -119,6 +119,7 @@
         v-model="ruleForm[item.prop]"
         type="date"
         placeholder="选择日期"
+        value-format="yyyy-MM-dd"
       >
       </el-date-picker>
       <div v-else-if="item.elType === 'blank'"></div>
@@ -150,7 +151,13 @@ export default {
       }
       if (it.CamelChars) {
         this.$watch(`ruleForm.${it.prop}`, (val) => {
-          this.ruleForm[it.CamelChars] = this.$str.py.getCamelChars(val)
+          if (typeof it.CamelChars === 'string') {
+            this.ruleForm[it.CamelChars] = this.$str.py.getCamelChars(val)
+          } else if (it.CamelChars instanceof Array) {
+            it.CamelChars.forEach(k => {
+              this.ruleForm[k] = this.$str.py.getCamelChars(val).replace(/ /g, '')
+            })
+          }
         })
       }
     })
@@ -219,7 +226,7 @@ export default {
               ...this.$format.copy(this.initArea)
             }
           } else {
-            return { ...t, [item.prop]: '' }
+            return { ...t, [item.prop]: item.num ? 0 : (item.defaultVal || '') }
           }
         }, {})
       }
@@ -231,7 +238,7 @@ export default {
       })
     },
     querySearchAsync (q, cb, item) {
-      this.$api[item.api]({ [item.sendKey || item.prop]: q }).then(
+      this.$api[item.api]({ [item.sendKey || item.prop]: q }, true).then(
         (data) => {
           cb(data.res)
         },

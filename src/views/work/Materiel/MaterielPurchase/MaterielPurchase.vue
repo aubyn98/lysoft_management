@@ -10,82 +10,65 @@
           :formItems="formItems"
         />
       </div>
-      <div class="billTitle-right" style="left:800px">
+      <div class="billTitle-right" style="left: 800px">
         <div class="billTitle-right-table">
           <edit-table
-            hideNum
-            hideSum
-            hideContext
+            hide-num
+            hide-sum
+            hide-context
+            header-bg
             ref="editTable2"
             name="MaterielPurchaseTitle"
-            :sourceData="tableDataTitle"
             :columns.sync="columnsTitle"
             :disabled="disabled"
           />
         </div>
       </div>
     </div>
-    <content-table :columns.sync="contentColumn" name="MaterielPurchaseContentTable">
-      <template #a>
-        <edit-table
-          ref="editTable"
-          name="MaterielPurchase"
-          :sourceData="tableDataXx"
-          :columns.sync="columnsXx"
-          :sums="countXx.sums"
-          :disabled="disabled"
-        />
-      </template>
-      <template #b>
-        <edit-table
-          ref="editTable"
-          name="MaterielPurchase"
-          :sourceData="tableDataXx"
-          :columns.sync="columnsXx"
-          :sums="countXx.sums"
-          :disabled="disabled"
-        />
-      </template>
-    </content-table>
+    <edit-table
+      ref="editTable"
+      name="MaterielPurchase"
+      :columns.sync="columnsLeft"
+      :disabled="disabled"
+    />
   </div>
 </template>
 
 <script type="text/javascript">
-import { columnsXx, columnsTitle } from './columns'
+import { bill } from '@/common/mixins'
+import { columnsLeft, columnsTitle } from './columns'
 import formItems from './formItems'
 export default {
+  mixins: [bill],
   data () {
     return {
       formItems,
-      columnsXx,
+      columnsLeft,
       columnsTitle,
-      contentColumn: [{ prop: 'a', width: 400 }, { prop: 'b', width: 400 }],
       countXx: {
         sums: [],
         total: 100
       },
+      sendData: {},
       disabled: false,
-      tableDataXx: [{ khmc: 'aa' }],
-      tableDataTitle: [{ kddh: '', kdrq: '2020-10-10', lsdh: '', zdr: '' }]
+      tableData: [],
+      tableDataTitle: []
     }
   },
   mounted () {
-
+    this.initData()
+    this.getData().then(res => {
+      console.log(res)
+    })
   },
   methods: {
-    editChange () {
+    editChange ({ action, edit, cb }) {
       this.$refs.autoForm.submitForm().then((res) => {
         console.log(res)
       })
-    },
-    rowClickXx () {},
-    rowDblclick () {},
-    sendTableData ({ i, row }) {
-      return this.$refs.editTable.sendTableData()
     }
   }
 }
 </script>
 <style lang="scss">
-
 </style>

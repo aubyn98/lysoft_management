@@ -14,6 +14,7 @@
       :row-class-name="tableRowClassName"
       :show-summary="autoSums.length > 1"
       :summary-method="getSummaries"
+      :span-method="spanMethod ? objectSpanMethod : () => {}"
       @current-change="handleCurrentChange"
       @header-dragend="dragend"
       @row-click="rowClick"
@@ -65,14 +66,22 @@
           <!-- eslint-disable-next-line -->
           <template slot="header" slot-scope="scope">
             <el-input
-              v-if="!column.checked"
+              v-if="!column.elType"
               v-model.trim="msg[column.prop]"
               size="mini"
               @keyup.native.enter="inputEeter(scope)"
               placeholder="输入关键字回车搜索"
             />
+            <el-date-picker
+              value-format="yyyy-MM-dd"
+              v-else-if="column.elType === 'date'"
+              v-model="msg[column.prop]"
+              type="date"
+              placeholder="选择日期"
+            >
+            </el-date-picker>
             <el-checkbox
-              v-else
+              v-else-if="column.elType === 'checkbox'"
               v-model="msg[column.prop]"
               @change="inputEeter(scope)"
             ></el-checkbox>
@@ -91,19 +100,19 @@
     <div
       class="search-table-pagination"
       data-small
-      v-if="small && !hidePagination && count > pageSize"
+      v-if="small && !hidePagination && autoCount > pageSize"
     >
       <el-pagination
         :disabled="loading"
         layout="prev, next,jumper"
-        :total="count"
+        :total="autoCount"
         :page-size="pageSize"
         :current-page="msg.page"
         @current-change="currentChange"
         small
       >
       </el-pagination>
-      <div class="totalPage">{{ Math.ceil(count / pageSize) }}页</div>
+      <div class="totalPage">{{ Math.ceil(autoCount / pageSize) }}页</div>
     </div>
     <div
       class="search-table-pagination"
@@ -125,13 +134,21 @@
 </template>
 
 <script type="text/javascript">
-import { dragendTable, customTable } from '@/common/mixins'
+import { dragendTable, customTable } from './mixins'
 export default {
   mixins: [dragendTable, customTable],
   created () {
     this.request(true)
   },
   props: {
+    mergeColumns: {
+      type: Array,
+      default: () => []
+    },
+    spanMethod: {
+      type: Boolean,
+      default: false
+    },
     hideLoading: {
       type: Boolean,
       default: false
@@ -139,6 +156,9 @@ export default {
     hideSearch: {
       type: Boolean,
       default: false
+    },
+    sourceCount: {
+      type: Number
     },
     sourceData: {
       type: Array,
@@ -171,17 +191,42 @@ export default {
   data () {
     return {
       count: 0,
-      sums: [],
       tableData: [],
       loading: false
     }
   },
   computed: {
+    autoCount () {
+      return this.api ? this.count : this.sourceCount
+    },
     autoTableData () {
+      // this.doLayout()
       return this.api ? this.tableData : this.sourceData
     }
   },
   methods: {
+    objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
+      if (this.mergeColumns.includes(column.property) && row.count) {
+        return {
+          rowspan: row.count,
+          colspan: 1
+        }
+      } else if (this.mergeColumns.includes(column.property) && !row.count) {
+        return {
+          rowspan: 0,
+          colspan: 0
+        }
+      }
+    },
+    setSums (data) {
+      const sums = ['合计']
+      this.autoColumns.forEach((v, index) => {
+        if (v.sumProp) {
+          sums[index + 1] = parseFloat(data[v.sumProp]) || 0
+        }
+      })
+      this.sums = sums
+    },
     addRow (row) {
       this.tableData.unshift(row)
     },
@@ -196,8 +241,8 @@ export default {
     },
     request (flag) {
       return new Promise((resolve, reject) => {
+        flag && (this.msg.page = 1)
         if (this.api) {
-          flag && (this.msg.page = 1)
           !this.hideLoading && (this.loading = true)
           this.$emit('reqStart')
           this.$api[this.api](
@@ -211,16 +256,11 @@ export default {
               this.tableData = data.res
               !this.hidePagination && (this.count = data.count)
               if (!this.hideSums) {
-                const sums = ['合计']
-                this.autoColumns.forEach((v, index) => {
-                  if (v.sumProp) {
-                    sums[index + 1] = data[v.sumProp]
-                  }
-                })
-                this.sums = sums
+                this.setSums(data)
               }
             })
             .catch((e) => {
+              this.loading = false
               reject(e)
             })
         }

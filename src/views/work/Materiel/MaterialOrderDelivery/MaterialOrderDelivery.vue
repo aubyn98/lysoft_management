@@ -3,18 +3,24 @@
     <div class="page-RowContent">
       <div class="page-RowContent-item" data-left>
         <search-table
-          name="MaterialOrderDeliveryTable"
           small
-          :tableData="tableDataXx"
+          span-method
+          ref="searchTable"
+          name="MaterialOrderDeliveryTable"
+          :sourceData="tableData"
           :columns.sync="columnsXx"
-          :total="countXx.total"
           :pageSize="30"
-          :sums="countXx.sums"
+          :sourceCount="count"
+          :merge-columns="mergeColumns"
           @row-dblclick="rowDblclick"
-          @send-change="sendChangeXx"
+          @send-change="sendChange"
         />
       </div>
-      <div class="page-RowContent-item" style="width: 140px;align-items:center;" data-hover>
+      <div
+        class="page-RowContent-item"
+        style="width: 160px; align-items: center"
+        data-hover
+      >
         <auto-form
           class="searchForm"
           ref="autoForm"
@@ -22,44 +28,64 @@
           :formItems="formItems"
           label-position="top"
         />
-        <el-button type="primary" size="mini" class="search-form-btn">查询</el-button>
-        <el-button type="primary" size="mini" class="search-form-btn">查询超期</el-button>
-        <el-button type="primary" size="mini" class="search-form-btn">打印</el-button>
-        <el-button type="primary" size="mini" class="search-form-btn">导出</el-button>
+        <el-checkbox v-model="attach.ycjd">隐藏结单与发完数据</el-checkbox>
+        <el-button
+          type="primary"
+          size="mini"
+          class="search-form-btn"
+          @click="
+            () => {
+              (attach.cq = 0), request();
+            }
+          "
+          >查询</el-button
+        >
+        <el-button
+          type="primary"
+          size="mini"
+          class="search-form-btn"
+          @click="
+            () => {
+              (attach.cq = 1), request();
+            }
+          "
+          >查询超期</el-button
+        >
+        <el-button type="primary" size="mini" class="search-form-btn"
+          >打印</el-button
+        >
+        <el-button type="primary" size="mini" class="search-form-btn"
+          >导出</el-button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/javascript">
+import { statistics } from '@/common/mixins'
 import { columnsXx } from './columns'
 import formItems from './formItems'
 export default {
   data () {
     return {
+      formItems,
       columnsXx,
-      countXx: {
-        total: 0,
-        sums: {}
+      api: 'getMaterialOrderDelivery',
+      attach: {
+        ycjd: false,
+        cq: 0
       },
-      tableDataXx: [],
-      formItems
+      groupKey: ['dh', 'khmc', 'rq'],
+      mergeColumns: ['khmc', 'rq', 'dh', 'lsdh', 'wlbh', 'wlmc', 'lx', 'dw']
     }
   },
+  mixins: [statistics],
   methods: {
-    sendChangeXx () {},
     rowDblclick () {}
   }
 }
 </script>
 <style lang="scss">
-.searchForm {
-  .el-form-item {
-    height: 56px;
-    margin-bottom: 0px;
-  }
-  .el-form-item__label {
-    padding: 0;
-  }
-}
+
 </style>

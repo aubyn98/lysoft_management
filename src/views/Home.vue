@@ -81,17 +81,34 @@
               @editable="handleSelect"
               :ref="item.name"
             ></component>
-            <MaterielColor :visible.sync="dialogColorVisible" />
           </el-tab-pane>
         </el-tabs>
       </el-main>
       <!-- <el-footer>Footer</el-footer> -->
     </el-container>
+    <component
+      v-for="d in dialogs"
+      :key="d.index"
+      :is="d.index"
+      :visible.sync="visibles[d.index]"
+      :ref="d.index"
+      @close="dialogClose(d.index)"
+    ></component>
   </el-container>
 </template>
 
 <script>
 import { tabs as tabData, menus } from './tabData'
+const dialogs = Object.keys(tabData).reduce((t, k) => {
+  if (tabData[k].dialog) {
+    t.push({ ...tabData[k], index: k })
+  }
+  return t
+}, [])
+const visibles = dialogs.reduce((t, it) => {
+  t[it.index] = false
+  return t
+}, {})
 export default {
   data () {
     return {
@@ -101,11 +118,13 @@ export default {
       isCollapse: true,
       editableTabs: [],
       editableTabsValue: '',
+      dialogs,
+      visibles,
       menus
     }
   },
   created () {
-    this.initMenu(tabData.Vendor, 'Vendor')
+    this.initMenu(tabData.MonthlyStatusTable, 'MonthlyStatusTable')
   },
   watch: {
     activeArr: {
@@ -118,6 +137,9 @@ export default {
     }
   },
   methods: {
+    dialogClose (index) {
+      this.removeTab(index)
+    },
     initMenu (tab, name) {
       this.activeArr.push(name)
       this.addTab(tab, name)
@@ -149,20 +171,17 @@ export default {
       this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
     },
     handleSelect (index, options) {
-      if (!this.activeArr.includes(index) && tabData[index]) {
+      if (
+        !this.activeArr.includes(index) &&
+        tabData[index]
+      ) {
         this.activeArr.push(index)
         this.addTab(tabData[index], index)
-      } else {
-        if (index === '2-1') {
-          this.show = true
-        }
+      }
+      if (tabData[index].dialog) {
+        this.visibles[index] = true
       }
       this.editableTabsValue = index
-      if (options.name) {
-        this.$nextTick(() => {
-          this.$refs[options.name][0].addMsg(options.msg)
-        })
-      }
     }
   }
 }

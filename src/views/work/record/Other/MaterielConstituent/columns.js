@@ -1,6 +1,6 @@
-export const columns = [
+export const columnsPp = [
   {
-    label: '成分',
+    label: '物料成分',
     prop: 'cf',
     width: 180,
     show: true

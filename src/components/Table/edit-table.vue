@@ -2,6 +2,7 @@
   <!-- eslint-disable -->
   <div
     class="search-table"
+    :class="{ searchTable_black: headerBg }"
     @contextmenu.prevent.stop="contextmenu"
     @click="visible = false"
     data-edit
@@ -63,7 +64,72 @@
         :prop="column.prop"
         :width="column.width"
       >
-        <template slot-scope="scope">
+        <el-table-column
+          v-if="showSearch"
+          :label="column.label"
+          align="center"
+          :key="column.prop"
+          :prop="column.prop"
+          :width="column.width"
+        >
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-if="!column.checked"
+              v-model.trim="msg[column.prop]"
+              size="mini"
+              @keyup.native.enter="inputEeter(scope)"
+              placeholder="输入关键字回车搜索"
+            />
+            <el-checkbox
+              v-else
+              v-model="msg[column.prop]"
+              @change="inputEeter(scope)"
+            ></el-checkbox>
+          </template>
+          <template slot-scope="scope">
+            <el-input
+              size="mini"
+              style="width: 100%"
+              :readonly="column.readonly"
+              :disabled="disabled"
+              v-if="!column.elType"
+              v-model="scope.row[column.prop]"
+              @contextmenu.stop.prevent="contextmenu"
+              @input="input($event,scope.row,column.prop)"
+            ></el-input>
+            <el-checkbox
+              :disabled="disabled"
+              v-model="scope.row[column.prop]"
+              v-else-if="column.elType === 'checkbox'"
+            ></el-checkbox>
+            <el-autocomplete
+              :disabled="disabled"
+              highlight-first-item
+              select-when-unmatched
+              placeholder="请输入内容"
+              v-else-if="column.elType === 'autocomplete'"
+              v-model="scope.row[column.prop]"
+              :value-key="column.prop"
+              :fetch-suggestions="
+                (q, cb) => querySearchAsync(q, cb, column, scope.row)
+              "
+              @select="
+                column.relation &&
+                  autocompleteSelect($event, column.relation, scope.row)
+              "
+            ></el-autocomplete>
+            <el-date-picker
+              style="width: 100%"
+              :disabled="disabled"
+              v-else-if="column.elType === 'date'"
+              v-model="scope.row[column.prop]"
+              type="date"
+              placeholder="选择日期"
+            >
+            </el-date-picker>
+          </template>
+        </el-table-column>
+        <template slot-scope="scope" v-if="!showSearch">
           <el-input
             size="mini"
             style="width: 100%"
@@ -72,7 +138,13 @@
             v-if="!column.elType"
             v-model="scope.row[column.prop]"
             @contextmenu.stop.prevent="contextmenu"
+            @input="input($event,scope.row,column.prop)"
           ></el-input>
+          <el-checkbox
+            :disabled="disabled"
+            v-model="scope.row[column.prop]"
+            v-else-if="column.elType === 'checkbox'"
+          ></el-checkbox>
           <el-autocomplete
             :disabled="disabled"
             highlight-first-item
@@ -108,23 +180,33 @@
       @click="visible = false"
       @contextmenu.stop.prevent
     >
-      <li @click="addRow">添加</li>
-      <li @click="delRow">删除</li>
+      <li @click="addRow" v-if="!hideAddMenu">添加</li>
+      <li @click="delRow" v-if="!hideDelMenu">删除</li>
     </ol>
   </div>
 </template>
 
 <script type="text/javascript">
-import { dragendTable, customTable } from '@/common/mixins'
+import { dragendTable, customTable } from './mixins'
 export default {
   mixins: [dragendTable, customTable],
-  created () {
-    this.initTableData()
-  },
-  mounted () {
-    this.setCurrentRow(this.tableData[0])
-  },
   props: {
+    hideAddMenu: {
+      type: Boolean,
+      default: false
+    },
+    hideDelMenu: {
+      type: Boolean,
+      default: false
+    },
+    headerBg: {
+      type: Boolean,
+      default: false
+    },
+    showSearch: {
+      type: Boolean,
+      default: false
+    },
     hideNum: {
       type: Boolean,
       default: false
@@ -137,10 +219,6 @@ export default {
       type: Boolean,
       default: false
     },
-    sourceData: {
-      type: Array,
-      required: true
-    },
     disabled: {
       type: Boolean,
       default: true
@@ -149,11 +227,41 @@ export default {
   data () {
     return {
       tableData: [],
+      add: [],
       visible: false,
+      sums: [],
       position: { x: '1', y: '1' }
     }
   },
+  watch: {
+    tableData: {
+      handler (val) {
+        /* const computeds = this.columns
+          .filter((c) => c.computed)
+          .map(({ prop, computed }) => ({ prop, computed }))
+        val.forEach((row) => {
+          computeds.forEach(c => {
+            row[c.prop] = c.computed(row)
+          })
+        }) */
+        this.doLayout()
+      },
+      deep: true
+    }
+  },
   methods: {
+    input (val, row, prop) {
+      const computeds = this.columns
+        .filter((c) => c.computed)
+        .map(({ prop, computed }) => ({ prop, computed }))
+      computeds.forEach(c => {
+        if (typeof c.computed === 'function') {
+          row[c.prop] = c.computed(row)
+        } else if (c.computed.props.includes(prop)) {
+          row[c.prop] = c.computed.handler(row)
+        }
+      })
+    },
     autocompleteSelect (v, relation, row) {
       relation.forEach((key) => {
         row[key] = v[key]
@@ -171,19 +279,27 @@ export default {
             : {})
         },
         true
-      ).then(data => {
-        cb(data.res)
-      }, e => {})
+      ).then(
+        (data) => {
+          cb(data.res)
+        },
+        (e) => {}
+      )
     },
-    sendTableData () {
+    submitTable () {
       return this.$format.copy(this.tableData)
     },
-    initTableData () {
-      this.tableData = this.$format.copy(this.sourceData)
+    initTableData (val = null) {
+      this.tableData = this.$format.copy(val || [])
+      this.addRow()
     },
     addRow () {
       const o = this.columns.reduce((t, c) => {
-        t[c.prop] = ''
+        if (c.elType === 'checkbox') {
+          t[c.prop] = false
+        } else {
+          t[c.prop] = ''
+        }
         return t
       }, {})
       this.tableData.push(o)
@@ -201,6 +317,12 @@ export default {
       if (this.disabled || this.hideContext) return
       this.visible = true
       this.position = { x, y }
+    },
+    inputEeter (scope) {
+      console.log(scope)
+    },
+    getSummaries () {
+      return this.autoSums
     }
   },
   computed: {
@@ -213,6 +335,7 @@ export default {
           }, 0)
         }
       })
+      this.doLayout()
       return sums
     }
   }
@@ -221,9 +344,19 @@ export default {
 
 <style lang="scss">
 .search-table[data-edit] {
+  width: 100%;
   overflow-y: auto;
   .el-table__body tr.current-row > td {
     background-color: var(--current-row-bg);
+  }
+}
+.searchTable_black {
+  .header-cell-class-name {
+    background-color: var(--editTable-header-black);
+    .cell {
+      background-color: var(--editTable-header-black);
+      color: white;
+    }
   }
 }
 .search-table {
@@ -264,7 +397,7 @@ export default {
         height: 30px;
         line-height: 30px;
       }
-      .el-input__icon{
+      .el-input__icon {
         line-height: 30px;
       }
     }

@@ -27,7 +27,7 @@ export const columnsXx = [
   },
   {
     label: '供货类型',
-    prop: 'ghlx',
+    prop: 'lx',
     width: 180,
     show: true
   }

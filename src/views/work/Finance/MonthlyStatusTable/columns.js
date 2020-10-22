@@ -1,238 +1,197 @@
-export const columnsXx = [
+export const columnsKh = [
   {
     label: '客户名称',
     prop: 'khmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '客户编号',
-    prop: 'khbh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
-    show: true
-  },
-  {
-    label: '单据累欠',
-    prop: 'templjqk',
-    width: 180,
-    show: true,
-    sumProp: 'templjqk'
-  },
-  {
-    label: '审核累欠',
-    prop: 'ljqk',
-    width: 180,
-    show: true,
-    sumProp: 'ljqk'
-  },
-  {
-    label: '客户类型',
-    prop: 'lx',
-    width: 180,
-    show: true
-  },
-  {
-    label: '客户等级',
-    prop: 'khdj',
-    width: 180,
-    show: true
-  }
-]
-export const columnsRight = [
-  {
-    label: '品牌',
-    prop: 'pp',
-    width: 180,
-    show: true
-  }
-]
-export const columnsLb = [
-  {
-    label: '客户名称',
-    prop: 'khmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
+    width: 100,
     show: true
   },
   {
     label: '客户类型',
-    prop: 'lx',
-    width: 180,
+    prop: 'khlx',
+    width: 100,
     show: true
-  },
-  {
-    label: '审核欠款',
-    prop: 'ljqk',
-    width: 180,
+  }, {
+    label: '上次结欠',
+    prop: 'scjq',
+    width: 100,
     show: true,
-    sumProp: 'ljqk'
-  },
-  {
-    label: '单据累欠',
-    prop: 'templjqk',
-    width: 180,
+    sumProp: 'scjq'
+  }, {
+    label: '销售额',
+    prop: 'xse',
+    width: 100,
     show: true,
-    sumProp: 'templjqk'
-  },
-  {
-    label: '累欠上限',
-    prop: 'xye',
-    width: 180,
-    show: true
-  },
-  {
-    label: '折扣',
-    prop: 'zk',
-    width: 180,
-    show: true
-  },
-  {
-    label: '联系人',
-    prop: 'lxr',
-    width: 180,
-    show: true
-  },
-  {
-    label: '手机',
-    prop: 'sj',
-    width: 180,
-    show: true
-  },
-  {
-    label: '电话',
-    prop: 'dh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '地址',
-    prop: 'dz',
-    width: 180,
-    show: true
-  },
-  {
-    label: '传真',
-    prop: 'cz',
-    width: 180,
-    show: true
-  },
-  {
-    label: '邮箱',
-    prop: 'yx',
-    width: 180,
-    show: true
-  },
-  {
-    label: '网址',
-    prop: 'wz',
-    width: 180,
-    show: true
-  },
-  {
-    label: '开户银行',
-    prop: 'khyh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '银行账号',
-    prop: 'yhzh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '开户人',
-    prop: 'khr',
-    width: 180,
-    show: true
-  },
-  {
-    label: '客户等级',
-    prop: 'khdj',
-    width: 180,
-    show: true
-  },
-  {
-    label: '业务分配',
-    prop: 'ywfp',
-    width: 180,
-    show: true
-  },
-  {
-    label: '省份',
-    prop: 'sfmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '市区',
-    prop: 'sqmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '县区',
-    prop: 'xqmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '微信',
-    prop: 'wbzh',
-    width: 180,
-    show: true
-  },
-  {
-    label: 'QQ',
-    prop: 'QQzh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '备注',
-    prop: 'bz',
-    width: 180,
+    sumProp: 'xse'
+  }, {
+    label: '付款额',
+    prop: 'fke',
+    width: 100,
+    show: true,
+    sumProp: 'fke'
+  }, {
+    label: '收款额',
+    prop: 'ske',
+    width: 100,
+    show: true,
+    sumProp: 'ske'
+  }, {
+    label: '退款额',
+    prop: 'tke',
+    width: 100,
+    show: true,
+    sumProp: 'tke'
+  }, {
+    label: '业务调账额',
+    prop: 'ywtze',
+    width: 100,
+    show: true,
+    sumProp: 'ywtze'
+  }, {
+    label: '其他金额',
+    prop: 'qtje',
+    width: 100,
+    show: true,
+    sumProp: 'qtje'
+  }, {
+    label: '本次结欠',
+    prop: 'bcjq',
+    width: 100,
+    show: true,
+    sumProp: 'bcjq'
+  }, {
+    label: '当前累欠',
+    prop: 'dqlq',
+    width: 100,
+    show: true,
+    sumProp: 'dqlq'
+  }, {
+    label: '客户顺序',
+    prop: 'khsx',
+    width: 100,
     show: true
   }
 ]
-export const columnsTy = [
-  /* {
-    label: '停用',
-    prop: 'ty',
-    width: 180,
+export const columnsGhs = [
+  {
+    label: '供货商',
+    prop: 'ghs',
+    width: 100,
+    show: true
+  }, {
+    label: '上次结欠',
+    prop: 'scjq',
+    width: 100,
     show: true,
-    checked: true
-  }, */
-  ...columnsLb
+    sumProp: 'scjq'
+  }, {
+    label: '采购额',
+    prop: 'cge',
+    width: 100,
+    show: true,
+    sumProp: 'cge'
+  }, {
+    label: '付款额',
+    prop: 'fke',
+    width: 100,
+    show: true,
+    sumProp: 'fke'
+  }, {
+    label: '收款额',
+    prop: 'ske',
+    width: 100,
+    show: true,
+    sumProp: 'ske'
+  }, {
+    label: '退款额',
+    prop: 'tke',
+    width: 100,
+    show: true,
+    sumProp: 'tke'
+  }, {
+    label: '业务调账额',
+    prop: 'ywtze',
+    width: 100,
+    show: true,
+    sumProp: 'ywtze'
+  }, {
+    label: '其他金额',
+    prop: 'qtje',
+    width: 100,
+    show: true,
+    sumProp: 'qtje'
+  }, {
+    label: '本次结欠',
+    prop: 'bcjq',
+    width: 100,
+    show: true,
+    sumProp: 'bcjq'
+  }, {
+    label: '当前累欠',
+    prop: 'dqlq',
+    width: 100,
+    show: true,
+    sumProp: 'dqlq'
+  }
 ]
-export const columnsPp = [
+export const columnsJgs = [
   {
-    label: '品牌',
-    prop: 'pp',
-    width: 180,
+    label: '加工商',
+    prop: 'jgs',
+    width: 100,
     show: true
-  },
-  {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
-    show: true
-  },
-  {
-    label: '编号',
-    prop: 'bh',
-    width: 180,
-    show: true
+  }, {
+    label: '上次结欠',
+    prop: 'scjq',
+    width: 100,
+    show: true,
+    sumProp: 'scjq'
+  }, {
+    label: '加工额',
+    prop: 'jge',
+    width: 100,
+    show: true,
+    sumProp: 'cge'
+  }, {
+    label: '付款额',
+    prop: 'fke',
+    width: 100,
+    show: true,
+    sumProp: 'fke'
+  }, {
+    label: '收款额',
+    prop: 'ske',
+    width: 100,
+    show: true,
+    sumProp: 'ske'
+  }, {
+    label: '销售额',
+    prop: 'xse',
+    width: 100,
+    show: true,
+    sumProp: 'xse'
+  }, {
+    label: '业务调账额',
+    prop: 'ywtze',
+    width: 100,
+    show: true,
+    sumProp: 'ywtze'
+  }, {
+    label: '其他金额',
+    prop: 'qtje',
+    width: 100,
+    show: true,
+    sumProp: 'qtje'
+  }, {
+    label: '本次结欠',
+    prop: 'bcjq',
+    width: 100,
+    show: true,
+    sumProp: 'bcjq'
+  }, {
+    label: '当前累欠',
+    prop: 'dqlq',
+    width: 100,
+    show: true,
+    sumProp: 'dqlq'
   }
 ]

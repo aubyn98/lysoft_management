@@ -1,49 +1,46 @@
 export const columnsXx = [
   {
-    label: '客户名称',
-    prop: 'khmc',
-    width: 180/* ,
-    elType: 'autocomplete',
-    api: 'getCustomer',
-    superKeys: ['khbh'],
-    relation: ['khbh'] */
-  },
-  {
-    label: '客户编号',
-    prop: 'khbh',
-    width: 180,
-    show: true
-  },
-  {
     label: '简码',
     prop: 'jm',
-    width: 180,
+    width: 100,
     show: true
   },
   {
-    label: '单据累欠',
-    prop: 'templjqk',
-    width: 180,
-    show: true,
-    sumProp: 'templjqk'
-  },
-  {
-    label: '审核累欠',
-    prop: 'ljqk',
-    width: 180,
-    show: true,
-    sumProp: 'ljqk'
-  },
-  {
-    label: '客户类型',
-    prop: 'lx',
-    width: 180,
+    label: '开支名称',
+    prop: 'kzmc',
+    width: 100,
     show: true
   },
   {
-    label: '客户等级',
-    prop: 'khdj',
-    width: 180,
+    label: '单价',
+    prop: 'dj',
+    width: 100,
+    show: true
+  },
+  {
+    label: '数量',
+    prop: 'sl',
+    width: 100,
+    show: true,
+    sumProp: 'sl'
+  },
+  {
+    label: '单位',
+    prop: 'dw',
+    width: 100,
+    show: true
+  },
+  {
+    label: '合计',
+    prop: 'hj',
+    width: 100,
+    show: true,
+    sumProp: 'hj'
+  },
+  {
+    label: '备注',
+    prop: 'bz',
+    width: 100,
     show: true
   }
 ]

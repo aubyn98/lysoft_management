@@ -9,10 +9,28 @@ export default {
     return {
       msg: { page: 1 },
       checkedList: [],
-      currentRow: null
+      currentRow: null,
+      sums: []
     }
   },
   methods: {
+    getDate () {
+      return new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().substring(0, 10)
+    },
+    initMsg (flag) {
+      if (flag) return (this.msg.page = 1)
+      this.msg = {
+        ...this.columns.reduce((t, l) => {
+          if (l.elType === 'checkbox') {
+            t[l.prop] = false
+          } else {
+            t[l.prop] = ''
+          }
+          return t
+        }, {}),
+        ...this.msg
+      }
+    },
     rowDblclick (r, c, e) {
       this.$emit('row-dblclick', r, c, e)
     },
@@ -41,7 +59,7 @@ export default {
       }
     },
     getSummaries (param) {
-      return this.autoSums
+      return this.sums
     }
   },
   created () {
@@ -49,17 +67,7 @@ export default {
       localStorage.getItem(this.name + 'CheackList')
     )
     this.checkedList = checkedList || this.columns.map((c) => c.label)
-    this.msg = {
-      ...this.columns.reduce((t, l) => {
-        if (l.checked) {
-          t[l.prop] = false
-        } else {
-          t[l.prop] = ''
-        }
-        return t
-      }, {}),
-      ...this.msg
-    }
+    this.initMsg()
   },
   watch: {
     checkedList: {
@@ -84,6 +92,7 @@ export default {
       return newColumns
     },
     autoSums () {
+      this.doLayout()
       return this.sums
     }
   }

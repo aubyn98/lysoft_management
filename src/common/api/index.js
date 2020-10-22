@@ -9,7 +9,7 @@ function withError (req, mask) {
         if (typeof res !== 'object') throw error
         /* eslint-disable-next-line */
         if (typeof res === 'object' && res.hasOwnProperty('res') && !res.res) throw error
-        if (res.status !== 1) throw res
+        if (!res.status || res.status !== 1) throw res
         res.msg && Message.success(res.msg)
         resolve(res)
       }).catch(e => {
@@ -56,7 +56,7 @@ const rq = createRequest(Instance)
 const req = withError(rq)
 const InstanceMask = createReqInstance({ ...baseConfig, ...baseConfigTransform })
 const rqm = createRequest(InstanceMask)
-const reqMask = withError(rqm, 'nm')
+const reqMask = withError(rqm, 'm')
 
 const apiReq = require.context('./', true, /\.js$/)
 module.exports = apiReq.keys().reduce((t, r) => {

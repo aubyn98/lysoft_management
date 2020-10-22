@@ -21,7 +21,7 @@ export default [
   }, {
     label: '',
     prop: 'sfjck',
-    style: { width: '120px' },
+    style: { width: '130px' },
     labelWidth: '0px',
     elType: 'checkbox',
     elText: '不减库存'

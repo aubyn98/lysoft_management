@@ -16,6 +16,7 @@
             hideNum
             hideSum
             hideContext
+            headerBg
             ref="editTable2"
             name="MaterielEnterStoreTitle"
             :sourceData="tableDataTitle"

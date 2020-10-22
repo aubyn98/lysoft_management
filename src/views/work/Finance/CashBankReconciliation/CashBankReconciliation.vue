@@ -3,15 +3,27 @@
     <div class="page-RowContent">
       <div class="page-RowContent-item" data-left>
         <search-table
-          name="CashBankReconciliationTable"
           small
-          :tableData="tableDataXx"
-          :columns.sync="columnsXx"
-          :total="countXx.total"
+          hide-search
+          ref="searchTable"
+          name="CashBankReconciliationTableTop"
+          :sourceData="tableData"
+          :columns.sync="columnsTop"
           :pageSize="30"
-          :sums="countXx.sums"
-          @row-dblclick="rowDblclick"
-          @send-change="sendChangeXx"
+          :sourceCount="count"
+          @row-click="rowClick"
+          @send-change="sendChange"
+        />
+        <search-table
+          small
+          hide-search
+          ref="searchTable"
+          name="CashBankReconciliationTableBottom"
+          :sourceData="tableDataMx"
+          :columns.sync="columnsBottom"
+          :pageSize="30"
+          :sourceCount="countMx"
+          @row-dblclick="rowDblclickMx"
         />
       </div>
       <div class="page-RowContent-item" style="width: 140px;align-items:center;" data-hover>
@@ -22,7 +34,13 @@
           :formItems="formItems"
           label-position="top"
         />
-        <el-button type="primary" size="mini" class="search-form-btn">查询</el-button>
+        <el-button
+          type="primary"
+          size="mini"
+          class="search-form-btn"
+          @click="request"
+          >查询</el-button
+        >
         <el-button type="primary" size="mini" class="search-form-btn">打印</el-button>
         <el-button type="primary" size="mini" class="search-form-btn">导出</el-button>
       </div>
@@ -31,34 +49,27 @@
 </template>
 
 <script type="text/javascript">
-import { columnsXx } from './columns'
+import { statistics, statisticsDetails } from '@/common/mixins'
+import { columnsBottom, columnsTop } from './columns'
 import formItems from './formItems'
 export default {
+  mixins: [statistics, statisticsDetails],
   data () {
     return {
-      columnsXx,
-      countXx: {
-        total: 0,
-        sums: {}
-      },
-      tableDataXx: [],
-      formItems
+      columnsBottom,
+      columnsTop,
+      formItems,
+      api: 'getCashBankReconciliation',
+      attach: {},
+      groupKey: ['dh', 'khmc'],
+      mergeColumns: ['khmc', 'rq', 'dh', 'lsdh', 'wlbh', 'wlmc', 'lx', 'dw']
     }
   },
   methods: {
-    sendChangeXx () {},
     rowDblclick () {}
   }
 }
 </script>
 <style lang="scss">
-.searchForm {
-  .el-form-item {
-    height: 56px;
-    margin-bottom: 0px;
-  }
-  .el-form-item__label {
-    padding: 0;
-  }
-}
+
 </style>

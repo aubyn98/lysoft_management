@@ -15,7 +15,7 @@
 </template>
 
 <script type="text/javascript">
-import { dragendTable } from '@/common/mixins'
+import { dragendTable } from './mixins'
 export default {
   mixins: [dragendTable],
   data () {

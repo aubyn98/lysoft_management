@@ -13,7 +13,7 @@ export default [{
   labelWidth: '50px'
 }, {
   label: '供 货 类 型',
-  prop: 'ghlx',
+  prop: 'lx',
   style: { width: '22%' },
   placeholder: '请选择价格类型',
   elType: 'select',
@@ -88,9 +88,10 @@ export default [{
 },
 {
   label: '累计应付款',
-  prop: 'ljyfk',
+  prop: 'ljqk',
   placeholder: '请选择创建时间',
-  style: { width: '33.333%' }
+  style: { width: '33.333%' },
+  num: true
 },
 {
   label: '创 建 时 间',

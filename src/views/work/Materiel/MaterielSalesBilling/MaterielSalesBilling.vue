@@ -16,6 +16,7 @@
             hideNum
             hideSum
             hideContext
+            headerBg
             ref="editTable2"
             name="MaterielSalesBillingTitle"
             :sourceData="tableDataTitle"
@@ -29,9 +30,9 @@
       <template #a>
         <edit-table
           ref="editTable"
-          name="MaterielSalesBilling"
+          name="MaterielSalesBillingLeft"
           :sourceData="tableDataXx"
-          :columns.sync="columnsXx"
+          :columns.sync="columnsLeft"
           :sums="countXx.sums"
           :disabled="disabled"
         />
@@ -39,9 +40,9 @@
       <template #b>
         <edit-table
           ref="editTable"
-          name="MaterielSalesBilling"
+          name="MaterielSalesBillingRight"
           :sourceData="tableDataXx"
-          :columns.sync="columnsXx"
+          :columns.sync="columnsRight"
           :sums="countXx.sums"
           :disabled="disabled"
         />
@@ -51,15 +52,16 @@
 </template>
 
 <script type="text/javascript">
-import { columnsXx, columnsTitle } from './columns'
+import { columnsLeft, columnsRight, columnsTitle } from './columns'
 import formItems from './formItems'
 export default {
   data () {
     return {
       formItems,
-      columnsXx,
+      columnsLeft,
+      columnsRight,
       columnsTitle,
-      contentColumn: [{ prop: 'a', width: 400 }, { prop: 'b', width: 400 }],
+      contentColumn: [{ prop: 'a', width: 800 }, { prop: 'b', width: 400 }],
       countXx: {
         sums: [],
         total: 100

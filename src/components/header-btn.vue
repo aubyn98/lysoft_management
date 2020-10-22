@@ -106,6 +106,7 @@ export default {
         this.edit = 'save'
         this.$emit('change', { action: this.action + action, edit: this.edit })
       } else {
+        this.edit = 'save'
         this.$emit('change', { action: 'del' })
       }
     }
@@ -115,8 +116,9 @@ export default {
 <style scoped>
 .page-header--btn {
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   flex-shrink: 0;
 }

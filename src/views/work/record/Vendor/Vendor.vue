@@ -14,7 +14,7 @@
           small
           hideLoading
           name="VendorTable"
-          ref="VendorTableXx"
+          ref="Xx"
           api="getVendor"
           :pageSize="30"
           :params="{ ty: 0 }"
@@ -24,10 +24,10 @@
       </div>
       <div class="page-RowContent-item" data-main>
         <auto-form
-          :formItems="formItems"
-          style="width: 100%"
           ref="autoForm"
+          style="width: 100%"
           :disabled="disabled"
+          :formItems="formItems"
         />
       </div>
     </div>
@@ -35,7 +35,7 @@
       <search-table
         small
         api="getVendor"
-        ref="VendorTableLb"
+        ref="Lb"
         name="VendorXxlbTable"
         :pageSize="30"
         :params="{ ty: 0 }"
@@ -47,7 +47,7 @@
       <search-table
         small
         api="getVendor"
-        ref="VendorTableTy"
+        ref="Ty"
         name="VendorXxlbTable"
         :pageSize="30"
         :params="{ ty: 1 }"
@@ -67,7 +67,20 @@ export default {
   data () {
     return {
       // 选择的tab
+      editTab: '供货商信息',
       tabIndex: '供货商信息',
+      // 操作
+      updateApi: {
+        api: 'updateVendor'
+      },
+      addApi: {
+        api: 'addVendor',
+        prop: 'ghsbh'
+      },
+      delApi: {
+        api: 'delVendor',
+        prop: 'ghsbh'
+      },
       columnsXx,
       columnsLb,
       columnsTy,
@@ -78,40 +91,8 @@ export default {
     // 表单相关---------------------------------------------
 
     // 表格相关---------------------------------------------
-    rowClickXx (row) {
-      this.rowClickXxCommon(row)
-    },
-    rowDblclick (row, c, e) {
-      this.rowDblclickCommon(row)
-      this.tabIndex = '供货商信息'
-      this.$refs.VendorTableXx.setCurrentRow()
-    },
-    refresh () {
-      this.$refs.VendorTableXx.request(true)
-      this.$refs.VendorTableLb.request(true)
-      this.$refs.VendorTableTy.request(true)
-    },
+
     // 顶部编辑按钮相关---------------------------------------------
-    add () {
-      this.addCommon()
-      this.tabIndex = '供货商信息'
-      this.$refs.VendorTableXx.setCurrentRow()
-    },
-    addsave (fn) {
-      this.$refs.autoForm.submitForm().then(({ ...res }) => {
-        this.$api.addVendor(res).then(
-          (r) => {
-            const result = { ...res, id: r.res, ghsbh: r.ghsbh }
-            this.addsaveCommon(result, fn)
-          },
-          (e) => {}
-        )
-      })
-    },
-    addcancel () {
-      this.addcancelCommon()
-    },
-    update () {},
     updatesave (fn) {
       this.$refs.autoForm.submitForm().then((option) => {
         const { bwl, id, index, rownumber, ...res } = option
@@ -121,14 +102,13 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.updatesaveCommon('updateVendor', fn, res, option)
+            this.updatesaveCommon(fn, res, option)
           })
         } else {
-          this.updatesaveCommon('updateVendor', fn, res, option)
+          this.updatesaveCommon(fn, res, option)
         }
       })
-    },
-    del () {}
+    }
   },
   components: {}
 }

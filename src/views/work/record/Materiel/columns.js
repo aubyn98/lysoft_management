@@ -1,7 +1,7 @@
 export const columnsXx = [
   {
     label: '编号',
-    prop: 'bh',
+    prop: 'wlbh',
     width: 180,
     show: true
   }, {
@@ -11,12 +11,12 @@ export const columnsXx = [
     show: true
   }, {
     label: '供货别名',
-    prop: 'ghbm',
+    prop: 'wlbm',
     width: 180,
     show: true
   }, {
     label: '物料类型',
-    prop: 'wllx',
+    prop: 'lx',
     width: 180,
     show: true
   }, {
@@ -28,7 +28,7 @@ export const columnsXx = [
 ]
 export const columnsLb = [{
   label: '编号',
-  prop: 'bh',
+  prop: 'wlbh',
   width: 180,
   show: true
 }, {
@@ -38,7 +38,7 @@ export const columnsLb = [{
   show: true
 }, {
   label: '供货别名',
-  prop: 'ghbm',
+  prop: 'wlbm',
   width: 180,
   show: true
 }, {
@@ -48,7 +48,7 @@ export const columnsLb = [{
   show: true
 }, {
   label: '物料类型',
-  prop: 'wllx',
+  prop: 'lx',
   width: 180,
   show: true
 }, {
@@ -90,7 +90,7 @@ export const columnsLb = [{
 export const columnsTy = [
   {
     label: '编号',
-    prop: 'bh',
+    prop: 'wlbh',
     width: 180,
     show: true
   }, {
@@ -100,7 +100,7 @@ export const columnsTy = [
     show: true
   }, {
     label: '供货别名',
-    prop: 'ghbm',
+    prop: 'wlbm',
     width: 180,
     show: true
   }, {

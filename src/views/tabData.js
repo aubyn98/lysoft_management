@@ -21,19 +21,23 @@ const sourceTree = {
         children: {
           Color: {
             label: '颜色档案',
-            closable: true
+            closable: true,
+            dialog: true
           },
           MaterielColor: {
             label: '物料颜色',
-            closable: true
+            closable: true,
+            dialog: true
           },
           MaterielConstituent: {
             label: '物料成分',
-            closable: true
+            closable: true,
+            dialog: true
           },
           MaterielSpec: {
             label: '物料规格',
-            closable: true
+            closable: true,
+            dialog: true
           }
         }
       }

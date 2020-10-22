@@ -46,7 +46,9 @@
 .el-menu-vertical-demo {
     width: 100%;
 }
-
+.el-menu.el-menu--horizontal{
+    border-bottom: none;
+}
 .el-table .warning-row {
     background: oldlace;
 }

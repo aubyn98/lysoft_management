@@ -15,7 +15,7 @@
           small
           hideLoading
           name="CustomerTable"
-          ref="CustomerTableXx"
+          ref="Xx"
           api="getCustomer"
           :pageSize="30"
           :columns.sync="columnsXx"
@@ -70,7 +70,7 @@
       <search-table
         api="getCustomer"
         name="CustomerXxlbTable"
-        ref="CustomerTableLb"
+        ref="Lb"
         :pageSize="30"
         :params="{ ty: 0 }"
         :columns.sync="columnsLb"
@@ -81,7 +81,7 @@
       <search-table
         api="getCustomer"
         name="CustomerTyxxlbTable"
-        ref="CustomerTableTy"
+        ref="Ty"
         :params="{ ty: 1 }"
         :pageSize="30"
         :columns.sync="columnsTy"
@@ -120,6 +120,22 @@ export default {
   mixins: [record],
   data () {
     return {
+      // 选择的tab
+      editTab: '客户信息',
+      tabIndex: '客户信息',
+      // 操作
+      addApi: {
+        api: 'addCustomer',
+        prop: 'khbh'
+      },
+      delApi: {
+        api: 'delCustomer',
+        prop: 'khbh'
+      },
+      updateApi: {
+        api: 'updateCustomer',
+        prop: 'khbh'
+      },
       // 弹窗显示
       dialogPpVisible: false,
       dialogKhLxVisible: false,
@@ -130,8 +146,6 @@ export default {
       currentRowPpList: [],
       // 选中的客户品牌
       selectKhPpRows: [],
-      // 选择的tab
-      tabIndex: '客户信息',
       // 列信息
       columnsXx,
       columnsRight,
@@ -160,7 +174,6 @@ export default {
     },
     khLxDblclick ({ id, index, ...row }) {
       this.dialogKhLxVisible = false
-      console.log(row)
       this.$refs.autoForm.setFieldsValue(row)
       this.dialogKhLxVisible = false
     },
@@ -174,13 +187,20 @@ export default {
       if (rows.length < 1) return
       this.addKhPp(rows)
     },
+    addAction () {
+      this.currentRowPpList = []
+    },
+    addsaveAction (res) {
+      res.khpp = this.currentRowPpList
+    },
     addKhPp (rows) {
-      this.$api.addKhPp({ pp: rows, khbh: this.currentRow.khbh }).then(
+      this.currentRowPpList.push(...rows)
+      /* this.$api.addKhPp({ pp: rows, khbh: this.currentRow.khbh }).then(
         (res) => {
           this.getKhPp()
         },
         (e) => {}
-      )
+      ) */
     },
     getKhPp () {
       this.$api.getKhPp({ khbh: this.currentRow.khbh }).then(
@@ -195,75 +215,41 @@ export default {
       this.addKhPp([row])
     },
     delKhPp () {
-      this.$api.delKhPp({ id: this.selectKhPpRows.map((it) => it.id) }).then(
-        (r) => {
-          this.getKhPp()
-          this.selectKhPpRows = []
-          this.$refs.CustomerTablePp.setCurrentRow()
-        },
-        (e) => {}
-      )
+      this.currentRowPpList = this.currentRowPpList.filter(it => {
+        return !this.selectKhPpRows.some(i => it.pp === i.pp)
+      })
     },
     // 表格相关---------------------------------------------
-    refresh () {
-      this.$refs.CustomerTableXx.request(true)
-      this.$refs.CustomerTableLb.request(true)
-      this.$refs.CustomerTableTy.request(true)
+    initPpList (flag) {
+      this.currentRowPpList = flag ? this.$format.copy(this.currentRow.khpp) : []
     },
-    rowClickXx (row) {
-      this.rowClickXxCommon(row)
-      this.getKhPp()
-    },
-    rowDblclick (row, c, e) {
-      this.rowDblclickCommon(row)
-      this.tabIndex = '客户信息'
-      this.$refs.CustomerTableXx.setCurrentRow()
+    rowClickXxAction () {
+      this.initPpList(true)
     },
     // 顶部编辑按钮相关---------------------------------------------
-    add () {
-      this.addCommon()
-      this.currentRowPpList = []
-      this.tabIndex = '客户信息'
-      this.$refs.CustomerTableXx.setCurrentRow()
+    addcancelAction () {
+      this.initPpList()
     },
-    addsave (fn) {
-      this.$refs.autoForm
-        .submitForm()
-        .then(({ bwl, blank_1, blank_2, ...res }) => {
-          this.$api.addCustomer(res).then(
-            (r) => {
-              const result = { ...res, id: r.res, khbh: r.khbh }
-              this.addsaveCommon(result, fn)
-            },
-            (e) => {}
-          )
-        })
+    updatecancelAction () {
+      this.initPpList(true)
     },
-    addcancel () {
-      this.addcancelCommon()
-      this.currentRowPpList = []
-    },
-    update () {},
     updatesave (fn) {
       this.$refs.autoForm.submitForm().then((option) => {
         const { bwl, id, index, rownumber, blank_1, blank_2, ...res } = option
+        const khpp = this.currentRowPpList
+        const r = { ...res, khpp }
+        const opt = { ...option, khpp }
         if (parseFloat(res.ljqk) > 0 && res.sftykh) {
           this.$confirm('此客户有累计欠款, 是否停用?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.updatesaveCommon('updateCustomer', fn, res, option)
+            this.updatesaveCommon(fn, r, opt)
           })
         } else {
-          this.updatesaveCommon('updateCustomer', fn, res, option)
+          this.updatesaveCommon(fn, r, opt)
         }
-      })
-    },
-    del () {
-      this.$api.delCustomer({ khbh: this.currentRow.khbh }).then((res) => {
-        this.$refs.CustomerTableXx.setCurrentRow()
-        this.refresh()
       })
     }
   }

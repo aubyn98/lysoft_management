@@ -1,0 +1,20 @@
+@mixin fullBox($width: 100%, $height: 100%) {
+    width: $width;
+    height: $height;
+}
+@mixin flexBox(
+    $direction: row,
+    $overflow: visible,
+    $wrap: nowrap,
+    $justify-content: flex-start,
+    $align-items: stretch
+) {
+    display: flex;
+    flex: {
+        direction: $direction;
+        wrap: $wrap;
+    }
+    justify-content: $justify-content;
+    align-items: $align-items;
+    overflow: $overflow;
+}

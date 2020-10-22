@@ -1,50 +1,157 @@
-export const columnsXx = [
+export const columnsLeft = [
   {
-    label: '客户名称',
-    prop: 'khmc',
-    width: 180/* ,
+    label: '条码编号',
+    prop: 'tmbh',
+    width: 100/* ,
     elType: 'autocomplete',
     api: 'getCustomer',
     superKeys: ['khbh'],
     relation: ['khbh'] */
   },
   {
-    label: '客户编号',
-    prop: 'khbh',
-    width: 180,
+    label: '物料编号',
+    prop: 'wlbh',
+    width: 100,
     show: true
   },
   {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
+    label: '物料名称',
+    prop: 'wlmc',
+    width: 100,
     show: true
   },
   {
-    label: '单据累欠',
-    prop: 'templjqk',
-    width: 180,
-    show: true,
-    sumProp: 'templjqk'
+    label: '供货别名',
+    prop: 'wlbm',
+    width: 100,
+    show: true
   },
   {
-    label: '审核累欠',
-    prop: 'ljqk',
-    width: 180,
-    show: true,
-    sumProp: 'ljqk'
+    label: '档位',
+    prop: 'ckdw',
+    width: 100,
+    show: true
   },
   {
-    label: '客户类型',
+    label: '类型',
     prop: 'lx',
-    width: 180,
+    width: 100,
     show: true
   },
   {
-    label: '客户等级',
-    prop: 'khdj',
-    width: 180,
+    label: '规格',
+    prop: 'gg',
+    width: 100,
     show: true
+  },
+  {
+    label: '颜色',
+    prop: 'ysmc',
+    width: 100,
+    show: true
+  },
+  {
+    label: '缸号',
+    prop: 'gh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '匹数',
+    prop: 'ps',
+    width: 100,
+    show: true
+  },
+  {
+    label: '单位',
+    prop: 'dw',
+    width: 100,
+    show: true
+  },
+  {
+    label: '单价',
+    prop: 'dj',
+    width: 100,
+    show: true
+  },
+  {
+    label: '数量',
+    prop: 'sl',
+    width: 100,
+    sumProp: 'sl'
+  },
+  {
+    label: '金额',
+    prop: 'je',
+    width: 100,
+    sumProp: 'je'
+  },
+  {
+    label: '引用单号',
+    prop: 'yydh',
+    width: 100,
+    sumProp: 'je'
+  },
+  {
+    label: '色号',
+    prop: 'sh',
+    width: 100
+  },
+  {
+    label: '备注',
+    prop: 'bz',
+    width: 100
+  }
+]
+export const columnsRight = [
+  {
+    label: '匹数1',
+    prop: 'ps1',
+    width: 50
+  },
+  {
+    label: '匹数2',
+    prop: 'ps2',
+    width: 50
+  },
+  {
+    label: '匹数3',
+    prop: 'ps3',
+    width: 50
+  },
+  {
+    label: '匹数4',
+    prop: 'ps4',
+    width: 50
+  },
+  {
+    label: '匹数5',
+    prop: 'ps5',
+    width: 50
+  }, {
+    label: '匹数6',
+    prop: 'ps6',
+    width: 50
+  }, {
+    label: '匹数7',
+    prop: 'ps7',
+    width: 50
+  }, {
+    label: '匹数8',
+    prop: 'ps8',
+    width: 50
+  }, {
+    label: '匹数9',
+    prop: 'ps9',
+    width: 50
+  }, {
+    label: '匹数10',
+    prop: 'ps10',
+    width: 50
+  }, {
+    label: '小计',
+    prop: 'xj',
+    width: 50
   }
 ]
 export const columnsTitle = [

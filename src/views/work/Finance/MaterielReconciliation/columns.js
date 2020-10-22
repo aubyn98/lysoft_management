@@ -1,238 +1,404 @@
-export const columnsXx = [
+export const columnsJgTop = [
   {
-    label: '客户名称',
-    prop: 'khmc',
-    width: 180,
+    label: '开单单号',
+    prop: 'kddh',
+    width: 100,
     show: true
   },
   {
-    label: '客户编号',
-    prop: 'khbh',
-    width: 180,
+    label: '加工商',
+    prop: 'jgs',
+    width: 100,
     show: true
   },
   {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
+    label: '日期',
+    prop: 'rq',
+    width: 100,
     show: true
   },
   {
-    label: '单据累欠',
-    prop: 'templjqk',
-    width: 180,
-    show: true,
-    sumProp: 'templjqk'
-  },
-  {
-    label: '审核累欠',
-    prop: 'ljqk',
-    width: 180,
-    show: true,
-    sumProp: 'ljqk'
-  },
-  {
-    label: '客户类型',
+    label: '类型',
     prop: 'lx',
-    width: 180,
+    width: 100,
     show: true
   },
   {
-    label: '客户等级',
-    prop: 'khdj',
-    width: 180,
-    show: true
-  }
-]
-export const columnsRight = [
-  {
-    label: '品牌',
-    prop: 'pp',
-    width: 180,
-    show: true
-  }
-]
-export const columnsLb = [
-  {
-    label: '客户名称',
-    prop: 'khmc',
-    width: 180,
+    label: '付款形式',
+    prop: 'fkxs',
+    width: 100,
     show: true
   },
   {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
+    label: '内部单号',
+    prop: 'nbdh',
+    width: 100,
     show: true
   },
   {
-    label: '客户类型',
-    prop: 'lx',
-    width: 180,
+    label: '流水单号',
+    prop: 'lsdh',
+    width: 100,
     show: true
   },
   {
-    label: '审核欠款',
-    prop: 'ljqk',
-    width: 180,
+    label: '开单金额',
+    prop: 'kdje',
+    width: 100,
     show: true,
-    sumProp: 'ljqk'
+    sumProp: 'kdje'
   },
   {
-    label: '单据累欠',
-    prop: 'templjqk',
-    width: 180,
+    label: '其他金额',
+    prop: 'qtje',
+    width: 100,
     show: true,
-    sumProp: 'templjqk'
+    sumProp: 'qtje'
   },
   {
-    label: '累欠上限',
-    prop: 'xye',
-    width: 180,
+    label: '金额类型',
+    prop: 'jelx',
+    width: 100,
     show: true
   },
   {
-    label: '折扣',
-    prop: 'zk',
-    width: 180,
+    label: '合计',
+    prop: 'hj',
+    width: 100,
+    show: true,
+    sumProp: 'hj'
+  },
+  {
+    label: '前单欠款',
+    prop: 'qdqk',
+    width: 100,
+    show: true,
+    sumProp: 'qdqk'
+  },
+  {
+    label: '付款金额',
+    prop: 'fkje',
+    width: 100,
+    show: true,
+    sumProp: 'fkje'
+  },
+  {
+    label: '结欠金额',
+    prop: 'jqje',
+    width: 100,
+    show: true,
+    sumProp: 'jqje'
+  },
+  {
+    label: '审核',
+    prop: 'sh',
+    width: 100,
     show: true
   },
   {
-    label: '联系人',
-    prop: 'lxr',
-    width: 180,
+    label: '制单人',
+    prop: 'zdr',
+    width: 100,
     show: true
   },
   {
-    label: '手机',
-    prop: 'sj',
-    width: 180,
+    label: '审核人',
+    prop: 'shr',
+    width: 100,
     show: true
   },
   {
-    label: '电话',
-    prop: 'dh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '地址',
-    prop: 'dz',
-    width: 180,
-    show: true
-  },
-  {
-    label: '传真',
-    prop: 'cz',
-    width: 180,
-    show: true
-  },
-  {
-    label: '邮箱',
-    prop: 'yx',
-    width: 180,
-    show: true
-  },
-  {
-    label: '网址',
-    prop: 'wz',
-    width: 180,
-    show: true
-  },
-  {
-    label: '开户银行',
-    prop: 'khyh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '银行账号',
-    prop: 'yhzh',
-    width: 180,
-    show: true
-  },
-  {
-    label: '开户人',
-    prop: 'khr',
-    width: 180,
-    show: true
-  },
-  {
-    label: '客户等级',
-    prop: 'khdj',
-    width: 180,
-    show: true
-  },
-  {
-    label: '业务分配',
-    prop: 'ywfp',
-    width: 180,
-    show: true
-  },
-  {
-    label: '省份',
-    prop: 'sfmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '市区',
-    prop: 'sqmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '县区',
-    prop: 'xqmc',
-    width: 180,
-    show: true
-  },
-  {
-    label: '微信',
-    prop: 'wbzh',
-    width: 180,
-    show: true
-  },
-  {
-    label: 'QQ',
-    prop: 'QQzh',
-    width: 180,
+    label: '作废人',
+    prop: 'zfr',
+    width: 100,
     show: true
   },
   {
     label: '备注',
     prop: 'bz',
-    width: 180,
+    width: 100,
     show: true
   }
 ]
-export const columnsTy = [
-  /* {
-    label: '停用',
-    prop: 'ty',
-    width: 180,
+export const columnsJgBottom = [
+  {
+    label: '物料编号',
+    prop: 'wlbh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '物料名称',
+    prop: 'wlmc',
+    width: 100,
+    show: true
+  },
+  {
+    label: '类型',
+    prop: 'lx',
+    width: 100,
+    show: true
+  },
+  {
+    label: '规格',
+    prop: 'gg',
+    width: 100,
+    show: true
+  },
+  {
+    label: '颜色',
+    prop: 'ysmc',
+    width: 100,
+    show: true
+  },
+  {
+    label: '缸号',
+    prop: 'gh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '单位',
+    prop: 'dw',
+    width: 100,
+    show: true
+  },
+  {
+    label: '数量',
+    prop: 'sl',
+    width: 100,
     show: true,
-    checked: true
-  }, */
-  ...columnsLb
+    sumProp: 'sl'
+  },
+  {
+    label: '单价',
+    prop: 'dj',
+    width: 100,
+    show: true
+  },
+  {
+    label: '金额',
+    prop: 'je',
+    width: 100,
+    show: true,
+    sumProp: 'je'
+  },
+  {
+    label: '引用单号',
+    prop: 'yydh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '备注',
+    prop: 'bz',
+    width: 100,
+    show: true
+  },
+  {
+    label: '匹数',
+    prop: 'ps',
+    width: 100,
+    show: true,
+    sumProp: 'ps'
+  }
 ]
-export const columnsPp = [
+export const columnsCgBottom = [
   {
-    label: '品牌',
-    prop: 'pp',
-    width: 180,
+    label: '物料编号',
+    prop: 'wlbh',
+    width: 100,
     show: true
   },
   {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
+    label: '物料名称',
+    prop: 'wlmc',
+    width: 100,
     show: true
   },
   {
-    label: '编号',
-    prop: 'bh',
-    width: 180,
+    label: '类型',
+    prop: 'lx',
+    width: 100,
+    show: true
+  },
+  {
+    label: '规格',
+    prop: 'gg',
+    width: 100,
+    show: true
+  },
+  {
+    label: '颜色',
+    prop: 'ysmc',
+    width: 100,
+    show: true
+  },
+  {
+    label: '单位',
+    prop: 'dw',
+    width: 100,
+    show: true
+  },
+  {
+    label: '数量',
+    prop: 'sl',
+    width: 100,
+    show: true,
+    sumProp: 'sl'
+  },
+  {
+    label: '单价',
+    prop: 'dj',
+    width: 100,
+    show: true
+  },
+  {
+    label: '金额',
+    prop: 'je',
+    width: 100,
+    show: true,
+    sumProp: 'je'
+  },
+  {
+    label: '引用单号',
+    prop: 'yydh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '备注',
+    prop: 'bz',
+    width: 100,
+    show: true
+  },
+  {
+    label: '匹数',
+    prop: 'ps',
+    width: 100,
+    show: true,
+    sumProp: 'ps'
+  }
+]
+export const columnsCgTop = [
+  {
+    label: '开单单号',
+    prop: 'kddh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '供货商',
+    prop: 'ghs',
+    width: 100,
+    show: true
+  },
+  {
+    label: '日期',
+    prop: 'rq',
+    width: 100,
+    show: true
+  },
+  {
+    label: '类型',
+    prop: 'lx',
+    width: 100,
+    show: true
+  },
+  {
+    label: '付款形式',
+    prop: 'fkxs',
+    width: 100,
+    show: true
+  },
+  {
+    label: '内部单号',
+    prop: 'nbdh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '流水单号',
+    prop: 'lsdh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '开单金额',
+    prop: 'kdje',
+    width: 100,
+    show: true,
+    sumProp: 'kdje'
+  },
+  {
+    label: '其他金额',
+    prop: 'qtje',
+    width: 100,
+    show: true,
+    sumProp: 'qtje'
+  },
+  {
+    label: '金额类型',
+    prop: 'jelx',
+    width: 100,
+    show: true
+  },
+  {
+    label: '合计',
+    prop: 'hj',
+    width: 100,
+    show: true,
+    sumProp: 'hj'
+  },
+  {
+    label: '前单欠款',
+    prop: 'qdqk',
+    width: 100,
+    show: true,
+    sumProp: 'qdqk'
+  },
+  {
+    label: '付款金额',
+    prop: 'fkje',
+    width: 100,
+    show: true,
+    sumProp: 'fkje'
+  },
+  {
+    label: '结欠金额',
+    prop: 'jqje',
+    width: 100,
+    show: true,
+    sumProp: 'jqje'
+  },
+  {
+    label: '审核',
+    prop: 'sh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '制单人',
+    prop: 'zdr',
+    width: 100,
+    show: true
+  },
+  {
+    label: '审核人',
+    prop: 'shr',
+    width: 100,
+    show: true
+  },
+  {
+    label: '作废人',
+    prop: 'zfr',
+    width: 100,
+    show: true
+  },
+  {
+    label: '备注',
+    prop: 'bz',
+    width: 100,
     show: true
   }
 ]

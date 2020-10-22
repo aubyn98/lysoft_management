@@ -1,11 +1,12 @@
 export default [{
   label: '物料名称',
-  prop: 'khmc',
+  prop: 'wlmc',
   style: { width: '50%' },
-  placeholder: '请输入物料名称'
+  placeholder: '请输入物料名称',
+  CamelChars: ['wlbh', 'wlbm']
 }, {
   label: '编　　号',
-  prop: 'bh',
+  prop: 'wlbh',
   style: { width: '50%' },
   placeholder: '请输入编号'
 }, {
@@ -19,13 +20,18 @@ export default [{
   style: { width: '50%' },
   placeholder: '请输入单位'
 }, {
+  label: '类　　别',
+  prop: 'lb',
+  style: { width: '50%' },
+  placeholder: '请选择客户'
+}, {
   label: '库存下限',
   prop: 'kcxx',
   style: { width: '50%' },
   placeholder: '请输入库存下限'
 }, {
   label: '供货别名',
-  prop: 'ghbm',
+  prop: 'wlbm',
   style: { width: '50%' },
   placeholder: '请输入供货别名'
 }, {
@@ -34,18 +40,13 @@ export default [{
   style: { width: '50%' },
   placeholder: '请输入条码编号'
 }, {
-  label: '仓库档位',
-  prop: 'tmbh',
-  style: { width: '50%' },
-  placeholder: '请输入仓库档位'
-}, {
   label: '供 货 商',
-  prop: 'tmbh',
+  prop: 'ghsmc',
   style: { width: '50%' },
   placeholder: '请选择供货商'
 }, {
   label: '',
-  prop: 'sftykh',
+  prop: 'sftywl',
   style: { width: '50%' },
   labelWidth: '0px',
   elType: 'checkbox',
@@ -56,10 +57,10 @@ export default [{
   style: { width: '50%' },
   placeholder: '请选择用料部位'
 }, {
-  label: '客　　户',
-  prop: 'ylbw',
+  label: '仓库档位',
+  prop: 'ckdw',
   style: { width: '50%' },
-  placeholder: '请选择客户'
+  placeholder: '请输入仓库档位'
 },
 {
   label: '备     注',

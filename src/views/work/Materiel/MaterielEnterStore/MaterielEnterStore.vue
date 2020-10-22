@@ -10,43 +10,57 @@
           :formItems="formItems"
         />
       </div>
-      <div class="billTitle-right" style="left:800px">
+      <div class="billTitle-right" style="left: 800px">
         <div class="billTitle-right-table">
           <edit-table
             hideNum
             hideSum
-            hideContext
+            hide-context
+            headerBg
             ref="editTable2"
-            name="MaterielEnterStoreTitle"
-            :sourceData="tableDataTitle"
+            name="MaterielPurchaseTitle"
             :columns.sync="columnsTitle"
             :disabled="disabled"
           />
         </div>
       </div>
     </div>
-    <edit-table
-      ref="editTable"
-      name="MaterielEnterStore"
-      :sourceData="tableDataXx"
-      :columns.sync="columnsXx"
-      :sums="countXx.sums"
-      :disabled="disabled"
-    />
+    <content-table
+      :columns.sync="contentColumn"
+      name="MaterielEnterStoreContentTable"
+    >
+      <template #a>
+        <edit-table
+          ref="editTable"
+          name="MaterielEnterStoreLeft"
+          :columns.sync="columnsLeft"
+          :disabled="disabled"
+        />
+      </template>
+      <template #b>
+        <edit-table
+          ref="editTable"
+          name="MaterielEnterStoreRight"
+          :columns.sync="columnsLeft"
+          :disabled="disabled"
+        />
+      </template>
+    </content-table>
   </div>
 </template>
 
 <script type="text/javascript">
-import { columnsXx, columnsTitle } from './columns'
+import { columnsLeft, columnsRight, columnsTitle } from './columns'
 import formItems from './formItems'
 export default {
   data () {
     return {
       formItems,
-      columnsXx,
+      columnsLeft,
+      columnsRight,
       columnsTitle,
       contentColumn: [
-        { prop: 'a', width: 400 },
+        { prop: 'a', width: 900 },
         { prop: 'b', width: 400 }
       ],
       countXx: {

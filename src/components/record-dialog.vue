@@ -2,11 +2,11 @@
 <script type="text/javascript">
 export default {
   render (h, c) {
-    const { select, rowClick, rowCheckChange, rows, currentRow, api, activeIndex, columns, selection, $attrs, $listeners } = this
-    const { visible, title, formItems, ...props } = $attrs
+    const { select, rowClick, rowCheckChange, rows, sendChange, currentRow, api, activeIndex, columns, formItems, selection, $attrs, $listeners } = this
+    const { visible, title, ...props } = $attrs
     const { selectEnd, ...listeners } = $listeners
     return (
-      <el-dialog props={{ visible, title }} on={{ close: () => { this.$emit('update:visible') } }}>
+      <el-dialog props={{ visible, title }} on={{ close: () => { this.$emit('update:visible'); this.$emit('close') } }}>
         <header-btn props={{ border: true, activeIndex: activeIndex }} hideEdit>
           <el-button type="primary" size="mini" on={{ click: this.add }}>添加</el-button>
           <el-button type="warning" size="mini" on={{ click: () => this.edit(false) }}>修改</el-button>
@@ -19,7 +19,7 @@ export default {
             small
             ref="searchTable"
             props={{ columns, pageSize: 30, api: api.get, ...props, selection }}
-            on={{ select, 'select-all': select, 'row-click': rowClick, ...listeners, 'check-change': rowCheckChange }}
+            on={{ select, 'select-all': select, 'row-click': rowClick, ...listeners, 'check-change': rowCheckChange, 'send-change': sendChange }}
           />) : ''}
         </div>
         <el-dialog props={{ visible: this.subVisible, 'append-to-body': true }} on={{ close: this.closeInnerDialog }} class="innerDialog">
@@ -34,6 +34,10 @@ export default {
   },
   props: {
     columns: {
+      type: Array,
+      required: true
+    },
+    formItems: {
       type: Array,
       required: true
     },
@@ -59,6 +63,9 @@ export default {
     }
   },
   methods: {
+    sendChange () {
+      this.currentRow = null
+    },
     rowCheckChange ({ index, ...row }) {
       this.$api[this.api.update](row).then(res => {
         this.$refs.searchTable.request(true)

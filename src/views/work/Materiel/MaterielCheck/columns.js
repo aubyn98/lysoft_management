@@ -1,49 +1,110 @@
 export const columnsXx = [
   {
-    label: '客户名称',
-    prop: 'khmc',
-    width: 180/* ,
+    label: '条码编号',
+    prop: 'tmbh',
+    width: 100/* ,
     elType: 'autocomplete',
     api: 'getCustomer',
     superKeys: ['khbh'],
     relation: ['khbh'] */
   },
   {
-    label: '客户编号',
-    prop: 'khbh',
-    width: 180,
+    label: '物料编号',
+    prop: 'wlbh',
+    width: 100,
     show: true
   },
   {
-    label: '简码',
-    prop: 'jm',
-    width: 180,
+    label: '物料名称',
+    prop: 'wlmc',
+    width: 100,
     show: true
   },
   {
-    label: '单据累欠',
-    prop: 'templjqk',
-    width: 180,
-    show: true,
-    sumProp: 'templjqk'
+    label: '档位类型',
+    prop: 'dwlx',
+    width: 100,
+    show: true
   },
   {
-    label: '审核累欠',
-    prop: 'ljqk',
-    width: 180,
-    show: true,
-    sumProp: 'ljqk'
-  },
-  {
-    label: '客户类型',
+    label: '类型',
     prop: 'lx',
-    width: 180,
+    width: 100,
     show: true
   },
   {
-    label: '客户等级',
-    prop: 'khdj',
-    width: 180,
+    label: '规格',
+    prop: 'gg',
+    width: 100,
+    show: true
+  },
+  {
+    label: '颜色',
+    prop: 'ysmc',
+    width: 100,
+    show: true
+  },
+  {
+    label: '缸号',
+    prop: 'gh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '色号',
+    prop: 'sh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '单位',
+    prop: 'dw',
+    width: 100,
+    show: true
+  },
+  {
+    label: '数量',
+    prop: 'sl',
+    width: 100,
+    show: true,
+    sumProp: 'sl'
+  },
+  {
+    label: '单价',
+    prop: 'dj',
+    width: 100,
+    show: true
+  },
+  {
+    label: '匹数',
+    prop: 'ps',
+    width: 100,
+    show: true,
+    sumProp: 'ps'
+  },
+  {
+    label: '金额',
+    prop: 'je',
+    width: 100,
+    show: true,
+    sumProp: 'je'
+  },
+  {
+    label: '条码',
+    prop: 'tm',
+    width: 100,
+    show: true
+  },
+  {
+    label: '是否分配',
+    prop: 'sffp',
+    width: 100,
+    show: true
+  },
+  {
+    label: '备注',
+    prop: 'bz',
+    width: 100,
     show: true
   }
 ]

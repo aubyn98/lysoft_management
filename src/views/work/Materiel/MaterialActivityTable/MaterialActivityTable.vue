@@ -3,18 +3,24 @@
     <div class="page-RowContent">
       <div class="page-RowContent-item" data-left>
         <search-table
-          name="MaterialActivityTable"
           small
-          :tableData="tableDataXx"
+          span-method
+          ref="searchTable"
+          name="MaterialActivityTable"
+          :sourceData="tableData"
           :columns.sync="columnsXx"
-          :total="countXx.total"
           :pageSize="30"
-          :sums="countXx.sums"
+          :sourceCount="count"
+          :merge-columns="mergeColumns"
           @row-dblclick="rowDblclick"
-          @send-change="sendChangeXx"
+          @send-change="sendChange"
         />
       </div>
-      <div class="page-RowContent-item" style="width: 140px;align-items:center;" data-hover>
+      <div
+        class="page-RowContent-item"
+        style="width: 140px; align-items: center"
+        data-hover
+      >
         <auto-form
           class="searchForm"
           ref="autoForm"
@@ -22,9 +28,20 @@
           :formItems="formItems"
           label-position="top"
         />
-        <el-button type="primary" size="mini" class="search-form-btn">查询</el-button>
-        <el-button type="primary" size="mini" class="search-form-btn">打印</el-button>
-        <el-button type="primary" size="mini" class="search-form-btn">导出</el-button>
+        <el-checkbox v-model="attach.ycwsh">隐藏未审核记录</el-checkbox>
+        <el-button
+          type="primary"
+          size="mini"
+          class="search-form-btn"
+          @click="request"
+          >查询</el-button
+        >
+        <el-button type="primary" size="mini" class="search-form-btn"
+          >打印</el-button
+        >
+        <el-button type="primary" size="mini" class="search-form-btn"
+          >导出</el-button
+        >
       </div>
     </div>
   </div>
@@ -33,32 +50,28 @@
 <script type="text/javascript">
 import { columnsXx } from './columns'
 import formItems from './formItems'
+import { statistics } from '@/common/mixins'
 export default {
+  mixins: [statistics],
   data () {
     return {
       columnsXx,
-      countXx: {
-        total: 0,
-        sums: {}
+      api: 'getMaterialActivityTable',
+      attach: {
+        ycjd: false,
+        cq: 0
       },
-      tableDataXx: [],
+      groupKey: ['dh', 'wlmc', 'wllx', 'rq1', 'lb'],
+      mergeColumns: ['rq1', 'wllx', 'dh', 'wlbh', 'wlmc', 'lb'],
+      tableData: [],
       formItems
     }
   },
   methods: {
-    sendChangeXx () {},
     rowDblclick () {}
   }
 }
 </script>
 <style lang="scss">
-.searchForm {
-  .el-form-item {
-    height: 56px;
-    margin-bottom: 0px;
-  }
-  .el-form-item__label {
-    padding: 0;
-  }
-}
+
 </style>

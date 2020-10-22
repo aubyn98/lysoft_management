@@ -17,7 +17,7 @@ export default [
   {
     label: '',
     prop: 'sfrk',
-    style: { width: '120px' },
+    style: { width: '130px' },
     labelWidth: '0px',
     elType: 'checkbox',
     elText: '不入库'
