@@ -1,50 +1,60 @@
 export default ({ req, reqMask }) => {
   return {
-    getMateriel (data, type = false) {
+    getMaterial (data, type = false) {
       const send = ['da/cxwlda', data]
       return type ? req(...send) : reqMask(...send)
     },
-    getMaterielAlarm (data) {
+    getMaterialAlarm (data) {
       return reqMask('da/cxwlbjsz', data)
     },
-    getMaterielType (data) {
-      return req('index/cxwllx', data)
-    },
-    updateMaterielAlarm (data) {
+    updateMaterialAlarm (data) {
       return reqMask('da/xgwlbjsz', data)
     },
-    addMateriel (data) {
+    addMaterial (data) {
       return reqMask('da/tjwlda', data)
     },
-    updateMateriel (data) {
+    updateMaterial (data) {
       return reqMask('da/xgwlda', data)
     },
-    delMateriel (data) {
+    delMaterial (data) {
       return reqMask('da/scwlda', data)
     },
-    addMaterielys (data) {
+    addMaterialys (data) {
       return reqMask('da/tjwldays', data)
     },
-    addMaterielsh (data) {
+    addMaterialsh (data) {
       return reqMask('da/tjwldash', data)
     },
-    addMaterielgg (data) {
+    addMaterialgg (data) {
       return reqMask('da/tjwldagg', data)
     },
-    addMaterielcf (data) {
+    addMaterialcf (data) {
       return reqMask('da/tjwldacf', data)
     },
-    delMaterielys (data) {
+    delMaterialys (data) {
       return reqMask('da/scwldays', data)
     },
-    delMaterielsh (data) {
+    delMaterialsh (data) {
       return reqMask('da/scwldash', data)
     },
-    delMaterielgg (data) {
+    delMaterialgg (data) {
       return reqMask('da/scwldagg', data)
     },
-    delMaterielcf (data) {
+    delMaterialcf (data) {
       return reqMask('da/scwldacf', data)
+    },
+    // 物料类型
+    getMaterialType (data) {
+      return req('index/cxwllx', data)
+    },
+    addMaterialType (data) {
+      return reqMask('index/tjwllx', data)
+    },
+    updateMaterialType (data) {
+      return reqMask('index/xgwllx', data)
+    },
+    delMaterialType (data) {
+      return reqMask('index/scwllx', data)
     }
   }
 }

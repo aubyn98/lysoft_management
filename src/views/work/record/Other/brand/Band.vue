@@ -2,6 +2,7 @@
   <record-dialog
     name="Band"
     title="品牌"
+    permission
     :api="{
       get:'getBand',
       del:'delBand',

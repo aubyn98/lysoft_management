@@ -12,15 +12,17 @@
       cell-class-name="cell-class-name"
       header-cell-class-name="header-cell-class-name"
       :row-class-name="tableRowClassName"
-      :show-summary="autoSums.length > 1"
+      :show-summary="autoSums.length > 1 && !this.hideSums"
       :summary-method="getSummaries"
       :span-method="spanMethod ? objectSpanMethod : () => {}"
       @current-change="handleCurrentChange"
       @header-dragend="dragend"
       @row-click="rowClick"
-      @row-dblclick="rowDblclick"
+      @row-dblclick="(r, c, e) => rowDblclick(r, c, e, 'row')"
       @select="select"
       @select-all="selectAll"
+      @selection-change="selectionChange"
+      @cell-dblclick="cellDblclick"
     >
       <el-table-column
         type="selection"
@@ -57,6 +59,18 @@
         :prop="column.prop"
         :width="column.width"
       >
+        <template slot="header" slot-scope="scope">
+          <div
+            @click.exact="sort_click(column.prop)"
+            @click.ctrl="sort_click_ctrl(column.prop)"
+            @click.shift="sort_click_shift(column.prop)"
+          >
+            <span>{{ column.label }}</span>
+            <span style="color: var(--dark-blue)">{{
+              !sort[column.prop] ? "" : sort[column.prop] === "desc" ? "▼" : "▲"
+            }}</span>
+          </div>
+        </template>
         <el-table-column
           :prop="column.prop"
           :width="column.width"
@@ -88,11 +102,14 @@
           </template>
           <template slot-scope="scope">
             <el-checkbox
-              v-if="column.checked"
+              :disabled="column.disabled"
+              v-if="column.elType === 'checkbox'"
               v-model="scope.row[column.prop]"
               @change="$emit('check-change', scope.row)"
             ></el-checkbox>
-            <span v-else>{{ scope.row[column.prop] }}</span>
+            <span :style="{ color: scope.row.color || '#606266' }" v-else>{{
+              scope.row[column.prop]
+            }}</span>
           </template>
         </el-table-column>
       </el-table-column>
@@ -116,13 +133,13 @@
     </div>
     <div
       class="search-table-pagination"
-      v-else-if="!small && !hidePagination && count > pageSize"
+      v-else-if="!small && !hidePagination && autoCount > pageSize"
     >
       <el-pagination
         :disabled="loading"
         background
         layout="prev, pager, next,jumper"
-        :total="count"
+        :total="autoCount"
         :page-size="pageSize"
         :current-page="msg.page"
         @current-change="currentChange"
@@ -141,48 +158,50 @@ export default {
     this.request(true)
   },
   props: {
+    // 需要合并单元格的列
     mergeColumns: {
       type: Array,
       default: () => []
     },
+    // 是否开启单元格合并
     spanMethod: {
       type: Boolean,
       default: false
     },
+    // 隐藏表头加载效果
     hideLoading: {
       type: Boolean,
       default: false
     },
+    // 隐藏表头搜索条件
     hideSearch: {
       type: Boolean,
       default: false
     },
+    // 没有api时 传入的表格行数
     sourceCount: {
-      type: Number
     },
+    // 没有api时 传入的表格数据
     sourceData: {
       type: Array,
       default: null
     },
+    // 请求api时附带的额外参数
     params: {
       type: Object,
       default: () => ({})
     },
+    // 分页器-小
     small: {
       type: Boolean,
       default: false
     },
-    pageSize: {
-      type: Number
-    },
+    // 隐藏分页器
     hidePagination: {
       type: Boolean,
       default: false
     },
-    hideSums: {
-      type: Boolean,
-      default: false
-    },
+    // 表格获取数据的api
     api: {
       type: String,
       default: null
@@ -190,21 +209,60 @@ export default {
   },
   data () {
     return {
+      // 数据总行数
       count: 0,
-      tableData: [],
-      loading: false
+      // 是否显示表格加载效果
+      loading: false,
+      // 表格排序信息
+      sort: {},
+      sumsData: {}
     }
   },
   computed: {
     autoCount () {
-      return this.api ? this.count : this.sourceCount
+      return this.api ? parseFloat(this.count) : parseFloat(this.sourceCount)
     },
     autoTableData () {
       // this.doLayout()
       return this.api ? this.tableData : this.sourceData
+    },
+    pageSize () {
+      return this.$store.state.company ? parseFloat(this.$store.state.company.mysj) : 60
     }
   },
   methods: {
+    // 表格条件发生变化时触发
+    sendChange (flag) {
+      this.request(flag)
+      this.$emit('send-change', { ...this.msg, ...this.getSort() })
+    },
+    // 排序
+    sort_click (prop) {
+      Object.keys(this.sort).forEach((k) => {
+        if (k !== prop) {
+          this.sort[k] = ''
+        }
+      })
+      this.sort[prop] = !this.sort[prop]
+        ? 'asc'
+        : this.sort[prop] === 'asc'
+          ? 'desc'
+          : 'asc'
+      this.sendChange()
+    },
+    sort_click_shift (prop) {
+      this.sort[prop] = !this.sort[prop]
+        ? 'asc'
+        : this.sort[prop] === 'asc'
+          ? 'desc'
+          : 'asc'
+      this.sendChange()
+    },
+    sort_click_ctrl (prop) {
+      this.sort[prop] = ''
+      this.sendChange()
+    },
+    // 合并单元格
     objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
       if (this.mergeColumns.includes(column.property) && row.count) {
         return {
@@ -218,6 +276,7 @@ export default {
         }
       }
     },
+    // 设置表尾合计信息
     setSums (data) {
       const sums = ['合计']
       this.autoColumns.forEach((v, index) => {
@@ -227,18 +286,47 @@ export default {
       })
       this.sums = sums
     },
+    toggleRowSelection (row, selected) {
+      this.$refs.searchTable.toggleRowSelection(row, selected)
+    },
+    // 添加行
     addRow (row) {
       this.tableData.unshift(row)
     },
+    // 更新行
     updateRow (i, row) {
       this.tableData.splice(i, 1, row)
     },
+    // 删除行
     delRow (i) {
       this.tableData.splice(i, 1)
     },
+    // 获取表格数据
     getData () {
       return this.tableData
     },
+    getMsg () {
+      return Object.keys(this.msg).reduce((t, k) => {
+        if (this.msg[k]) {
+          t[k] = this.msg[k]
+        }
+        return t
+      }, {})
+    },
+    // 获取排序条件
+    getSort () {
+      return Object.keys(this.sort).every((k) => !this.sort[k])
+        ? {}
+        : {
+          sort: Object.keys(this.sort).reduce((t, k) => {
+            if (this.sort[k]) {
+              t[k] = this.sort[k]
+            }
+            return t
+          }, {})
+        }
+    },
+    // 发送请求
     request (flag) {
       return new Promise((resolve, reject) => {
         flag && (this.msg.page = 1)
@@ -246,17 +334,18 @@ export default {
           !this.hideLoading && (this.loading = true)
           this.$emit('reqStart')
           this.$api[this.api](
-            { ...this.msg, ...this.params },
+            { ...this.msg, ...this.params, ...this.getSort() },
             !this.hideLoading
           )
             .then((data) => {
               resolve(true)
               this.loading = false
-              this.$emit('reqEnd')
+              this.$emit('reqEnd', data.res)
               this.tableData = data.res
               !this.hidePagination && (this.count = data.count)
               if (!this.hideSums) {
                 this.setSums(data)
+                this.sumsData = data
               }
             })
             .catch((e) => {
@@ -266,14 +355,14 @@ export default {
         }
       })
     },
+    // 页码变化时触发
     currentChange (val) {
       this.msg.page = val
-      this.request()
-      this.$emit('send-change', this.msg)
+      this.sendChange()
     },
+    // 表头搜索框 回车触发
     inputEeter (scope) {
-      this.request(true)
-      this.$emit('send-change', this.msg)
+      this.sendChange(true)
     }
   }
 }
@@ -305,9 +394,13 @@ export default {
         display: block !important;
       }
       .el-input__inner {
+        padding: 0 4px !important;
         border: none;
         height: 30px;
         line-height: 30px;
+      }
+      .el-date-editor .el-input__inner {
+        padding: 0 30px !important;
       }
     }
   }
@@ -323,9 +416,13 @@ export default {
         display: block !important;
       }
       .el-input__inner {
+        padding: 0 4px !important;
         border: none;
         height: 30px;
         line-height: 30px;
+      }
+      .el-date-editor .el-input__inner {
+        padding: 0 30px !important;
       }
       .el-input__icon {
         line-height: 30px;

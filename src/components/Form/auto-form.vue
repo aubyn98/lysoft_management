@@ -21,6 +21,8 @@
         :placeholder="item.placeholder"
         :disabled="disabled"
         :readonly="item.readonly"
+        @input="input($event, item.prop)"
+        :type="item.type || 'text'"
       ></el-input>
       <el-button
         v-else-if="item.elType === 'button'"
@@ -50,8 +52,10 @@
         :fetch-suggestions="(q, cb) => querySearchAsync(q, cb, item)"
         placeholder="请输入内容"
         :disabled="disabled"
-        :value-key="item.prop"
-        @select="item.relation && autocompleteSelect($event, item.relation)"
+        :value-key="item.sendKey || item.prop"
+        @select="
+          autocompleteSelect($event, item.relation, item.prop, item.sendKey)
+        "
         ><i
           v-if="item.icon"
           class="el-icon-more-outline el-input__icon"
@@ -72,7 +76,7 @@
         style="width: 100%"
         v-model="ruleForm[item.prop]"
         filterable
-        clearable
+        :clearable="!item.hideClearable"
         :disabled="disabled"
         placeholder="请选择"
         v-else-if="item.elType === 'select'"
@@ -141,21 +145,27 @@ export default {
     labelPosition: {
       type: String,
       default: 'right'
+    },
+    includeKeys: {
+      type: Array,
+      default: () => []
     }
   },
   created () {
     const rules = {}
-    this.formItems.forEach((it) => {
+    this.formItems.forEach(it => {
       if (it.rules) {
         rules[it.prop] = it.rules
       }
       if (it.CamelChars) {
-        this.$watch(`ruleForm.${it.prop}`, (val) => {
+        this.$watch(`ruleForm.${it.prop}`, val => {
           if (typeof it.CamelChars === 'string') {
             this.ruleForm[it.CamelChars] = this.$str.py.getCamelChars(val)
           } else if (it.CamelChars instanceof Array) {
             it.CamelChars.forEach(k => {
-              this.ruleForm[k] = this.$str.py.getCamelChars(val).replace(/ /g, '')
+              this.ruleForm[k] = this.$str.py
+                .getCamelChars(val)
+                .replace(/ /g, '')
             })
           }
         })
@@ -163,11 +173,26 @@ export default {
     })
     this.rules = rules
   },
+  beforeDestroy () {
+    this.$refs.ruleForm.$el.forEach((it, i) => {
+      it.removeEventListener('keypress', this.kf[i])
+    })
+  },
   mounted () {
     this.initForm()
+    const $el = this.$refs.ruleForm.$el
+    $el.forEach((it, i) => {
+      it.addEventListener('keypress', this.kf[i] = (e) => {
+        if (e.key === 'Enter' && e.keyCode === 13) {
+          const $next = $el[i + 1]
+          $next && $next.focus()
+        }
+      })
+    })
   },
   data () {
     return {
+      kf: [],
       initArea: {
         sfmc: '',
         sqmc: '',
@@ -208,13 +233,55 @@ export default {
       }
     }
   },
+  computed: {
+
+  },
   methods: {
+    enter () {
+      this.$els.some((it, i) => {
+        if (it === document.activeElement) {
+          const $next = this.$els[i + 1]
+          $next && $next.focus()
+          return true
+        }
+      })
+    },
+    input (val, prop) {
+      const computeds = this.formItems
+        .filter(c => c.computed)
+        .map(({ prop, computed }) => ({ prop, computed }))
+      computeds.forEach(c => {
+        if (typeof c.computed === 'function') {
+          this.ruleForm[c.prop] = c.computed(this.ruleForm)
+        } else if (c.computed.props.includes(prop)) {
+          this.ruleForm[c.prop] = c.computed.handler(this.ruleForm)
+        }
+      })
+    },
     areaChange ({ key, val }) {
       this.ruleForm[key] = val
     },
-    initForm (value) {
+    initForm (value, flag = false) {
       if (value) {
-        this.ruleForm = this.$format.copy(value)
+        if (flag) {
+          this.ruleForm = this.formItems.reduce((t, it) => {
+            if (it.elType === 'checkbox') {
+              // eslint-disable-next-line eqeqeq
+              return {
+                ...t,
+                [it.prop]:
+                  typeof value[it.prop] === 'boolean'
+                    ? value[it.prop]
+                    // eslint-disable-next-line eqeqeq
+                    : value[it.prop] == 1
+              }
+            } else {
+              return { ...t, [it.prop]: value[it.prop] }
+            }
+          }, {})
+        } else {
+          this.ruleForm = this.$format.copy(value)
+        }
         this.$nextTick(() => {
           this.$refs.auArea && this.$refs.auArea[0].refresh()
         })
@@ -225,36 +292,52 @@ export default {
               ...t,
               ...this.$format.copy(this.initArea)
             }
+          } else if (item.elType === 'checkbox') {
+            return { ...t, [item.prop]: false }
           } else {
-            return { ...t, [item.prop]: item.num ? 0 : (item.defaultVal || '') }
+            return { ...t, [item.prop]: item.num ? 0 : item.defaultVal || '' }
           }
         }, {})
       }
     },
     handleIconClick () {},
-    autocompleteSelect (v, relation) {
-      relation.forEach((key) => {
-        this.ruleForm[key] = v[key]
-      })
+    autocompleteSelect (v, relation, prop, sendKey) {
+      relation &&
+        relation.forEach(key => {
+          this.ruleForm[key] = v[key]
+        })
+      this.$emit('autocomplete-select', { v, prop, sendKey })
     },
     querySearchAsync (q, cb, item) {
       this.$api[item.api]({ [item.sendKey || item.prop]: q }, true).then(
-        (data) => {
+        data => {
           cb(data.res)
         },
-        (e) => {}
+        e => {}
       )
     },
     setFieldsValue (values) {
-      Object.keys(values).forEach((k) => {
+      Object.keys(values).forEach(k => {
         this.ruleForm[k] = values[k]
+        this.input(values[k], k)
       })
     },
     submitForm (formName = 'ruleForm') {
       return new Promise((resolve, reject) => {
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate(valid => {
           if (valid) {
-            resolve(this.ruleForm)
+            resolve(
+              Object.keys(this.ruleForm).reduce((t, k) => {
+                if (
+                  (!k.includes('blank') &&
+                    this.formItems.some(it => it.prop === k)) ||
+                  this.includeKeys.includes(k)
+                ) {
+                  t[k] = this.ruleForm[k]
+                }
+                return t
+              }, {})
+            )
           } else {
             reject(new Error('未通过验证'))
             return false

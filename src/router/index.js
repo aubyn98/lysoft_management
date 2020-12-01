@@ -2,21 +2,21 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
+import { routePath } from '../config'
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/views/login'
   },
   {
-    path: '/home',
+    path: '/views/home',
     name: 'home',
     component: Home,
     meta: { isLogin: true }
   },
   {
-    path: '/login',
+    path: '/views/login',
     name: 'login',
     component: Login
   }
@@ -24,20 +24,20 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: routePath,
   routes
 })
-/* router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
   const needLogin = to.matched.some(item => item.meta.isLogin)
-  const isLogin = JSON.parse(sessionStorage.getItem('account')) && JSON.parse(sessionStorage.getItem('account')).isLogin
+  const isLogin = localStorage.getItem('x-token')
   if (needLogin && !isLogin) {
     next({ name: 'login' })
     return
   }
-  if (to.path === '/login' && isLogin) {
+  if (to.name === 'login' && isLogin) {
     next({ name: 'home' })
     return
   }
   next()
-}) */
+})
 export default router

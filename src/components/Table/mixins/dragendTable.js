@@ -10,8 +10,12 @@ export default {
     }
   },
   created () {
-    const columns = JSON.parse(localStorage.getItem(this.name))
-    columns && this.$emit('update:columns', columns) && this.$emit('columnsChange', columns)
+    this.localforage.getItem(this.name).then(columns => {
+      if (columns) {
+        this.$emit('update:columns', columns)
+        this.$emit('columns-change', columns)
+      }
+    })
   },
   methods: {
     dragend (newWidth, oldWidth, column) {
@@ -22,7 +26,8 @@ export default {
         }
       })
       this.$emit('update:columns', columns)
-      localStorage.setItem(this.name, JSON.stringify(columns))
+      this.$emit('columns-change', columns)
+      this.localforage.setItem(this.name, columns)
       this.doLayout()
     },
     doLayout () {

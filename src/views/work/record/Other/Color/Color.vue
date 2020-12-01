@@ -1,7 +1,7 @@
 <template>
   <record-dialog
     name="Color"
-    title="颜色"
+    title="颜色档案"
     :api="{
       get:'getColor',
       del:'delColor',

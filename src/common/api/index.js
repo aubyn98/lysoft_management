@@ -1,36 +1,17 @@
+const router = require('@/router').default
+const store = require('@/store').default
 const { createRequest, createReqInstance } = require('../utils/request')
-const baseURL = process.env.NODE_ENV !== 'production' ? 'http://192.168.0.178/web/home/' : './'
+const { apiPath } = require('@/config')
+const baseURL = apiPath
 const { Loading, Message, MessageBox } = require('element-ui')
-function withError (req, mask) {
-  return function (...args) {
-    return new Promise((resolve, reject) => {
-      req(...args).then(res => {
-        const error = { status: -998, msg: '服务器出错！' }
-        if (typeof res !== 'object') throw error
-        /* eslint-disable-next-line */
-        if (typeof res === 'object' && res.hasOwnProperty('res') && !res.res) throw error
-        if (!res.status || res.status !== 1) throw res
-        res.msg && Message.success(res.msg)
-        resolve(res)
-      }).catch(e => {
-        if (mask && e.response && e.response.status === 404) {
-          e.status = -999
-          Message.error('服务器暂无响应！')
-        } else if (mask) {
-          e.msg && MessageBox.alert(e.msg)
-        }
-        reject(e)
-      })
-    })
-  }
+
+const baseConfig = {
+  baseURL: baseURL,
+  timeout: 60000,
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 }
 
 let loadingInstance = null
-const baseConfig = {
-  baseURL: baseURL,
-  timeout: 5000,
-  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-}
 const baseConfigTransform = {
   transformRequest: (data) => {
     loadingInstance = Loading.service({
@@ -42,7 +23,7 @@ const baseConfigTransform = {
     return data
   },
   transformResponse: (data) => {
-    loadingInstance.close()
+    loadingInstance && loadingInstance.close()
     try {
       return JSON.parse(data)
     } catch (e) {
@@ -51,10 +32,84 @@ const baseConfigTransform = {
   }
 }
 
+const errorCode = {
+  401: '登陆已过期，请重新登陆！',
+  404: '服务器暂无响应！',
+  500: '服务器数据出错！'
+}
+const errorMsg = { status: -998, msg: '服务器返回的数据类型错误！' }
+
+const interceptors = {
+  request: [function (config) {
+    const token = localStorage.getItem('x-token')
+    if (token && config.url !== 'Login/login' && config.url !== 'Login/cxzb') {
+      config.headers['x-token'] = token
+    }
+    if (/\w+\/[c|w]\w+/.test(config.url)) {
+      const pageSize = store.state.company ? store.state.company.mysj : 60
+      config.data += `&pageSize=${pageSize}`
+    }
+    return config
+  }, function (error) {
+    return Promise.reject(error)
+  }],
+  response: [function (response) {
+    const token = response.headers['x-token']
+    if (token) {
+      localStorage.setItem('x-token', token)
+    }
+    if (response.status === 200) {
+      const data = response.data
+      /* eslint-disable-next-line */
+      if (data === null || typeof data !== 'object' || (typeof data === 'object' && data.hasOwnProperty('data') && !data.res)) throw errorMsg
+      if (!data.status || data.status !== 1) {
+        const nError = { ...errorMsg, ...data }
+        throw nError
+      }
+      data.msg && Message.success(data.msg)
+      return response
+    } else {
+      loadingInstance && loadingInstance.close()
+      throw errorMsg
+    }
+  }, function (e) {
+    if (e.response.status === 401) {
+      localStorage.removeItem('x-token')
+      router.push({ name: 'login' })
+    }
+    return Promise.reject(e)
+  }]
+}
+
+function withError (req, mask) {
+  return function (...args) {
+    return new Promise((resolve, reject) => {
+      req(...args).then(res => {
+        resolve(res.data)
+      }).catch(e => {
+        loadingInstance && loadingInstance.close()
+        if (mask && e.response && errorCode[e.response.status] && e.response.status !== 200) {
+          e.status = -999
+          MessageBox.alert(errorCode[e.response.status])
+        } else if (mask) {
+          console.log(e)
+          e.msg && MessageBox.alert(e.msg)
+        }
+        reject(e)
+      })
+    })
+  }
+}
+
 const Instance = createReqInstance(baseConfig)
+Instance.interceptors.request.use(...interceptors.request)
+Instance.interceptors.response.use(...interceptors.response)
 const rq = createRequest(Instance)
 const req = withError(rq)
+
 const InstanceMask = createReqInstance({ ...baseConfig, ...baseConfigTransform })
+InstanceMask.interceptors.request.use(...interceptors.request)
+InstanceMask.interceptors.response.use(...interceptors.response)
 const rqm = createRequest(InstanceMask)
 const reqMask = withError(rqm, 'm')
 

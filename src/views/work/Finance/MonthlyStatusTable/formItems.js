@@ -17,7 +17,8 @@ export const formItemsKh = [
   ...formItems,
   {
     label: '客户',
-    prop: 'khmc',
+    prop: 'mc',
+    sendKey: 'khmc',
     style: { width: '130px' },
     placeholder: '请输入客户名称',
     elType: 'autocomplete',
@@ -25,7 +26,8 @@ export const formItemsKh = [
   },
   {
     label: '客户类型',
-    prop: 'lx',
+    prop: 'khlx',
+    sendKey: 'lx',
     style: { width: '130px' },
     placeholder: '请选择客户类型',
     elType: 'autocomplete',
@@ -36,7 +38,7 @@ export const formItemsJgs = [
   ...formItems,
   {
     label: '加工商',
-    prop: 'jgs',
+    prop: 'mc',
     style: { width: '130px' },
     placeholder: '请选择加工商'
     /* elType: 'autocomplete',
@@ -47,7 +49,8 @@ export const formItemsGhs = [
   ...formItems,
   {
     label: '供货商',
-    prop: 'ghs',
+    prop: 'mc',
+    sendKey: 'ghsmc',
     style: { width: '130px' },
     placeholder: '请输入供货商名称',
     elType: 'autocomplete',

@@ -98,6 +98,7 @@ $menu-BgColor: #545c64;
   width: 100%;
   padding: 4px;
   box-sizing: border-box;
+  background-color: white;
   @include flexBox($direction: column, $overflow: hidden);
   .billTitle {
     display: flex;
@@ -117,6 +118,11 @@ $menu-BgColor: #545c64;
         height: 62px;
       }
     }
+  }
+  .billList {
+    flex: 1 1 0%;
+    flex-shrink: 1;
+    height: 0;
   }
 }
 .page[data-scrollY] {

@@ -9,7 +9,7 @@ export const columnsPp = [
     label: '已处理',
     prop: 'jd',
     width: 180,
-    checked: true,
+    elType: 'checkbox',
     align: 'center'
   }
 ]

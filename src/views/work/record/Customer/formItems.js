@@ -1,3 +1,4 @@
+import { num } from '@/common/utils/pattern'
 export default [
   {
     label: '客户名称',
@@ -5,7 +6,15 @@ export default [
     style: { width: '22%' },
     placeholder: '请输入客户名称',
     CamelChars: 'jm',
-    rules: [{ required: true, message: '请输入活动名称', trigger: 'blur' }]
+    rules: [{ trigger: 'focus', required: true, message: '请输入客户名称' }]
+  },
+  {
+    label: '',
+    prop: 'khbh',
+    style: { width: '0px' },
+    placeholder: '',
+    labelWidth: '0px',
+    elType: 'blank'
   },
   {
     label: '简 码',
@@ -20,14 +29,27 @@ export default [
     style: { width: '48%' },
     placeholder: '请选择省份',
     labelWidth: '0px',
-    elType: 'area',
-    listData: ['天津', '武汉']
+    elType: 'area'
+  }, {
+    label: '',
+    prop: 'sqmc',
+    style: { width: '0px' },
+    placeholder: '',
+    labelWidth: '0px',
+    elType: 'blank'
+  }, {
+    label: '',
+    prop: 'xqmc',
+    style: { width: '0px' },
+    placeholder: '',
+    labelWidth: '0px',
+    elType: 'blank'
   },
   {
     label: '',
     prop: 'sftykh',
     style: { width: '12%' },
-    labelWidth: '0px',
+    labelWidth: '6px',
     elType: 'checkbox',
     elText: '停用'
   },
@@ -149,7 +171,8 @@ export default [
     label: '累 计 欠 款',
     prop: 'ljqk',
     placeholder: '请输入累计欠款',
-    style: { width: '33.333%' }
+    style: { width: '33.333%' },
+    rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
   },
   {
     label: '创 建 时 间',
@@ -231,7 +254,8 @@ export default [
     label: '收款额低于',
     prop: 'skbj',
     placeholder: '请选择输入收款额',
-    style: { width: '25%' }
+    style: { width: '25%' },
+    rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
   }, {
     label: '%报警',
     prop: 'blank_2',

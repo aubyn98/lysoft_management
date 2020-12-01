@@ -1,16 +1,16 @@
 export default ({ req, reqMask }) => {
   return {
-    getMaterielColor (data, type = false) {
+    getMaterialColor (data, type = false) {
       const send = ['da/cxwlys', data]
       return type ? req(...send) : reqMask(...send)
     },
-    addMaterielColor (data) {
+    addMaterialColor (data) {
       return reqMask('da/tjwlys', data)
     },
-    updateMaterielColor (data) {
+    updateMaterialColor (data) {
       return reqMask('da/xgwlys', data)
     },
-    delMaterielColor (data) {
+    delMaterialColor (data) {
       return reqMask('da/scwlys', data)
     }
   }

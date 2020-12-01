@@ -12,10 +12,11 @@ Vue.use(common)
 Vue.use(ElementUI)
 Vue.use(components)
 Vue.config.productionTip = false
-
+/* document.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+}) */
 new Vue({
   router,
   store,
-  a: 1,
   render: h => h(App)
 }).$mount('#app')

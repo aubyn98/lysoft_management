@@ -1,3 +1,4 @@
+/*eslint-disable */
 const sourceTree = {
   Record: {
     label: '基础档案',
@@ -5,15 +6,23 @@ const sourceTree = {
     children: {
       Customer: {
         label: '客户档案',
-        closable: true
+        closable: true,
+        dialog: true
       },
       Vendor: {
         label: '供货商档案',
-        closable: true
+        closable: true,
+        dialog: true
       },
-      Materiel: {
+      Material: {
         label: '物料档案',
-        closable: true
+        closable: true,
+        dialog: true
+      },
+      Company: {
+        label: '公司档案',
+        closable: true,
+        dialog: true
       },
       other: {
         label: '其他档案',
@@ -24,26 +33,30 @@ const sourceTree = {
             closable: true,
             dialog: true
           },
-          MaterielColor: {
+          MaterialColor: {
             label: '物料颜色',
             closable: true,
             dialog: true
           },
-          MaterielConstituent: {
+          MaterialConstituent: {
             label: '物料成分',
             closable: true,
             dialog: true
           },
-          MaterielSpec: {
+          MaterialSpec: {
             label: '物料规格',
             closable: true,
             dialog: true
           }
         }
+      },
+      User: {
+        label: '用户管理',
+        closable: true
       }
     }
   },
-  Materiel: {
+  Material: {
     label: '物料',
     icon: 'el-icon-box',
     children: {
@@ -77,27 +90,27 @@ const sourceTree = {
           }
         }
       },
-      MaterielPurchase: {
+      MaterialPurchase: {
         label: '物料采购',
         closable: true
       },
-      MaterielEnterStore: {
+      MaterialEnterStore: {
         label: '物料入库',
         closable: true
       },
-      MaterielReturn: {
+      MaterialReturn: {
         label: '物料退货',
         closable: true
       },
-      MaterielSalesBilling: {
+      MaterialSalesBilling: {
         label: '物料销售开单',
         closable: true
       },
-      MaterielSalesReturn: {
+      MaterialSalesReturn: {
         label: '物料销售退货',
         closable: true
       },
-      MaterielCheck: {
+      MaterialCheck: {
         label: '物料盘点',
         closable: true
       },
@@ -105,7 +118,7 @@ const sourceTree = {
         label: '物料订单发货情况',
         closable: true
       },
-      MaterielPurchaseDelivery: {
+      MaterialPurchaseDelivery: {
         label: '物料采购来货情况',
         closable: true
       },
@@ -139,22 +152,72 @@ const sourceTree = {
         label: '销售对账表',
         closable: true
       },
-      MaterielReconciliation: {
+      MaterialReconciliation: {
         label: '物料对账表',
         closable: true
       }
     }
   }
 }
-function getTab (source) {
-  return Object.keys(source).reduce((t, d) => {
-    const tempData = source[d]
-    if (tempData.children) {
-      return { ...t, ...getTab(tempData.children) }
-    } else {
-      return { ...t, [d]: tempData }
-    }
-  }, {})
+function getTreeData (source) {
+  const tabs = {}
+  const labelDict = {}
+  const keyDict = {}
+  const menus = []
+  const stack = [source]
+  while (stack.length > 0) {
+    const pop = stack.pop()
+    Object.keys(pop).forEach(d => {
+      const temp = pop[d]
+      const { children, closable, ...res } = temp
+      const item = { ...res, index: d }
+      if (children) {
+        item.children = []
+        Object.keys(children).forEach(c => (children[c].parent = item))
+        stack.push(children)
+      } else {
+        tabs[d] = temp
+        keyDict[d] = temp.label
+        labelDict[temp.label] = d
+      }
+      if (temp.parent) {
+        temp.parent.children.push(item)
+      } else {
+        menus.push(item)
+      }
+    })
+  }
+  return {
+    tabs,
+    menus,
+    keyDict,
+    labelDict
+  }
+}
+/* function getTreeData2 (source) {
+  const tabs = {}
+  const labelDict = {}
+  const keyDict = {}
+  const stack = [source]
+  while (stack.length > 0) {
+    const pop = stack.pop()
+    Object.keys(pop).forEach(d => {
+      const temp = pop[d]
+      const { children } = temp
+      if (children) {
+        stack.push(children)
+      } else {
+        tabs[d] = temp
+        keyDict[d] = temp.label
+        labelDict[temp.label] = d
+      }
+    })
+  }
+  return {
+    tabs,
+    keyDict,
+    labelDict
+  }
 }
 function getMenus (source) {
   return Object.keys(source).reduce((t, d) => {
@@ -167,6 +230,35 @@ function getMenus (source) {
     return t
   }, [])
 }
+function getTabs (source) {
+  return Object.keys(source).reduce((t, d) => {
+    const tempData = source[d]
+    if (tempData.children) {
+      return { ...t, ...getTabs(tempData.children) }
+    } else {
+      return { ...t, [d]: tempData }
+    }
+  }, {})
+}
+function getLabelDict (source) {
+  return Object.keys(source).reduce((t, d) => {
+    const tempData = source[d]
+    if (tempData.children) {
+      return { ...t, ...getLabelDict(tempData.children) }
+    } else {
+      return { ...t, [tempData.label]: d }
+    }
+  }, {})
+}
+function getKeyDict (source) {
+  return Object.keys(source).reduce((t, d) => {
+    const tempData = source[d]
+    if (tempData.children) {
+      return { ...t, ...getKeyDict(tempData.children) }
+    } else {
+      return { ...t, [d]: tempData.label }
+    }
+  }, {})
+} */
 
-export const tabs = getTab(sourceTree)
-export const menus = getMenus(sourceTree)
+export const { tabs, menus, keyDict, labelDict } = getTreeData(sourceTree)

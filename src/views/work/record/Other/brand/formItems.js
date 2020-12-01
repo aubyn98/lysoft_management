@@ -3,16 +3,17 @@ export default [{
   prop: 'pp',
   style: { width: '50%' },
   placeholder: '请输入品牌名称',
-  CamelChars: 'jm'
+  CamelChars: 'jm',
+  rules: [{ trigger: 'focus', required: true, message: '请输入品牌名称' }]
 }, {
   label: '简　　码',
   prop: 'jm',
   style: { width: '50%' },
   placeholder: '请输入简码'
 }, {
-  label: '编　　号',
-  prop: 'bh',
-  style: { width: '50%' },
-  placeholder: '请输入编号',
-  readonly: true
+  label: '',
+  prop: 'id',
+  style: { width: '0px' },
+  labelWidth: '0px',
+  elType: 'blank'
 }]

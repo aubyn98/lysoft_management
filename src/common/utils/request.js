@@ -8,7 +8,7 @@ function createRequest (instance) {
   return function (url, data, options, type) {
     return new Promise((resolve, reject) => {
       instance(getConfig(url, data, options, type)).then(res => {
-        resolve(res.data)
+        resolve(res)
       }).catch((e) => {
         reject(e)
       })

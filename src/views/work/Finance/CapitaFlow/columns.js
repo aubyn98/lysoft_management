@@ -1,7 +1,7 @@
-export const columnsXx = [
+export const columnsCustomer = [
   {
     label: '开单单号',
-    prop: 'kddh',
+    prop: 'dh',
     width: 100/* ,
     elType: 'autocomplete',
     api: 'getCustomer',
@@ -10,7 +10,7 @@ export const columnsXx = [
   },
   {
     label: '开单日期',
-    prop: 'kdrq',
+    prop: 'rq',
     width: 100,
     show: true
   },
@@ -22,7 +22,7 @@ export const columnsXx = [
   },
   {
     label: '客户名称',
-    prop: 'khmc',
+    prop: 'mc',
     width: 100,
     show: true
   },
@@ -40,10 +40,10 @@ export const columnsXx = [
   },
   {
     label: '汇款金额',
-    prop: 'hkje',
+    prop: 'skje',
     width: 100,
     show: true,
-    sumProp: 'hkje'
+    sumProp: 'skje'
   },
   {
     label: '金额类型',
@@ -67,10 +67,10 @@ export const columnsXx = [
   },
   {
     label: '结欠金额',
-    prop: 'jqje',
+    prop: 'ljqk',
     width: 100,
     show: true,
-    sumProp: 'jqje'
+    sumProp: 'ljqk'
   },
   {
     label: '收款人',
@@ -80,7 +80,7 @@ export const columnsXx = [
   },
   {
     label: '收款账号',
-    prop: 'skzh',
+    prop: 'yhzh',
     width: 100,
     show: true
   },
@@ -106,13 +106,17 @@ export const columnsXx = [
     label: '审核',
     prop: 'sh',
     width: 100,
-    show: true
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
   },
   {
     label: '作废',
-    prop: 'zf',
+    prop: 'ch',
     width: 100,
-    show: true
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
   },
   {
     label: '备注',
@@ -121,10 +125,10 @@ export const columnsXx = [
     show: true
   }
 ]
-export const columnsJgs = [
+export const columnsConverter = [
   {
     label: '开单单号',
-    prop: 'kddh',
+    prop: 'dh',
     width: 100/* ,
     elType: 'autocomplete',
     api: 'getCustomer',
@@ -133,7 +137,7 @@ export const columnsJgs = [
   },
   {
     label: '开单日期',
-    prop: 'kdrq',
+    prop: 'rq',
     width: 100,
     show: true
   },
@@ -145,7 +149,7 @@ export const columnsJgs = [
   },
   {
     label: '加工商',
-    prop: 'jgs',
+    prop: 'mc',
     width: 100,
     show: true
   },
@@ -157,22 +161,22 @@ export const columnsJgs = [
   },
   {
     label: '汇款人',
-    prop: 'skr',
+    prop: 'fkr',
     width: 100,
     show: true
   },
   {
     label: '收款账号',
-    prop: 'skzh',
+    prop: 'hrzh',
     width: 100,
     show: true
   },
   {
     label: '汇款金额',
-    prop: 'hkje',
+    prop: 'skje',
     width: 100,
     show: true,
-    sumProp: 'hkje'
+    sumProp: 'skje'
   },
   {
     label: '金额类型',
@@ -196,14 +200,14 @@ export const columnsJgs = [
   },
   {
     label: '结欠金额',
-    prop: 'jqje',
+    prop: 'ljqk',
     width: 100,
     show: true,
-    sumProp: 'jqje'
+    sumProp: 'ljqk'
   },
   {
     label: '汇款账号',
-    prop: 'skzh',
+    prop: 'yhzh',
     width: 100,
     show: true
   },
@@ -229,13 +233,17 @@ export const columnsJgs = [
     label: '审核',
     prop: 'sh',
     width: 100,
-    show: true
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
   },
   {
     label: '作废',
-    prop: 'zf',
+    prop: 'ch',
     width: 100,
-    show: true
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
   },
   {
     label: '备注',
@@ -244,10 +252,10 @@ export const columnsJgs = [
     show: true
   }
 ]
-export const columnsGhs = [
+export const columnsVendor = [
   {
     label: '开单单号',
-    prop: 'kddh',
+    prop: 'dh',
     width: 100/* ,
     elType: 'autocomplete',
     api: 'getCustomer',
@@ -256,7 +264,7 @@ export const columnsGhs = [
   },
   {
     label: '开单日期',
-    prop: 'kdrq',
+    prop: 'rq',
     width: 100,
     show: true
   },
@@ -268,7 +276,7 @@ export const columnsGhs = [
   },
   {
     label: '供货商',
-    prop: 'ghs',
+    prop: 'mc',
     width: 100,
     show: true
   },
@@ -280,22 +288,22 @@ export const columnsGhs = [
   },
   {
     label: '汇款人',
-    prop: 'skr',
+    prop: 'fkr',
     width: 100,
     show: true
   },
   {
     label: '收款账号',
-    prop: 'skzh',
+    prop: 'hrzh',
     width: 100,
     show: true
   },
   {
     label: '汇款金额',
-    prop: 'hkje',
+    prop: 'skje',
     width: 100,
     show: true,
-    sumProp: 'hkje'
+    sumProp: 'skje'
   },
   {
     label: '金额类型',
@@ -319,14 +327,14 @@ export const columnsGhs = [
   },
   {
     label: '结欠金额',
-    prop: 'jqje',
+    prop: 'ljqk',
     width: 100,
     show: true,
-    sumProp: 'jqje'
+    sumProp: 'ljqk'
   },
   {
     label: '汇款账号',
-    prop: 'skzh',
+    prop: 'yhzh',
     width: 100,
     show: true
   },
@@ -352,13 +360,17 @@ export const columnsGhs = [
     label: '审核',
     prop: 'sh',
     width: 100,
-    show: true
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
   },
   {
     label: '作废',
-    prop: 'zf',
+    prop: 'ch',
     width: 100,
-    show: true
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
   },
   {
     label: '备注',
@@ -367,15 +379,15 @@ export const columnsGhs = [
     show: true
   }
 ]
-export const columnsTitle = [
+const columnsTitle = [
   {
     label: '开单单号',
-    prop: 'kddh',
+    prop: 'dh',
     width: 100,
     readonly: true
   }, {
     label: '开单日期',
-    prop: 'kdrq',
+    prop: 'rq',
     width: 136,
     elType: 'date'
   }, {
@@ -387,6 +399,46 @@ export const columnsTitle = [
     label: '制单人',
     prop: 'zdr',
     width: 100,
-    readonly: true
+    align: 'center',
+    readonly: true,
+    defaultVal: () => {
+      return JSON.parse(localStorage.getItem('account')).username
+    }
   }
 ]
+export const columnsCustomerTitle = [
+  {
+    label: '收款人',
+    prop: 'skr',
+    width: 100
+  },
+  ...columnsTitle
+]
+export const columnsConverterTitle = [
+  {
+    label: '汇款人',
+    prop: 'fkr',
+    width: 100,
+    readonly: true
+  },
+  ...columnsTitle
+]
+export const columnsVendorTitle = [
+  ...columnsConverterTitle
+]
+const columns = {
+  columnsConverter,
+  columnsCustomer,
+  columnsVendor
+}
+const columnsTitles = {
+  columnsConverterTitle,
+  columnsCustomerTitle,
+  columnsVendorTitle
+}
+export function getColumns (type) {
+  return columns['columns' + type]
+}
+export function getColumnsTitle (type) {
+  return columnsTitles['columns' + type + 'Title']
+}

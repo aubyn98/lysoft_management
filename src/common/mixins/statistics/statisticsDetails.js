@@ -1,12 +1,28 @@
 export default {
   data () {
     return {
+      currentRow: null,
       tableDataMx: [],
-      countMx: 0
+      tableDataMxF: []
     }
   },
   methods: {
-    rowClick () {
+    initAllTableData () {
+      this.tableData = []
+      this.tableDataMx = []
+      this.tableDataMxF = []
+    },
+    sendChangeMx ({ page, ...msg }) {
+      this.tableDataMx = this.tableDataMxF.filter(
+        item => {
+          return Object.keys(msg).every(k => {
+            return (item[k] ? item[k].toString() : '').startsWith(msg[k])
+          })
+        }
+      )
+    },
+    searchMsgHandle () {
+      this.searchMsg = { ...this.searchMsg, ...(this.currentRow ? this.currentRow : {}) }
     },
     rowDblclickMx () {
 

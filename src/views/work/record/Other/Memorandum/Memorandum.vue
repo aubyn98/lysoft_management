@@ -1,6 +1,7 @@
 <template>
   <record-dialog
     name="Memorandum"
+    permission
     title="备忘录"
     :api="{
       get:'getMemorandum',

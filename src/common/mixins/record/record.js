@@ -8,7 +8,26 @@ export default {
       disabled: true
     }
   },
+  props: {
+    sub: {
+      type: Array,
+      default: null
+    },
+    visible: {
+      type: Boolean,
+      required: true,
+      default: true
+    },
+    appendToBody: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
+    closeDialog () {
+      this.$emit('update:visible', false)
+      this.$emit('close')
+    },
     // 表单相关---------------------------------------------
     initForm (val = null) {
       this.$refs.autoForm.initForm(val)
@@ -51,7 +70,9 @@ export default {
     addcancel () {
       this.add()
     },
-    update () {},
+    update () {
+      this.tabIndex = this.editTab
+    },
     updatesaveCommon (fn, res, opt) {
       const { api } = this.updateApi
       this.$api[api](res).then(
@@ -82,9 +103,9 @@ export default {
     },
     // 表格相关---------------------------------------------
     refresh () {
-      this.$refs.Xx.request(true)
-      this.$refs.Lb.request(true)
-      this.$refs.Ty.request(true)
+      this.$refs.Xx && this.$refs.Xx.request(true)
+      this.$refs.Lb && this.$refs.Lb.request(true)
+      this.$refs.Ty && this.$refs.Ty.request(true)
     },
     rowClickXx (row) {
       if (!this.disabled) {
@@ -99,6 +120,16 @@ export default {
       this.rowClickXx(row, c, e)
       this.$refs.Xx.setCurrentRow()
       this.tabIndex = this.editTab
+      if (this.sub) {
+        if (this.sub instanceof Array && this.sub.length > 0) {
+          row = this.sub.reduce((t, it) => {
+            t[it] = row[it]
+            return t
+          }, {})
+        }
+        this.$emit('row-dblclick', row)
+        this.closeDialog()
+      }
       this.rowDblclickAction && this.rowDblclickAction(row, c, e)
     }
   }

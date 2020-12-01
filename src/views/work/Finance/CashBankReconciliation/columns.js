@@ -1,19 +1,19 @@
 export const columnsBottom = [
   {
     label: '开单单号',
-    prop: 'kddh',
+    prop: 'dh',
     width: 100,
     show: true
   },
   {
     label: '开单日期',
-    prop: 'kdrq',
+    prop: 'rq1',
     width: 100,
     show: true
   },
   {
-    label: '客户名称',
-    prop: 'khmc',
+    label: '名称',
+    prop: 'mc',
     width: 100,
     show: true
   }, {
@@ -42,7 +42,8 @@ export const columnsBottom = [
     label: '银行账号',
     prop: 'yhzh',
     width: 100,
-    show: true
+    show: true,
+    sumProp: 'yhzh'
   }, {
     label: '制单人',
     prop: 'zdr',
@@ -55,13 +56,13 @@ export const columnsTop = [
   {
     label: '开户银行',
     prop: 'khyh',
-    width: 100,
+    width: 200,
     show: true
   },
   {
     label: '银行账号',
     prop: 'yhzh',
-    width: 100,
+    width: 200,
     show: true
   }
 ]

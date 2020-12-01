@@ -2,6 +2,7 @@
   <record-dialog
     name="ColorNumber"
     title="色号"
+    permission
     :api="{
       get:'getColorNumber',
       del:'delColorNumber',

@@ -19,8 +19,12 @@
 .el-table::before {
     background-color: var(--border-gray) !important; //#d5dae2;
 }
+.outerTab > .el-tabs__content {
+    background: url("../../assets/img/login_bg_1.png") 19% 50%;
+}
 .el-dialog {
     margin-top: 10vh !important;
+    min-width: 600px;
 }
 .el-dialog__body {
     padding: 10px 10px;
@@ -46,7 +50,7 @@
 .el-menu-vertical-demo {
     width: 100%;
 }
-.el-menu.el-menu--horizontal{
+.el-menu.el-menu--horizontal {
     border-bottom: none;
 }
 .el-table .warning-row {
@@ -55,4 +59,24 @@
 
 .el-table .success-row {
     background: #f0f9eb;
+}
+
+.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+    background-color: #409eff;
+    border-color: #409eff;
+}
+.record_dialog {
+    box-sizing: border-box;
+    .el-dialog {
+        width: 96vw;
+        height: 90vh;
+        margin-top: 5vh !important;
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: column;
+        .el-dialog__body {
+            flex: 1;
+            height: 0;
+        }
+    }
 }

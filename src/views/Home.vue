@@ -3,7 +3,7 @@
     <el-aside style="width: auto" class="home-aside">
       <a class="logoBox" href="http://www.lyerp.net" target="_blank">
         <p v-show="!isCollapse">领域软件</p>
-        <img src="../assets/logo_mini.png" alt="" />
+        <img src="../assets/img/logo_mini.png" alt="" />
       </a>
       <div class="home-collapse-btn" @click="isCollapse = !isCollapse">
         <i v-show="!isCollapse" class="el-icon-s-fold"></i>
@@ -40,33 +40,35 @@
       </div>
     </el-aside>
     <el-container class="home-content">
-      <el-header class="home-header"
-        ><el-dropdown trigger="click" style="cursor: pointer">
+      <el-header class="home-header">
+        <el-dropdown trigger="click" style="cursor: pointer">
           <span class="el-dropdown-link">
-            {{ "名字预留位" }}
+            {{ $store.state.account.username }}
             <i class="el-icon-setting el-icon-setting"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="cipherShowHandle"
-              >更改密码</el-dropdown-item
+              >更改密码
+            </el-dropdown-item
             >
-            <el-dropdown-item @click.native="ipShowHandle"
+            <!-- <el-dropdown-item @click.native="ipShowHandle"
               >设置打印IP</el-dropdown-item
-            >
+            > -->
             <el-dropdown-item
               v-if="$store.state.mobile"
               @click.native="setBluetoothPrinter"
               >设置蓝牙打印机</el-dropdown-item
             >
-            <el-dropdown-item @click.native="tcdl">退出登录</el-dropdown-item>
+            <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown></el-header
-      >
+        </el-dropdown>
+      </el-header>
       <el-main class="home-main">
         <el-tabs
           v-model="editableTabsValue"
           type="card"
           @tab-remove="removeTab"
+          class="outerTab"
           data-home
         >
           <el-tab-pane
@@ -78,22 +80,26 @@
           >
             <component
               :is="item.name"
-              @editable="handleSelect"
+              @select="handleSelect"
               :ref="item.name"
+              v-if="!item.dialog"
             ></component>
           </el-tab-pane>
         </el-tabs>
       </el-main>
       <!-- <el-footer>Footer</el-footer> -->
     </el-container>
-    <component
-      v-for="d in dialogs"
-      :key="d.index"
-      :is="d.index"
-      :visible.sync="visibles[d.index]"
-      :ref="d.index"
-      @close="dialogClose(d.index)"
-    ></component>
+    <div v-for="d in dialogs" :key="d.index">
+      <component
+        :is="d.index"
+        :ref="d.index"
+        :key="d.index"
+        :visible.sync="visibles[d.index]"
+        v-if="visibles[d.index]"
+        @close="dialogClose(d.index)"
+      ></component>
+    </div>
+    <Password :visible.sync="visiblePassword" />
   </el-container>
 </template>
 
@@ -112,19 +118,22 @@ const visibles = dialogs.reduce((t, it) => {
 export default {
   data () {
     return {
-      dialogColorVisible: true,
       show: false,
       activeArr: [],
       isCollapse: true,
       editableTabs: [],
       editableTabsValue: '',
+      visiblePassword: false,
       dialogs,
       visibles,
       menus
     }
   },
   created () {
-    this.initMenu(tabData.MonthlyStatusTable, 'MonthlyStatusTable')
+    this.initMenu(tabData.MaterialSalesBilling, 'MaterialSalesBilling')
+    this.$api.getCompany().then(({ res }) => {
+      this.$store.commit('changeCompany', res)
+    })
   },
   watch: {
     activeArr: {
@@ -137,6 +146,15 @@ export default {
     }
   },
   methods: {
+    logout () {
+      this.$api.logout().then(res => {
+        localStorage.removeItem('x-token')
+        this.$router.push({ name: 'login' })
+      })
+    },
+    cipherShowHandle () {
+      this.visiblePassword = true
+    },
     dialogClose (index) {
       this.removeTab(index)
     },
@@ -170,7 +188,7 @@ export default {
       this.editableTabsValue = activeName
       this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
     },
-    handleSelect (index, options) {
+    handleSelect (index, { cb }) {
       if (
         !this.activeArr.includes(index) &&
         tabData[index]
@@ -182,6 +200,9 @@ export default {
         this.visibles[index] = true
       }
       this.editableTabsValue = index
+      cb && this.$nextTick(() => {
+        cb(this.$refs[index] instanceof Array ? this.$refs[index][0] : this.$refs[index])
+      })
     }
   }
 }

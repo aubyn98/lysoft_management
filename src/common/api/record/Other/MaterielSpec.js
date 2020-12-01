@@ -1,16 +1,16 @@
 export default ({ req, reqMask }) => {
   return {
-    getMaterielSpec (data, type = false) {
+    getMaterialSpec (data, type = false) {
       const send = ['da/cxwlgg', data]
       return type ? req(...send) : reqMask(...send)
     },
-    addMaterielSpec (data) {
+    addMaterialSpec (data) {
       return reqMask('da/tjwlgg', data)
     },
-    updateMaterielSpec (data) {
+    updateMaterialSpec (data) {
       return reqMask('da/xgwlgg', data)
     },
-    delMaterielSpec (data) {
+    delMaterialSpec (data) {
       return reqMask('da/scwlgg', data)
     }
   }

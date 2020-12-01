@@ -7,7 +7,7 @@ export const columnsTop = [
   },
   {
     label: '开单单号',
-    prop: 'kddh',
+    prop: 'dh',
     width: 100,
     show: true
   },
@@ -19,19 +19,19 @@ export const columnsTop = [
   },
   {
     label: '类型',
-    prop: 'lx',
+    prop: 'djlx',
     width: 100,
     show: true
   },
   {
     label: '付款形式',
-    prop: 'fkxs',
+    prop: 'xs',
     width: 100,
     show: true
   },
   {
     label: '内部单号',
-    prop: 'nbdh',
+    prop: 'nblsdh',
     width: 100,
     show: true
   },
@@ -52,8 +52,8 @@ export const columnsTop = [
     label: '其他金额',
     prop: 'qtje',
     width: 100,
-    show: true,
-    sumProp: 'qtje'
+    show: true/* ,
+    sumProp: 'qtje' */
   },
   {
     label: '金额类型',
@@ -65,22 +65,22 @@ export const columnsTop = [
     label: '合计',
     prop: 'hj',
     width: 100,
-    show: true,
-    sumProp: 'hj'
+    show: true/* ,
+    sumProp: 'hj' */
   },
   {
     label: '前单欠款',
     prop: 'qdqk',
     width: 100,
-    show: true,
-    sumProp: 'qdqk'
+    show: true/* ,
+    sumProp: 'qdqk' */
   },
   {
     label: '销售前单欠款',
-    prop: 'xsqdqk',
+    prop: 'qdxsljqk',
     width: 100,
-    show: true,
-    sumProp: 'xsqdqk'
+    show: true/* ,
+    sumProp: 'xsqdqk' */
   },
   {
     label: '来款明细',
@@ -96,10 +96,10 @@ export const columnsTop = [
     sumProp: 'skje'
   }, {
     label: '结欠金额',
-    prop: 'jqje',
+    prop: 'ljqk',
     width: 100,
-    show: true,
-    sumProp: 'jqje'
+    show: true/* ,
+    sumProp: 'jqje' */
   }, {
     label: '制单人',
     prop: 'zdr',
@@ -124,11 +124,83 @@ export const columnsTop = [
     label: '审核',
     prop: 'sh',
     width: 100,
+    show: true,
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
+  }
+]
+export const columnsBottom = [
+  {
+    label: '物料编号',
+    prop: 'wlbh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '物料名称',
+    prop: 'wlmc',
+    width: 100,
+    show: true
+  },
+  {
+    label: '类型',
+    prop: 'lx',
+    width: 100,
+    show: true
+  },
+  {
+    label: '规格',
+    prop: 'gg',
+    width: 100,
+    show: true
+  },
+  {
+    label: '颜色',
+    prop: 'ysmc',
+    width: 100,
+    show: true
+  },
+  {
+    label: '单位',
+    prop: 'dw',
+    width: 100,
+    show: true
+  },
+  {
+    label: '数量',
+    prop: 'sl',
+    width: 100,
+    show: true,
+    sumProp: 'sl'
+  },
+  {
+    label: '单价',
+    prop: 'dj',
+    width: 100,
+    show: true
+  },
+  {
+    label: '金额',
+    prop: 'je',
+    width: 100,
+    show: true,
+    sumProp: 'je'
+  },
+  {
+    label: '引用单号',
+    prop: 'yydh',
+    width: 100,
+    show: true
+  },
+  {
+    label: '备注',
+    prop: 'bz',
+    width: 100,
     show: true
   }
 ]
-
-export const columnsBottom = [
+/* export const columnsBottom = [
   {
     label: '商标',
     prop: 'sb',
@@ -156,7 +228,7 @@ export const columnsBottom = [
   },
   {
     label: '每包/件',
-    prop: 'mbj',
+    prop: 'mbjs',
     width: 100,
     show: true
   },
@@ -204,4 +276,4 @@ export const columnsBottom = [
     width: 100,
     show: true
   }
-]
+] */

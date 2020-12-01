@@ -10,11 +10,11 @@ export const columnsPp = [
     prop: 'jm',
     width: 180,
     show: true
-  },
+  }/* ,
   {
     label: '编号',
     prop: 'bh',
     width: 180,
     show: true
-  }
+  } */
 ]

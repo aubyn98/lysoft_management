@@ -2,6 +2,7 @@
   <record-dialog
     name="CustomerType"
     title="客户类型"
+    permission
     :api="{
       get:'getCustomerType',
       del:'delCustomerType',

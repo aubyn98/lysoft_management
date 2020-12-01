@@ -1,77 +1,62 @@
 <template>
-  <div class="page">
-    <header-btn border @change="editChange"></header-btn>
-    <div class="billTitle">
-      <div class="billTitle-left">
-        <auto-form
-          ref="autoForm"
-          :disabled="disabled"
-          style="width: 100%"
-          :formItems="formItems"
-        />
-      </div>
-      <div class="billTitle-right" style="left: 750px">
-        <div class="billTitle-right-table">
-          <edit-table
-            hideNum
-            hideSum
-            hideContext
-            headerBg
-            ref="editTable2"
-            name="CapitaFlowTitle"
-            :sourceData="tableDataTitle"
-            :columns.sync="columnsTitle"
-            :disabled="disabled"
-          />
-        </div>
-      </div>
-    </div>
-    <edit-table
-      ref="editTable"
-      name="CapitaFlow"
-      :sourceData="tableDataXx"
-      :columns.sync="columnsXx"
-      :sums="countXx.sums"
-      :disabled="disabled"
+  <div style="height: 100%; width: 100%">
+    <CapitaFlowPage
+      :tabIndex.sync="tabIndex"
+      v-show="tabIndex === '客户来款'"
+      :params="{ lx: '客户' }"
+      :tabs="tabs"
+      :api="{
+        add: 'addCapitaFlowCustomer',
+        update: 'updateCapitaFlow',
+        del: 'delCapitaFlow',
+      }"
+      name="Customer"
+    />
+    <CapitaFlowPage
+      :tabIndex.sync="tabIndex"
+      v-show="tabIndex === '加工商还款'"
+      :params="{ lx: '加工商' }"
+      :tabs="tabs"
+      :api="{
+        add: 'addCapitaFlowConverter',
+        update: 'updateCapitaFlow',
+        del: 'delCapitaFlow',
+      }"
+      name="Converter"
+    />
+    <CapitaFlowPage
+      :tabIndex.sync="tabIndex"
+      v-show="tabIndex === '供货商还款'"
+      :params="{ lx: '供货商' }"
+      :tabs="tabs"
+      :api="{
+        add: 'addCapitaFlowVendor',
+        update: 'updateCapitaFlow',
+        del: 'delCapitaFlow',
+      }"
+      name="Vendor"
     />
   </div>
 </template>
 
 <script type="text/javascript">
-import { columnsXx, columnsTitle } from './columns'
-import formItems from './formItems'
 export default {
   data () {
     return {
-      formItems,
-      columnsXx,
-      columnsTitle,
-      contentColumn: [
-        { prop: 'a', width: 400 },
-        { prop: 'b', width: 400 }
-      ],
-      countXx: {
-        sums: [],
-        total: 100
-      },
-      disabled: false,
-      tableDataXx: [{ khmc: 'aa' }],
-      tableDataTitle: [{ kddh: '', kdrq: '2020-10-10', lsdh: '', zdr: '' }]
+      tabIndex: '客户来款',
+      tabs: []
     }
   },
+  created () {
+    this.$permission([{ mc: '资金往来_客户', ll: true }]) &&
+      this.tabs.push('客户来款')
+    this.$permission([{ mc: '资金往来_加工商', ll: true }]) &&
+      this.tabs.push('加工商还款')
+    this.$permission([{ mc: '资金往来_供货商', ll: true }]) &&
+      this.tabs.push('供货商还款')
+  },
   mounted () {},
-  methods: {
-    editChange () {
-      this.$refs.autoForm.submitForm().then((res) => {
-        console.log(res)
-      })
-    },
-    rowClickXx () {},
-    rowDblclick () {},
-    sendTableData ({ i, row }) {
-      return this.$refs.editTable.sendTableData()
-    }
-  }
+  methods: {}
 }
 </script>
 <style lang="scss">

@@ -1,10 +1,19 @@
+import { num } from '@/common/utils/pattern'
 export default [{
   label: '供货商名称',
   prop: 'ghsmc',
   style: { width: '22%' },
   placeholder: '请输入供货商名称',
   CamelChars: 'jm',
-  labelWidth: '100px'
+  labelWidth: '100px',
+  rules: [{ trigger: 'focus', required: true, message: '请输入供货商名称' }]
+}, {
+  label: '',
+  prop: 'ghsbh',
+  style: { width: '0px' },
+  placeholder: '',
+  labelWidth: '0px',
+  elType: 'blank'
 }, {
   label: '简 码',
   prop: 'jm',
@@ -22,7 +31,7 @@ export default [{
   label: '',
   prop: 'sftyghs',
   style: { width: '12%' },
-  labelWidth: '0px',
+  labelWidth: '6px',
   elType: 'checkbox',
   elText: '停用'
 },
@@ -91,7 +100,8 @@ export default [{
   prop: 'ljqk',
   placeholder: '请选择创建时间',
   style: { width: '33.333%' },
-  num: true
+  num: true,
+  rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
 },
 {
   label: '创 建 时 间',

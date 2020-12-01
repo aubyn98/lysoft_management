@@ -1,113 +1,145 @@
 <template>
-  <div class="page">
-    <header-btn
-      border
-      @change="editChange"
-      :activeIndex="xxDataIndex"
-      :disabled="disabled_header"
-      :defaultTab.sync="tabIndex"
-      :tabs="['客户信息', '客户信息列表', '停用客户信息列表']"
-    >
-    </header-btn>
-    <div v-show="tabIndex === '客户信息'" class="page-RowContent">
-      <div class="page-RowContent-item" data-left>
-        <search-table
-          small
-          hideLoading
-          name="CustomerTable"
-          ref="Xx"
-          api="getCustomer"
-          :pageSize="30"
-          :columns.sync="columnsXx"
-          @row-click="rowClickXx"
-          @reqStart="disabled_header = true"
-          @reqEnd="disabled_header = false"
+  <el-dialog
+    title="客户档案"
+    class="record_dialog"
+    :visible="visible"
+    :append-to-body="appendToBody"
+    @close="closeDialog"
+  >
+    <div class="page">
+      <header-btn
+        border
+        :hide-edit="!$permission([{ mc: '客户档案', xg: true }])"
+        @change="editChange"
+        :activeIndex="xxDataIndex"
+        :disabled="disabled_header"
+        :defaultTab.sync="tabIndex"
+        :tabs="['客户信息', '客户信息列表', '停用客户信息列表']"
+      >
+        <el-button type="primary" size="mini" @click="exportExcel"
+          >导出</el-button
+        >
+        <exportExcel
+          ref="exportExcel"
+          :msg="excelData"
+          :format="excelFormat"
+          style="display: none"
         />
-      </div>
-      <div class="page-RowContent-item" data-main>
-        <auto-form
-          ref="autoForm"
-          :disabled="disabled"
-          style="width: 100%"
-          :formItems="formItems"
-          @btn-click="fromBtnClick"
-          @icon-click="fromIconClick"
-        />
-      </div>
-      <div class="page-RowContent-item" data-right>
-        <div class="page-RowContent-item-header">
-          <el-tag style="margin-right: 10px; height: 28px">品牌</el-tag>
-          <el-button
-            type="primary"
-            size="mini"
-            :disabled="disabled"
-            @click="dialogPpVisible = !dialogPpVisible"
-            >添加</el-button
-          ><el-button
-            type="danger"
-            size="mini"
-            @click="delKhPp"
-            :disabled="disabled || selectKhPpRows.length < 1"
-            >删除</el-button
-          >
-        </div>
-        <div class="page-RowContent-item-main" style="flex-shrink: 1">
+      </header-btn>
+      <div v-show="tabIndex === '客户信息'" class="page-RowContent">
+        <div class="page-RowContent-item" data-left>
           <search-table
-            hidePagination
-            hideSearch
-            selection
-            name="CustomerTablePp"
-            ref="CustomerTablePp"
-            :columns.sync="columnsRight"
-            :sourceData="currentRowPpList"
-            @select="selectKhPp"
-            @select-all="selectKhPp"
+            small
+            hideLoading
+            name="CustomerTable"
+            ref="Xx"
+            api="getCustomer"
+            :columns.sync="columnsXx"
+            @row-click="rowClickXx"
+            @row-dblclick="rowDblclick"
+            @reqStart="disabled_header = true"
+            @reqEnd="disabled_header = false"
           />
         </div>
+        <div class="page-RowContent-item" data-main>
+          <auto-form
+            ref="autoForm"
+            :disabled="disabled"
+            style="width: 100%"
+            :formItems="formItems"
+            @btn-click="fromBtnClick"
+            @icon-click="fromIconClick"
+          />
+        </div>
+        <div class="page-RowContent-item" data-right>
+          <div class="page-RowContent-item-header">
+            <el-tag style="margin-right: 10px; height: 28px">品牌</el-tag>
+            <el-button
+              type="primary"
+              size="mini"
+              :disabled="disabled"
+              @click="dialogPpVisible = !dialogPpVisible"
+              >添加</el-button
+            ><el-button
+              type="danger"
+              size="mini"
+              @click="delKhPp"
+              :disabled="disabled || selectKhPpRows.length < 1"
+              >删除</el-button
+            >
+          </div>
+          <div class="page-RowContent-item-main" style="flex-shrink: 1">
+            <search-table
+              hidePagination
+              hideSearch
+              selection
+              name="CustomerTablePp"
+              ref="CustomerTablePp"
+              :columns.sync="columnsRight"
+              :sourceData="currentRowPpList"
+              @select="selectKhPp"
+              @select-all="selectKhPp"
+            />
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="page-RowContent" v-show="tabIndex === '客户信息列表'">
-      <search-table
-        api="getCustomer"
-        name="CustomerXxlbTable"
-        ref="Lb"
-        :pageSize="30"
-        :params="{ ty: 0 }"
-        :columns.sync="columnsLb"
-        @row-dblclick="rowDblclick"
+      <div class="page-RowContent" v-show="tabIndex === '客户信息列表'">
+        <search-table
+          api="getCustomer"
+          name="CustomerXxlbTable"
+          ref="Lb"
+          :params="{ ty: 0 }"
+          :columns.sync="columnsLb"
+          @row-click="rowClickXx"
+          @row-dblclick="rowDblclick"
+        />
+      </div>
+      <div class="page-RowContent" v-show="tabIndex === '停用客户信息列表'">
+        <search-table
+          api="getCustomer"
+          name="CustomerTyxxlbTable"
+          ref="Ty"
+          :params="{ ty: 1 }"
+          :columns.sync="columnsTy"
+          @row-click="rowClickXx"
+          @row-dblclick="rowDblclick"
+        />
+      </div>
+      <Band
+        append-to-body
+        :visible.sync="dialogPpVisible"
+        :params="{ khbh: currentRow && currentRow.khbh }"
+        @row-dblclick="ppDblclick"
+        @selectEnd="selectEndPp"
+      />
+      <div v-for="item in subRecords" :key="item.component">
+        <component
+          :is="item.component"
+          :visible.sync="item.visible"
+          append-to-body
+          @row-dblclick="
+            (...argv) => {
+              subDblclick(item.prop, ...argv);
+            }
+          "
+          @selectEnd="
+            (...argv) => {
+              subSelectEnd(item.prop, ...argv);
+            }
+          "
+        />
+      </div>
+      <Memorandum
+        append-to-body
+        :visible.sync="dialogMemorandumVisible"
+        :params="{ khbh: currentRow && currentRow.khbh }"
       />
     </div>
-    <div class="page-RowContent" v-show="tabIndex === '停用客户信息列表'">
-      <search-table
-        api="getCustomer"
-        name="CustomerTyxxlbTable"
-        ref="Ty"
-        :params="{ ty: 1 }"
-        :pageSize="30"
-        :columns.sync="columnsTy"
-        @row-dblclick="rowDblclick"
-      />
-    </div>
-    <Band
-      :visible.sync="dialogPpVisible"
-      :params="{ khbh: currentRow && currentRow.khbh }"
-      @row-dblclick="ppDblclick"
-      @selectEnd="selectEndPp"
-    />
-    <CustomerType
-      :visible.sync="dialogKhLxVisible"
-      @row-dblclick="khLxDblclick"
-      @selectEnd="selectEndKhLx"
-    />
-    <Memorandum
-      :visible.sync="dialogMemorandumVisible"
-      :params="{ khbh: currentRow && currentRow.khbh }"
-    />
-  </div>
+  </el-dialog>
 </template>
 
 <script type="text/javascript">
-import { record } from '@/common/mixins'
+import { record, excel, formIconClick } from '@/common/mixins'
 import formItems from './formItems'
 import {
   columnsXx,
@@ -117,7 +149,7 @@ import {
   columnsPp
 } from './columns'
 export default {
-  mixins: [record],
+  mixins: [record, excel, formIconClick],
   data () {
     return {
       // 选择的tab
@@ -138,7 +170,6 @@ export default {
       },
       // 弹窗显示
       dialogPpVisible: false,
-      dialogKhLxVisible: false,
       dialogMemorandumVisible: false,
       // 操作禁用
       disabled_header: false,
@@ -153,29 +184,25 @@ export default {
       columnsTy,
       columnsPp,
       // 表单项
-      formItems
+      formItems,
+      excelApi: 'getCustomer',
+      subRecords: [
+        {
+          prop: 'lx',
+          visible: false,
+          component: 'CustomerType'
+        }
+      ]
     }
+  },
+  created () {
+    this.excelFormat = this.c2eFormat(this.columnsLb)
   },
   methods: {
     // 表单相关---------------------------------------------
     fromBtnClick (prop) {
       if (!this.currentRow) return
       this.dialogMemorandumVisible = true
-    },
-    fromIconClick (prop) {
-      if (prop === 'lx') this.dialogKhLxVisible = true
-    },
-    // 表格弹窗 -客户类型相关---------------------------------------------
-    selectEndKhLx (rows) {
-      if (!rows[0]) return this.$message.info('请至少选择一项！')
-      const { id, index, ...row } = rows[0]
-      this.$refs.autoForm.setFieldsValue(row)
-      this.dialogKhLxVisible = false
-    },
-    khLxDblclick ({ id, index, ...row }) {
-      this.dialogKhLxVisible = false
-      this.$refs.autoForm.setFieldsValue(row)
-      this.dialogKhLxVisible = false
     },
     // 品牌相关---------------------------------------------
     selectKhPp (rows) {
