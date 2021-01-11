@@ -12,7 +12,7 @@ $menu-BgColor: #545c64;
       height: 50px;
       @include flexBox($justify-content: center, $align-items: center);
       background-color: $menu-BgColor;
-      color: white;
+      color: var(--text-white);
       text-decoration: none;
       p {
         font-size: 18px;
@@ -30,7 +30,7 @@ $menu-BgColor: #545c64;
       }
       i,
       p {
-        color: white;
+        color: var(--text-white);
         line-height: 40px;
       }
     }
@@ -46,7 +46,7 @@ $menu-BgColor: #545c64;
     }
     .home-menuBox::-webkit-scrollbar-thumb {
       border-radius: 8px;
-      background-color: #ccc;
+      background-color: var(--bg-light-gray);
     }
     .home-menuBox::-webkit-scrollbar {
       width: 4px;
@@ -56,25 +56,55 @@ $menu-BgColor: #545c64;
     height: auto;
     overflow: hidden;
     .home-header {
-      background-color: #b3c0d1;
-      color: #333;
+      background-color: var(--bg-gray);
+      background-color: var(--bg-black) !important;
+      color: var(--text-drak-black);
       text-align: center;
-      line-height: 50px;
-      height: 50px !important;
-      background-color: white;
-      box-shadow: 0 -10px 15px #32363f;
+      line-height: 46px;
+      height: 46px !important;
+      background-color: var(--bg-white);
+      box-shadow: 0 -10px 15px var(--shodow-black);
       position: relative;
-      @include flexBox($justify-content: flex-end);
-      padding: 0 40px !important;
+      @include flexBox;
+      padding: 0 0 0 0 !important;
+      .logoBox {
+        flex-shrink: 0;
+        height: 46px;
+        @include flexBox($justify-content: center, $align-items: center);
+        // background-color: $menu-BgColor;
+        color: var(--text-white);
+        text-decoration: none;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        p {
+          font-size: 14px;
+          margin-left: 5px;
+        }
+        img {
+          margin-left: 5px;
+        }
+      }
+      .headerDropdown {
+        cursor: pointer;
+        position: absolute;
+        right: 50px;
+        color: var(--text-white);
+        top: 0;
+      }
     }
     .home-main {
       height: calc(100% - 50px);
       // height: 0;
       overflow: hidden;
-      padding: 0;
+      padding: 0 0 4px 0;
+      box-sizing: border-box;
       .el-tabs[data-home] {
         height: 100%;
         overflow: hidden;
+        border-radius: 0 0 8px 8px;
+        border-bottom: 1px var(--bg-gray) solid;
+        box-shadow: 0 0 15px var(--bg-gray);
+        box-sizing: border-box;
         .el-tabs__header {
           margin: 0;
           min-height: 40px;
@@ -84,6 +114,8 @@ $menu-BgColor: #545c64;
           overflow: hidden;
           .el-tab-pane {
             height: 100%;
+            /* padding: 0 3px 3px 0;
+            box-sizing: border-box; */
             overflow: hidden;
           }
         }
@@ -98,7 +130,12 @@ $menu-BgColor: #545c64;
   width: 100%;
   padding: 4px;
   box-sizing: border-box;
-  background-color: white;
+  background-color: var(--bg-white);
+  border-radius: 0 0 8px 0;
+  /* border: 1px solid var(--bg-light-gray);
+  box-shadow: 0 0 15px var(--bg-gray);
+  border-left: none;
+  border-top: none; */
   @include flexBox($direction: column, $overflow: hidden);
   .billTitle {
     display: flex;
@@ -114,8 +151,8 @@ $menu-BgColor: #545c64;
       /* display: flex;
       justify-content: flex-end; */
       .billTitle-right-table {
-        width: 437px;
-        height: 62px;
+        width: 440px;
+        height: 64px;
       }
     }
   }
@@ -148,6 +185,16 @@ $menu-BgColor: #545c64;
     overflow: hidden;
     box-shadow: 0px 0px 5px #ccc;
   }
+  .page-RowContent-right {
+    width: 145px !important;
+    padding: 2px 0 10px 0;
+    box-sizing: border-box;
+    align-items: center;
+    overflow-y: auto;
+  }
+  .page-RowContent-right::-webkit-scrollbar {
+    width: 4px;
+  }
   .page-RowContent-item[data-hover]:hover,
   .page-RowContent-item[data-left]:hover,
   .page-RowContent-item[data-main]:hover,
@@ -164,10 +211,20 @@ $menu-BgColor: #545c64;
   .page-RowContent-item[data-right] {
     flex: 2;
   }
+  .page-RowContent-item[data-scroll] {
+    overflow-y: auto;
+  }
   .page-RowContent-item-header {
     height: 40px;
     @include flexBox($align-items: center);
     flex-shrink: 0;
+  }
+  .page-RowContent-item[data-search] {
+    width: 155px;
+    padding-bottom: 3px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    align-items: center;
   }
   .page-RowContent-item-main {
     height: 200px;
@@ -195,4 +252,88 @@ $menu-BgColor: #545c64;
   width: 120px;
   margin: 0px !important;
   margin-top: 5px !important;
+}
+.StatisticRightSearchCheckBox {
+  display: flex;
+  padding: 0px 6px;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.treeContent {
+  height: 0px;
+  flex: 1;
+  display: flex;
+  .page-nop {
+    padding: 0;
+  }
+  .treeContentLeft {
+    min-width: 200px;
+    max-width: 300px;
+    height: 100%;
+    padding-right: 8px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  .treeContentLeft[class*="shadow"] {
+    margin-right: 2px;
+    box-shadow: 0px 0px 5px #4382df;
+  }
+  .treeContentRight {
+    flex: 1;
+    flex-shrink: 0;
+    height: 100%;
+    display: flex;
+    padding-left: 2px;
+    position: relative;
+    flex-direction: column;
+    &::before {
+      content: "";
+      width: 1px;
+      height: 100%;
+      display: table;
+      position: absolute;
+      background-color: var(--border-gray);
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+  }
+}
+.searchForm {
+  padding-top: 2px;
+  .el-form-item {
+    min-height: 56px;
+    margin-bottom: 0px;
+    .el-tag--info{
+      height: auto;
+      white-space: pre-wrap;
+    }
+  }
+  .el-form-item__label {
+    padding: 0;
+  }
+}
+.searchForm-column {
+  @extend .searchForm;
+  width: 100%;
+  justify-content: center;
+  padding-left: 6px;
+  .el-form-item--mini.el-form-item {
+    margin-bottom: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.dialog-row {
+  .dialog-content {
+    display: flex;
+    height: 70vh;
+    min-height: 70vh;
+    .dialog-content-right {
+      flex: 1;
+    }
+  }
 }

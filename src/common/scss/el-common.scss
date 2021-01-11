@@ -30,9 +30,14 @@
     padding: 10px 10px;
 }
 .el-input.is-disabled .el-input__inner {
-    color: #999;
+    color: var(--text-light-gray);
 }
 .innerDialog {
+    &[data-title-center] {
+        .el-dialog__header {
+            text-align: center;
+        }
+    }
     .el-dialog {
         margin-top: 15vh !important;
     }
@@ -53,17 +58,32 @@
 .el-menu.el-menu--horizontal {
     border-bottom: none;
 }
-.el-table .warning-row {
-    background: oldlace;
-}
-
-.el-table .success-row {
-    background: #f0f9eb;
+.el-table {
+    @mixin cellSpan($color) {
+        .cell > span {
+            color: $color;
+        }
+    }
+    .warning-row {
+        background: oldlace;
+    }
+    .success-row {
+        background: #f0f9eb;
+    }
+    .danger-row-span {
+        @include cellSpan(#f56c6c);
+    }
+    .primary-row-span {
+        @include cellSpan(#409eff);
+    }
+    .info-row-span {
+        @include cellSpan(#909399);
+    }
 }
 
 .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
-    background-color: #409eff;
-    border-color: #409eff;
+    background-color: var(--dark-blue);
+    border-color: var(--dark-blue);
 }
 .record_dialog {
     box-sizing: border-box;

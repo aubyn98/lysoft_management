@@ -10,8 +10,8 @@ export default {
   },
   props: {
     sub: {
-      type: Array,
-      default: null
+      type: [Array, Boolean],
+      default: false
     },
     visible: {
       type: Boolean,
@@ -61,7 +61,7 @@ export default {
             fn()
             this.disabled = true
             this.xxDataIndex = 0
-            this.refresh()
+            this.refresh(false)
           },
           (e) => {}
         )
@@ -69,6 +69,7 @@ export default {
     },
     addcancel () {
       this.add()
+      this.$refs.autoForm.clearValidate()
     },
     update () {
       this.tabIndex = this.editTab
@@ -80,7 +81,7 @@ export default {
           this.currentRow = { ...opt }
           fn()
           this.disabled = true
-          this.refresh()
+          this.refresh(false)
         },
         e => {}
       )
@@ -88,6 +89,7 @@ export default {
     updatecancel () {
       this.updatecancelAction && this.updatecancelAction()
       this.initForm(this.currentRow)
+      this.$refs.autoForm.clearValidate()
     },
     del () {
       const { api, prop } = this.delApi
@@ -97,15 +99,15 @@ export default {
           if (res[prop] === this.currentRow[prop]) {
             this.add()
           }
-          this.refresh()
+          this.refresh(false)
         })
       })
     },
     // 表格相关---------------------------------------------
-    refresh () {
-      this.$refs.Xx && this.$refs.Xx.request(true)
-      this.$refs.Lb && this.$refs.Lb.request(true)
-      this.$refs.Ty && this.$refs.Ty.request(true)
+    refresh (flag = true) {
+      this.$refs.Xx && this.$refs.Xx.request(flag)
+      this.$refs.Lb && this.$refs.Lb.request(flag)
+      this.$refs.Ty && this.$refs.Ty.request(flag)
     },
     rowClickXx (row) {
       if (!this.disabled) {

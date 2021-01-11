@@ -7,8 +7,9 @@
     v-if="$attrs.visible"
     v-bind="$attrs"
     v-on="listeners"
-    :columns="columns"
+    :columns.sync="columns"
     :formItems="formItems"
+    hideAddMenu
   />
 </template>
 

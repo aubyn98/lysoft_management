@@ -32,6 +32,7 @@ router.beforeEach((to, from, next) => {
   const isLogin = localStorage.getItem('x-token')
   if (needLogin && !isLogin) {
     next({ name: 'login' })
+    window.location.reload()
     return
   }
   if (to.name === 'login' && isLogin) {

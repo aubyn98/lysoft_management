@@ -1,141 +1,111 @@
 <template>
-  <el-form
+<el-form
     class="auto-form"
     :model="ruleForm"
     :rules="rules"
     ref="ruleForm"
     size="mini"
-    :label-position="labelPosition"
-  >
+    :label-position="labelPosition">
     <el-form-item
-      :label="item.label"
-      :prop="item.prop"
-      :style="item.style"
-      v-for="item in formItems"
-      :key="item.prop"
-      :label-width="item.labelWidth || '90px'"
-    >
-      <el-input
-        v-if="!item.elType"
-        v-model="ruleForm[item.prop]"
-        :placeholder="item.placeholder"
-        :disabled="disabled"
-        :readonly="item.readonly"
-        @input="input($event, item.prop)"
-        :type="item.type || 'text'"
-      ></el-input>
-      <el-button
-        v-else-if="item.elType === 'button'"
-        type="primary"
-        :disabled="disabled"
-        @click="$emit('btn-click', item.prop)"
-        >{{ item.elText }}</el-button
-      >
-      <el-button
-        v-else-if="item.elType === 'ndbutton'"
-        type="primary"
-        @click="$emit('btn-click', item.prop)"
-        >{{ item.elText }}</el-button
-      >
-      <el-input
-        v-else-if="item.elType === 'textarea'"
-        type="textarea"
-        placeholder="请输入内容"
-        :disabled="disabled"
-        v-model="ruleForm[item.prop]"
-      >
-      </el-input>
-      <el-autocomplete
-        style="width: 100%"
-        v-else-if="item.elType === 'autocomplete'"
-        v-model="ruleForm[item.prop]"
-        :fetch-suggestions="(q, cb) => querySearchAsync(q, cb, item)"
-        placeholder="请输入内容"
-        :disabled="disabled"
-        :value-key="item.sendKey || item.prop"
-        @select="
-          autocompleteSelect($event, item.relation, item.prop, item.sendKey)
+        :label="item.label"
+        :prop="item.prop"
+        :style="item.style"
+        v-for="item in formItems"
+        :key="item.prop"
+        :label-width="item.labelWidth || '90px'">
+        <el-input
+            v-if="!item.elType"
+            v-model="ruleForm[item.prop]"
+            :placeholder="item.placeholder"
+            :disabled="disabled"
+            :readonly="item.readonly"
+            @input="input($event, item.prop)"
+            @keypress.native.enter="$emit('enter', item.prop,ruleForm)"
+            :type="item.type || 'text'"></el-input>
+        <el-button v-else-if="item.elType === 'button'" type="primary" :disabled="disabled" @click="$emit('btn-click', item.prop)">{{ item.elText }}</el-button>
+        <el-button v-else-if="item.elType === 'ndbutton'" type="primary" @click="$emit('btn-click', item.prop)">{{ item.elText }}</el-button>
+        <el-input
+            v-else-if="item.elType === 'textarea'"
+            type="textarea"
+            autosize
+            placeholder="请输入内容"
+            :disabled="disabled"
+            :readonly="item.readonly"
+            @keypress.native.enter="$emit('enter', item.prop)"
+            v-model="ruleForm[item.prop]"></el-input>
+        <el-autocomplete
+            style="width: 100%"
+            v-else-if="item.elType === 'autocomplete'"
+            v-model="ruleForm[item.prop]"
+            :fetch-suggestions="(q, cb) => querySearchAsync(q, cb, item)"
+            placeholder="请输入内容"
+            :disabled="disabled"
+            :value-key="item.sendKey || item.prop"
+            :trigger-on-focus="true"
+            highlight-first-item
+            clearable
+            @keypress.native.enter="$emit('enter', item.prop)"
+            @select="autocompleteSelect($event, item)">
+            <i v-if="item.icon" class="el-icon-more-outline el-input__icon" slot="suffix" @click="$emit('icon-click', item.prop)"></i>
+        </el-autocomplete>
+        <au-area
+            ref="auArea"
+            @change="areaChange"
+            @keypress.native.enter="$emit('enter', item.prop)"
+            :disabled="disabled"
+            :defaultArea="ruleForm"
+            v-else-if="item.elType === 'area'"
+            style="width: 100%" />
+        <el-select
+            style="width: 100%"
+            v-model="ruleForm[item.prop]"
+            filterable
+            :multiple="item.multiple"
+            :collapse-tags="item.collapseTags"
+            :clearable="!item.hideClearable"
+            :disabled="disabled"
+            placeholder="请选择"
+            v-else-if="item.elType === 'select'"
+            :value-key="item.sendKey || item.prop"
+            remote
+            :remote-method="
+          (q) => {
+            item.api && remoteMethod(item, q);
+          }
         "
-        ><i
-          v-if="item.icon"
-          class="el-icon-more-outline el-input__icon"
-          slot="suffix"
-          @click="$emit('icon-click', item.prop)"
-        >
-        </i
-      ></el-autocomplete>
-      <au-area
-        ref="auArea"
-        @change="areaChange"
-        :disabled="disabled"
-        :defaultArea="ruleForm"
-        v-else-if="item.elType === 'area'"
-        style="width: 100%"
-      />
-      <el-select
-        style="width: 100%"
-        v-model="ruleForm[item.prop]"
-        filterable
-        :clearable="!item.hideClearable"
-        :disabled="disabled"
-        placeholder="请选择"
-        v-else-if="item.elType === 'select'"
-        @focus="
-          item.api &&
-            $api[item.api]().then((data) => {
-              item.listData = data.res.map((c) => c[item.prop]);
-            })
-        "
-      >
-        <el-option
-          v-for="item in item.listData"
-          :key="item"
-          :label="item"
-          :value="item"
-        >
-        </el-option>
-      </el-select>
-      <el-checkbox
-        :disabled="disabled"
-        v-else-if="item.elType === 'checkbox'"
-        v-model="ruleForm[item.prop]"
-        >{{ item.elText }}</el-checkbox
-      >
-      <el-date-picker
-        style="width: 100%"
-        :disabled="disabled"
-        v-else-if="item.elType === 'daterange'"
-        v-model="ruleForm[item.prop]"
-        type="daterange"
-        align="right"
-        unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :placeholder="item.placeholder"
-        :picker-options="pickerOptions"
-      >
-      </el-date-picker>
-      <el-date-picker
-        style="width: 100%"
-        :disabled="disabled"
-        v-else-if="item.elType === 'date'"
-        v-model="ruleForm[item.prop]"
-        type="date"
-        placeholder="选择日期"
-        value-format="yyyy-MM-dd"
-      >
-      </el-date-picker>
-      <div v-else-if="item.elType === 'blank'"></div>
+            @keypress.native.enter="$emit('enter', item.prop)"
+            @change="autocompleteSelect($event, item)"
+            @focus="item.api && remoteMethod(item)">
+            <el-option v-for="it in item.listData" :key="item.api ? it[item.sendKey || item.prop] : it" :label="item.api ? it[item.sendKey || item.prop] : it" :value="item.api && item.nonObj ? it[item.sendKey || item.prop]: it"></el-option>
+        </el-select>
+        <el-checkbox :disabled="disabled" v-else-if="item.elType === 'checkbox'" v-model="ruleForm[item.prop]" @change="checkboxChange($event, item)">{{ item.elText }}</el-checkbox>
+        <el-date-picker
+            style="width: 100%"
+            :disabled="disabled"
+            :picker-options="pickerOptions(item.prop)"
+            :clearable="!item.hideClearable"
+            v-else-if="item.elType === 'date'"
+            v-model="ruleForm[item.prop]"
+            :type="item.type || 'date'"
+            :readonly="item.readonly"
+            placeholder="选择日期"
+            value-format="yyyy-MM-dd"
+            @change="$emit('date-change', $event, item.prop)"></el-date-picker>
+        <div v-else-if="item.elType === 'blank'">{{ item.elText }}</div>
     </el-form-item>
-  </el-form>
+</el-form>
 </template>
+
 <script>
 export default {
   props: {
     disabled: {
       type: Boolean,
       default: false
+    },
+    tab: {
+      type: Boolean,
+      default: true
     },
     formItems: {
       type: Array,
@@ -153,16 +123,16 @@ export default {
   },
   created () {
     const rules = {}
-    this.formItems.forEach(it => {
+    this.formItems.forEach((it) => {
       if (it.rules) {
         rules[it.prop] = it.rules
       }
       if (it.CamelChars) {
-        this.$watch(`ruleForm.${it.prop}`, val => {
+        this.$watch(`ruleForm.${it.prop}`, (val) => {
           if (typeof it.CamelChars === 'string') {
             this.ruleForm[it.CamelChars] = this.$str.py.getCamelChars(val)
           } else if (it.CamelChars instanceof Array) {
-            it.CamelChars.forEach(k => {
+            it.CamelChars.forEach((k) => {
               this.ruleForm[k] = this.$str.py
                 .getCamelChars(val)
                 .replace(/ /g, '')
@@ -180,15 +150,21 @@ export default {
   },
   mounted () {
     this.initForm()
-    const $el = this.$refs.ruleForm.$el
-    $el.forEach((it, i) => {
-      it.addEventListener('keypress', this.kf[i] = (e) => {
-        if (e.key === 'Enter' && e.keyCode === 13) {
-          const $next = $el[i + 1]
-          $next && $next.focus()
-        }
+    if (this.tab) {
+      const $el = this.$refs.ruleForm.$el
+      $el.forEach((it, i) => {
+        it.addEventListener(
+          'keypress',
+          (this.kf[i] = (e) => {
+            if (e.key === 'Enter' && e.keyCode === 13) {
+              e.preventDefault()
+              const $next = $el[i + 1]
+              $next && $next.focus()
+            }
+          })
+        )
       })
-    })
+    }
   },
   data () {
     return {
@@ -200,43 +176,92 @@ export default {
       },
       ruleForm: {},
       rules: {},
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: '最近一周',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          },
-          {
-            text: '最近一个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
-          },
-          {
-            text: '最近三个月',
-            onClick (picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }
-        ]
-      }
+      rqDict: {},
+      monthDict: {}
     }
   },
-  computed: {
-
-  },
+  /* watch: {
+    ruleForm: {
+      handler (val) {
+        this.$emit('change', this.$format.copy(val))
+      },
+      deep: true
+    }
+  }, */
+  computed: {},
   methods: {
+    checkboxChange ($event, item) {
+      item.excludeKeys &&
+        item.excludeKeys.forEach((k) => {
+          this.ruleForm[k] = false
+        })
+      this.$emit('checkbox-change', $event, item.prop)
+    },
+    pickerOptions (prop) {
+      const shortcuts = [
+        ...this.shortcuts(prop),
+        ...this.getMonthShortcuts(prop)
+      ]
+      if (prop === 'ksrq') return { shortcuts }
+      if (prop === 'jsrq') {
+        const ksrq = this.ruleForm.ksrq
+        return {
+          ...(prop === 'jsrq'
+            ? ksrq
+              ? {
+                disabledDate: (time) => {
+                  return time.getTime() < new Date(ksrq).getTime() - 28800000
+                }
+              }
+              : { disabledDate: () => true }
+            : {}),
+          shortcuts
+        }
+      }
+      return {}
+    },
+    getMonthShortcuts (prop) {
+      const year = new Date().getFullYear()
+      const list = []
+      for (let month = 1; month < 13; month++) {
+        if (!this.monthDict[month]) {
+          let startDate = new Date(year, month - 1, 1)
+          let endDate = new Date(year, month, 0)
+          startDate.setTime(
+            startDate.getTime() - startDate.getTimezoneOffset() * 60000
+          )
+          endDate.setTime(
+            endDate.getTime() - endDate.getTimezoneOffset() * 60000
+          )
+          startDate = startDate.toISOString().substring(0, 10)
+          endDate = endDate.toISOString().substring(0, 10)
+          this.monthDict[month] = { startDate, endDate }
+        }
+        list.push({
+          text: (month < 10 ? '0' + month : month) + ' 月',
+          onClick: (picker) => {
+            const { startDate, endDate } = this.monthDict[month]
+            this.ruleForm.ksrq = startDate
+            this.ruleForm.jsrq = endDate
+            picker.$emit('pick', prop === 'ksrq' ? startDate : endDate)
+          }
+        })
+      }
+      return list
+    },
+    shortcuts (prop) {
+      return Object.keys(this.$format.dateDict).map((k) => {
+        return {
+          text: k,
+          onClick: (picker) => {
+            const { startDate, endDate } = this.$format.dateDict[k]
+            this.ruleForm.ksrq = startDate
+            this.ruleForm.jsrq = endDate
+            picker.$emit('pick', prop === 'ksrq' ? startDate : endDate)
+          }
+        }
+      })
+    },
     enter () {
       this.$els.some((it, i) => {
         if (it === document.activeElement) {
@@ -248,9 +273,9 @@ export default {
     },
     input (val, prop) {
       const computeds = this.formItems
-        .filter(c => c.computed)
+        .filter((c) => c.computed)
         .map(({ prop, computed }) => ({ prop, computed }))
-      computeds.forEach(c => {
+      computeds.forEach((c) => {
         if (typeof c.computed === 'function') {
           this.ruleForm[c.prop] = c.computed(this.ruleForm)
         } else if (c.computed.props.includes(prop)) {
@@ -295,42 +320,82 @@ export default {
           } else if (item.elType === 'checkbox') {
             return { ...t, [item.prop]: false }
           } else {
-            return { ...t, [item.prop]: item.num ? 0 : item.defaultVal || '' }
+            return {
+              ...t,
+              [item.prop]: item.num
+                ? 0
+                : (typeof item.defaultVal === 'function'
+                  ? item.defaultVal()
+                  : item.defaultVal) || ''
+            }
           }
         }, {})
       }
     },
     handleIconClick () {},
-    autocompleteSelect (v, relation, prop, sendKey) {
+    autocompleteSelect (v, item) {
+      const { relation, prop, sendKey } = item
       relation &&
-        relation.forEach(key => {
-          this.ruleForm[key] = v[key]
+        relation.forEach((key) => {
+          if (key.indexOf('->') === -1) return (this.ruleForm[key] = v[key])
+          const [oKey, nKey] = key.split('->')
+          this.ruleForm[nKey] = v[oKey]
         })
-      this.$emit('autocomplete-select', { v, prop, sendKey })
+      this.$emit('autocomplete-select', { v, prop, sendKey, form: this.ruleForm })
+    },
+    remoteMethod (item, e) {
+      this.$api[item.api](
+        {
+          [item.sendKey || item.prop]: e || '',
+          ...(item.superKeys
+            ? item.superKeys.reduce((t, k) => {
+              t[k] = this.ruleForm[k] || ''
+              return t
+            }, {})
+            : {})
+        },
+        true
+      ).then((data) => {
+        item.listData = data.res
+      })
     },
     querySearchAsync (q, cb, item) {
-      this.$api[item.api]({ [item.sendKey || item.prop]: q }, true).then(
-        data => {
+      this.$api[item.api](
+        {
+          [item.sendKey || item.prop]: q,
+          ...(item.superKeys
+            ? item.superKeys.reduce((t, k) => {
+              t[k] = this.ruleForm[k] || ''
+              return t
+            }, {})
+            : {})
+        },
+        true
+      ).then(
+        (data) => {
           cb(data.res)
         },
-        e => {}
+        (e) => {}
       )
     },
+    clearValidate () {
+      this.$refs.ruleForm.clearValidate()
+    },
     setFieldsValue (values) {
-      Object.keys(values).forEach(k => {
+      Object.keys(values).forEach((k) => {
         this.ruleForm[k] = values[k]
         this.input(values[k], k)
       })
     },
     submitForm (formName = 'ruleForm') {
       return new Promise((resolve, reject) => {
-        this.$refs[formName].validate(valid => {
+        this.$refs[formName].validate((valid) => {
           if (valid) {
             resolve(
               Object.keys(this.ruleForm).reduce((t, k) => {
                 if (
                   (!k.includes('blank') &&
-                    this.formItems.some(it => it.prop === k)) ||
+                    this.formItems.some((it) => it.prop === k)) ||
                   this.includeKeys.includes(k)
                 ) {
                   t[k] = this.ruleForm[k]
@@ -339,7 +404,7 @@ export default {
               }, {})
             )
           } else {
-            reject(new Error('未通过验证'))
+            // reject(new Error('未通过验证'))
             return false
           }
         })
@@ -351,12 +416,30 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+
+<style lang="scss">
 .auto-form {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 10px 6px 4px 0px;
-  box-sizing: border-box;
-  flex-shrink: 1;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 6px 4px 0px;
+    box-sizing: border-box;
+    flex-shrink: 1;
+    background-color: white;
+
+    .el-input {
+        display: block !important;
+    }
+
+    .el-input__inner {
+        padding: 0 8px !important;
+    }
+
+    .el-date-editor .el-input__inner {
+        padding: 0 30px !important;
+    }
+
+    .el-form-item--mini.el-form-item {
+        margin-bottom: 13px;
+    }
 }
 </style>

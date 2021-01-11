@@ -8,7 +8,10 @@ export default {
   },
   methods: {
     exportExcel () {
-      this.$api[this.excelApi]().then(({ res }) => {
+      const statistic = this.$refs.statistic
+      const autoForm = statistic ? statistic.$children[1] : this.$refs.autoForm
+      const { columns, ...form } = autoForm ? autoForm.ruleForm : {}
+      this.$api[this.excelApi](form).then(({ res }) => {
         this.excelData = res
         this.$nextTick(() => {
           this.$refs.exportExcel.exportData()

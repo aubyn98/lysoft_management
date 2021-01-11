@@ -67,25 +67,25 @@
       </div>
       <div
         class="page-RowContent-item"
-        style="width: 140px; align-items: center"
+        data-search
         data-hover
       >
         <tabs-mini :tabIndex.sync="tabIndex" :tabs="['加工对账', '采购对账']" />
         <auto-form
           v-if="tabIndex === '加工对账'"
           key="jgdz"
-          class="searchForm"
+          class="searchForm-column"
           ref="autoForm"
-          style="width: 100%; justify-content: center; padding-left: 6px"
+
           :formItems="formItemsJg"
           label-position="top"
         />
         <auto-form
           v-if="tabIndex === '采购对账'"
           key="cgdz"
-          class="searchForm"
+          class="searchForm-column"
           ref="autoForm"
-          style="width: 100%; justify-content: center; padding-left: 6px"
+
           :formItems="formItemsCg"
           label-position="top"
         />

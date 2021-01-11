@@ -1,9 +1,9 @@
-import { math } from 'aubyn-common'
+// import { math } from 'aubyn-common'
 export const columnsLeft = [
   {
     label: '条码编号',
     prop: 'tmbh',
-    width: 100/* ,
+    width: 100 /* ,
     elType: 'autocomplete',
     api: 'getCustomer',
     superKeys: ['khbh'],
@@ -103,15 +103,17 @@ export const columnsLeft = [
     width: 100,
     show: true,
     sumProp: 'je',
-    computed: (r) => {
-      return math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
-    }
-  }, {
+    computed: `
+    return this.$math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
+    `
+  },
+  {
     label: '条码',
     prop: 'tm',
     width: 100,
     show: true
-  }, {
+  },
+  {
     label: '备注',
     prop: 'bz',
     width: 100,
@@ -143,23 +145,28 @@ export const columnsRight = [
     label: '匹数5',
     prop: 'ps5',
     width: 50
-  }, {
+  },
+  {
     label: '匹数6',
     prop: 'ps6',
     width: 50
-  }, {
+  },
+  {
     label: '匹数7',
     prop: 'ps7',
     width: 50
-  }, {
+  },
+  {
     label: '匹数8',
     prop: 'ps8',
     width: 50
-  }, {
+  },
+  {
     label: '匹数9',
     prop: 'ps9',
     width: 50
-  }, {
+  },
+  {
     label: '匹数10',
     prop: 'ps10',
     width: 50
@@ -169,14 +176,14 @@ export const columnsRight = [
     prop: 'xj',
     width: 50,
     sumProp: 'xj',
-    computed: (r) => {
+    computed: `
       return Object.keys(r).reduce((t, k) => {
         if (k.includes('ps')) {
-          t = math.add(parseFloat(t), parseFloat(r[k] || 0))
+          t = this.$math.add(parseFloat(t), parseFloat(r[k] || 0))
         }
         return t
       }, 0)
-    }
+    `
   }
 ]
 export const columnsTitle = [
@@ -185,17 +192,20 @@ export const columnsTitle = [
     prop: 'dh',
     width: 100,
     readonly: true
-  }, {
+  },
+  {
     label: '开单日期',
     prop: 'rq',
     width: 136,
     elType: 'date'
-  }, {
+  },
+  {
     label: '流水单号',
     prop: 'lsdh',
     width: 100,
     readonly: true
-  }, {
+  },
+  {
     label: '制单人',
     prop: 'zdr',
     width: 100,
@@ -275,7 +285,8 @@ export const columnsList = [
     label: '累计欠款',
     prop: 'ljqk',
     width: 100
-  }, {
+  },
+  {
     label: '审核',
     prop: 'sh',
     width: 100,
@@ -296,5 +307,4 @@ export const columnsList = [
     prop: 'bz',
     width: 100
   }
-
 ]

@@ -21,9 +21,9 @@ export const columnsEdit = [
     elType: 'checkbox',
     computed: {
       props: ['xg'],
-      handler: function (row) {
+      handler: `
         return row.xg
-      }
+      `
     }
   }, {
     label: '修改',

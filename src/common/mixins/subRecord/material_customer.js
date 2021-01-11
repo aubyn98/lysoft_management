@@ -22,12 +22,12 @@ export default {
   },
   methods: {
     subDblclick (prop, { id, index, ...row }) {
-      /* this.subRecords.some(it => {
+      this.subRecords.some(it => {
         if (it.prop === prop) {
           it.visible = false
           return true
         }
-      }) */
+      })
       switch (prop) {
         /* case 'khmc':
           break */

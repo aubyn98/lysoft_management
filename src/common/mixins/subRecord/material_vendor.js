@@ -46,12 +46,12 @@ export default {
         default:
           this.$refs.autoForm.setFieldsValue(row)
       }
-      /* this.subRecords.some(it => {
+      this.subRecords.some(it => {
         if (it.prop === prop) {
           it.visible = false
           return true
         }
-      }) */
+      })
     }
   }
 }

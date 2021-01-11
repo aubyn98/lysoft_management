@@ -1,4 +1,4 @@
-import { math } from 'aubyn-common'
+// import { math } from 'aubyn-common'
 export const columnsLeft = [
   {
     label: '不减库存',
@@ -131,9 +131,9 @@ export const columnsLeft = [
     prop: 'je',
     width: 100,
     sumProp: 'je',
-    computed: (r) => {
-      return math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
-    },
+    computed: `
+    return this.$math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
+    `,
     readonly: true
   },
   {
@@ -209,14 +209,14 @@ export const columnsRight = [
     prop: 'xj',
     width: 50,
     sumProp: 'xj',
-    computed: (r) => {
+    computed: `
       return Object.keys(r).reduce((t, k) => {
         if (k.includes('ps')) {
-          t = math.add(parseFloat(t), parseFloat(r[k] || 0))
+          t = this.$math.add(parseFloat(t), parseFloat(r[k] || 0))
         }
         return t
       }, 0)
-    }
+    `
   }
 ]
 export const columnsTitle = [

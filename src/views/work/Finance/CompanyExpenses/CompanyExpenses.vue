@@ -48,7 +48,7 @@
         />
       </div>
       <div class="billTitle-right" style="left: 580px">
-        <div class="billTitle-right-table" style="width: 538px">
+        <div class="billTitle-right-table" style="width: 540px">
           <edit-table
             hideNum
             hide-sums

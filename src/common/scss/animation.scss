@@ -1,0 +1,15 @@
+@import '../../../node_modules/animate.css/animate.min.css';
+.fade-enter-active{
+    animation: fadeInLeft .5s;
+}
+.fade-leave-active {
+    animation: fadeOutLeft .5s;
+}
+
+.zoom-enter-active{
+    animation: zoomInDown .5s;
+}
+.zoom-leave-active {
+    animation: zoomOutDown .5s;
+}
+

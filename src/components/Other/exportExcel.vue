@@ -1,11 +1,11 @@
 <template>
-  <div>
+<div>
     <div class="container_excel" :style="$attrs.styles" @click="(e)=>{exportData(e)}">
-      <i class="el-icon-download"></i>
-      <span class="export">导出excel</span>
-      <a ref="down" :href="href" :download="`${title}.xlsx`"></a>
+        <i class="el-icon-download"></i>
+        <span class="export">导出excel</span>
+        <a ref="down" :href="href" :download="`${title}.xlsx`"></a>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -105,28 +105,30 @@ export default {
 
 <style>
 .download {
-  display: none;
+    display: none;
 }
 
 .container_excel {
-  background-color: #409eff;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  border: 1px solid #409eff;
-  width: 100px;
-  height: 36px;
-  line-height: 36px;
-  border-radius: 4px;
-  padding-left: 5px;
-  box-sizing: border-box;
-  display: inline-block;
+    background-color: #409eff;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #409eff;
+    width: 100px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 4px;
+    padding-left: 5px;
+    box-sizing: border-box;
+    display: inline-block;
 }
+
 .container_excel:hover {
-  color: #fff;
-  background-color: #66b1ff;
+    color: #fff;
+    background-color: #66b1ff;
 }
+
 .export {
-  margin-left: 8px;
+    margin-left: 8px;
 }
 </style>

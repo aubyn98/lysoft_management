@@ -18,7 +18,7 @@
         />
       </div>
       <div class="billTitle-right" style="left: 750px">
-        <div class="billTitle-right-table" style="width:537px">
+        <div class="billTitle-right-table" style="width:540px">
           <edit-table
             hideNum
             hide-sums
@@ -68,7 +68,6 @@ export default {
     del () {},
     editChange () {
       this.getData().then((res) => {
-        console.log(res)
       })
     },
     rowClickXx () {},

@@ -1,4 +1,4 @@
-import { math } from 'aubyn-common'
+// import { math } from 'aubyn-common'
 export const columnsLeft = [
   {
     label: '是否已打印',
@@ -107,9 +107,9 @@ export const columnsLeft = [
     prop: 'je',
     width: 100,
     sumProp: 'je',
-    computed: (r) => {
-      return math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
-    },
+    computed: `
+    return this.$math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
+    `,
     readonly: true
   },
   {

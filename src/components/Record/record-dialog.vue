@@ -2,7 +2,7 @@
 <script type="text/javascript">
 export default {
   render (h, c) {
-    const { select, rowClick, rowCheckChange, rows, sendChange, currentRow, api, activeIndex, columns, formItems, selection, $attrs, $listeners, permission } = this
+    const { select, rowClick, rowCheckChange, rows, sendChange, currentRow, api, activeIndex, columns, formItems, selection, $attrs, $listeners, permission, columnsChange } = this
     const { visible, title, ...props } = $attrs
     const { selectEnd, ...listeners } = $listeners
     const $permission = this.$permission([{ mc: title, xg: true }])
@@ -20,10 +20,10 @@ export default {
             small
             ref="searchTable"
             props={{ columns, pageSize: 30, api: api.get, ...props, selection }}
-            on={{ select, 'select-all': select, 'row-click': rowClick, ...listeners, 'check-change': rowCheckChange, 'send-change': sendChange }}
+            on={{ select, 'select-all': select, 'row-click': rowClick, ...listeners, 'check-change': rowCheckChange, 'send-change': sendChange, 'columns-change': columnsChange }}
           />) : ''}
         </div>
-        <el-dialog props={{ visible: this.subVisible, 'append-to-body': true }} on={{ close: this.closeInnerDialog }} class="innerDialog">
+        <el-dialog props={{ visible: this.subVisible, 'append-to-body': true }} on={{ close: this.closeInnerDialog, 'row-dblclick': (row) => { selectEnd([row]) } }} class="innerDialog">
           <auto-form ref="autoForm" props={{ formItems }}/>
           <span slot="footer" class="dialog-footer">
             <el-button size="mini" on={{ click: this.closeInnerDialog }}>取 消</el-button>
@@ -68,6 +68,9 @@ export default {
     }
   },
   methods: {
+    columnsChange (c) {
+      this.$emit('update:columns', c)
+    },
     sendChange () {
       this.currentRow = null
     },
@@ -94,7 +97,7 @@ export default {
     },
     initForm () {
       this.$nextTick(() => {
-        console.log(this.$refs.autoForm.initForm)
+        // console.log(this.$refs.autoForm.initForm)
         this.$refs.autoForm.initForm(this.currentRow)
       })
     },
@@ -116,6 +119,7 @@ export default {
     del () {
       if (!this.currentRow) return this.$message.error('请选择要删除数据')
       this.$api[this.api.del]({ id: this.currentRow.id }).then(res => {
+        this.currentRow = null
         this.$refs.searchTable.delRow(this.currentRowIndex)
       }, e => {})
     },

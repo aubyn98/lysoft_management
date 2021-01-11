@@ -1,7 +1,7 @@
 <template>
   <record-dialog
     name="Unit"
-    title="物料类型"
+    title="单位档案"
     permission
     :api="{
       get:'getUnit',

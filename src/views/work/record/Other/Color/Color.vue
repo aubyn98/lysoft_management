@@ -8,7 +8,7 @@
       update:'updateColor',
       add:'addColor'
     }"
-    :columns="columns"
+    :columns.sync="columns"
     :formItems="formItems"
     v-on="listeners"
     v-bind="$attrs"

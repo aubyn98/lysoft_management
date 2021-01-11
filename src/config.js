@@ -5,4 +5,4 @@ if (hrefReg[3]) {
 }
 console.log(urlPath)
 export const routePath = urlPath
-export const apiPath = process.env.NODE_ENV !== 'production' ? 'http://192.168.0.178/wljxc/home/' : urlPath + 'home/'
+export const apiPath = process.env.NODE_ENV !== 'production' ? 'http://192.168.0.178/wljxc_web/home/' : urlPath + 'home/'

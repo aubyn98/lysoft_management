@@ -1,7 +1,7 @@
 <template>
   <el-table
     class="contentTable"
-    ref="searchTable"
+    ref="Table"
     :data="[{}]"
     border
     @header-dragend="dragend"
@@ -29,34 +29,38 @@ export default {
     }
   },
   mounted () {
-    const columns = JSON.parse(localStorage.getItem(this.name))
-    if (columns) {
-      this.$emit('update:columns', columns)
-      this.$emit('columns-change', columns)
-    } else {
-      this.setFullScreen()
-      window.addEventListener('resize', this.setFullScreen)
-    }
-    this.$nextTick(() => {
-      const elTable = this.$refs.searchTable.$el
-      const wrapper = elTable.children[2]
-      elTable.children[1].classList.add('table-content-header')
-      wrapper.style.height = 'calc(100% - 10px)'
-      wrapper.children[0].classList.add('table-content-table')
-      document
-        .getElementsByClassName('cell-class-name-content')
-        .forEach((td) => {
-          td.classList.add('table-content-td')
-          td.children[0].classList.add('table-content-cell')
-        })
+    this.localforage.getItem(this.name).then(columns => {
+      if (columns) {
+        this.$emit('update:columns', columns)
+        this.$emit('columns-change', columns)
+      } else {
+        this.setFullScreen()
+        window.addEventListener('resize', this.setFullScreen)
+      }
+      this.$nextTick(() => {
+        const elTable = this.$refs.Table.$el
+        const wrapper = elTable.children[2]
+        elTable.children[1].classList.add('table-content-header')
+        wrapper.style.height = 'calc(100% - 10px)'
+        wrapper.children[0].classList.add('table-content-table')
+        document
+          .getElementsByClassName('cell-class-name-content')
+          .forEach((td) => {
+            td.classList.add('table-content-td')
+            td.children[0].classList.add('table-content-cell')
+          })
+      })
     })
+    /* const $el = this.$refs.Table.$el
+    $el.removeChild($el.querySelector('.hidden-columns')) */
+    // const columns = JSON.parse(localStorage.getItem(this.name))
   },
   destroyed () {
     window.removeEventListener('resize', this.setFullScreen)
   },
   methods: {
     setFullScreen () {
-      const width = this.$refs.searchTable.$el.clientWidth
+      const width = this.$refs.Table.$el.clientWidth
       const newcolumns = this.columns.map((it, i) => {
         const t = { ...it }
         if (i === this.columns.length - 1) {
@@ -76,12 +80,13 @@ export default {
       })
       this.$emit('update:columns', columns)
       this.$emit('columns-change', columns)
-      localStorage.setItem(this.name, JSON.stringify(columns))
+      this.localforage.setItem(this.name, columns)
+      // localStorage.setItem(this.name, JSON.stringify(columns))
       this.doLayout()
     },
     doLayout () {
       this.$nextTick(() => {
-        this.$refs.searchTable.doLayout()
+        this.$refs.Table.doLayout()
       })
     }
   }

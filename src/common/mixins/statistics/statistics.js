@@ -39,7 +39,7 @@ export default {
         this.initAllTableData && this.initAllTableData()
         this.$api[this.api](msg)
           .then((data) => {
-            this.groupKey && this.countMerge(data.res)
+            this.mergeColumns && this.countMerge(data.res)
             this.count = data.count
             this.requestHandle && this.requestHandle(data)
             this.tableData = data.res
@@ -49,7 +49,8 @@ export default {
     },
     // 清除表格搜索条件
     clearTableHeader (flag) {
-      this.$refs.searchTable.initMsg(flag)
+      const searchTable = this.$refs.searchTable
+      searchTable && searchTable.initMsg(flag)
     },
     // 初始化搜索条件
     initSearchMsg () {

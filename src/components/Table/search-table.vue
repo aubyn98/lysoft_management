@@ -5,7 +5,7 @@
       border
       height="20px"
       style="width: 100%"
-      ref="searchTable"
+      ref="Table"
       :data="autoTableData"
       v-loading="loading"
       highlight-current-row
@@ -14,6 +14,8 @@
       :row-class-name="tableRowClassName"
       :show-summary="autoSums.length > 1 && !this.hideSums"
       :summary-method="getSummaries"
+      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+      :row-key="rowKey"
       :span-method="spanMethod ? objectSpanMethod : () => {}"
       @current-change="handleCurrentChange"
       @header-dragend="dragend"
@@ -42,7 +44,7 @@
         <template slot="header" slot-scope="scope">
           <popover-check
             label="序号"
-            :listData="columns"
+            :listData="autoCheckC"
             prop="label"
             v-model="checkedList"
           />
@@ -54,8 +56,8 @@
       <el-table-column
         :label="column.label"
         :align="column.align || 'left'"
-        v-for="column in autoColumns"
-        :key="column.prop"
+        v-for="(column, index) in autoColumns"
+        :key="index + column.prop"
         :prop="column.prop"
         :width="column.width"
       >
@@ -66,52 +68,99 @@
             @click.shift="sort_click_shift(column.prop)"
           >
             <span>{{ column.label }}</span>
-            <span style="color: var(--dark-blue)">{{
+            <span style="color: #409eff">{{
               !sort[column.prop] ? "" : sort[column.prop] === "desc" ? "▼" : "▲"
             }}</span>
           </div>
         </template>
-        <el-table-column
-          :prop="column.prop"
-          :width="column.width"
-          v-if="!hideSearch"
-          :align="column.align || 'left'"
-        >
-          <!-- eslint-disable-next-line -->
-          <template slot="header" slot-scope="scope">
-            <el-input
-              v-if="!column.elType"
-              v-model.trim="msg[column.prop]"
-              size="mini"
-              @keyup.native.enter="inputEeter(scope)"
-              placeholder="输入关键字回车搜索"
-            />
-            <el-date-picker
-              value-format="yyyy-MM-dd"
-              v-else-if="column.elType === 'date'"
-              v-model="msg[column.prop]"
-              type="date"
-              placeholder="选择日期"
-            >
-            </el-date-picker>
-            <el-checkbox
-              v-else-if="column.elType === 'checkbox'"
-              v-model="msg[column.prop]"
-              @change="inputEeter(scope)"
-            ></el-checkbox>
-          </template>
-          <template slot-scope="scope">
-            <el-checkbox
-              :disabled="column.disabled"
-              v-if="column.elType === 'checkbox'"
-              v-model="scope.row[column.prop]"
-              @change="$emit('check-change', scope.row)"
-            ></el-checkbox>
-            <span :style="{ color: scope.row.color || '#606266' }" v-else>{{
-              scope.row[column.prop]
-            }}</span>
-          </template>
-        </el-table-column>
+        <template v-if="column.children">
+          <el-table-column
+            :label="c.label"
+            :align="c.align || 'left'"
+            v-for="(c, index) in column.children"
+            :key="index + c.prop"
+            :prop="c.prop"
+            :width="c.width"
+          >
+            <template slot-scope="scope">
+              <el-checkbox
+                :disabled="c.disabled"
+                v-if="c.elType === 'checkbox'"
+                v-model="scope.row[c.prop]"
+                @change="$emit('check-change', scope.row, c.prop)"
+              ></el-checkbox>
+              <span v-else>{{
+                scope.row[c.prop]
+              }}</span>
+            </template>
+          </el-table-column>
+        </template>
+        <template v-else-if="!hideSearch && !column.children">
+          <el-table-column
+            :prop="column.prop"
+            :key="index + column.prop"
+            :width="column.width"
+            :align="column.align || 'left'"
+          >
+            <!-- eslint-disable-next-line -->
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-if="!column.elType"
+                v-model.trim="msg[column.prop]"
+                size="mini"
+                @keyup.native.enter="inputEeter(scope)"
+                placeholder="输入关键字回车搜索"
+              />
+              <el-date-picker
+                value-format="yyyy-MM-dd"
+                v-else-if="column.elType === 'date'"
+                v-model="msg[column.prop]"
+                type="date"
+                placeholder="选择日期"
+              >
+              </el-date-picker>
+              <el-checkbox
+                v-else-if="column.elType === 'checkbox'"
+                v-model="msg[column.prop]"
+                @change="inputEeter(scope)"
+              ></el-checkbox>
+            </template>
+            <template slot-scope="scope">
+              <el-checkbox
+                :disabled="column.disabled"
+                v-if="column.elType === 'checkbox'"
+                v-model="scope.row[column.prop]"
+                @change="$emit('check-change', scope.row, column.prop)"
+              ></el-checkbox>
+              <el-date-picker
+                @keypress.native.enter="enter"
+                style="width: 100%"
+                :disabled="column.disabled"
+                v-else-if="column.elType === 'date'"
+                v-model="scope.row[column.prop]"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"
+                @change="$emit('date-change', scope.row, column.prop)"
+              >
+              </el-date-picker>
+              <span v-else>{{
+                scope.row[column.prop]
+              }}</span>
+            </template>
+          </el-table-column>
+        </template>
+        <template slot-scope="scope" v-if="hideSearch && !column.children">
+          <el-checkbox
+            :disabled="column.disabled"
+            v-if="column.elType === 'checkbox'"
+            v-model="scope.row[column.prop]"
+            @change="$emit('check-change', scope.row, column.prop)"
+          ></el-checkbox>
+          <span v-else>{{
+            scope.row[column.prop]
+          }}</span>
+        </template>
       </el-table-column>
     </el-table>
     <div
@@ -158,6 +207,14 @@ export default {
     this.request(true)
   },
   props: {
+    // 设置表格-行样式
+    rowClassName: {
+      type: Function,
+      default: null
+    },
+    rowKey: {
+      type: [String, Number]
+    },
     // 需要合并单元格的列
     mergeColumns: {
       type: Array,
@@ -165,7 +222,7 @@ export default {
     },
     // 是否开启单元格合并
     spanMethod: {
-      type: Boolean,
+      type: [Boolean, Function],
       default: false
     },
     // 隐藏表头加载效果
@@ -179,12 +236,14 @@ export default {
       default: false
     },
     // 没有api时 传入的表格行数
-    sourceCount: {
-    },
+    sourceCount: {},
     // 没有api时 传入的表格数据
     sourceData: {
       type: Array,
       default: null
+    },
+    sourcePageSize: {
+      type: Number
     },
     // 请求api时附带的额外参数
     params: {
@@ -215,7 +274,8 @@ export default {
       loading: false,
       // 表格排序信息
       sort: {},
-      sumsData: {}
+      sumsData: {},
+      init: false
     }
   },
   computed: {
@@ -224,13 +284,37 @@ export default {
     },
     autoTableData () {
       // this.doLayout()
-      return this.api ? this.tableData : this.sourceData
+      return this.api || this.init ? this.tableData : this.sourceData
     },
     pageSize () {
-      return this.$store.state.company ? parseFloat(this.$store.state.company.mysj) : 60
+      return this.sourcePageSize || (this.$store.state.company
+        ? parseFloat(this.$store.state.company.mysj)
+        : 60)
     }
   },
   methods: {
+    // 设置当前选中行
+    setCurrentRow (val = null) {
+      typeof val === 'number' && (val = this.autoTableData[val])
+      this.$refs.Table.setCurrentRow(val)
+    },
+    initTableData (val = null, flag = true, copy = true) {
+      this.init = true
+      this.tableData = copy ? this.$format.copy(val || []) : val
+      const hasOwnProperty = Object.prototype.hasOwnProperty
+      const sums = this.autoColumns.reduce((t, c) => {
+        if (hasOwnProperty.call(c, 'sumProp')) {
+          t[c.prop] = 0
+        }
+        return t
+      }, {})
+      this.tableData.forEach(r => {
+        Object.keys(sums).forEach(k => {
+          sums[k] = this.$math.add(sums[k], r[k])
+        })
+      })
+      this.setSums(sums)
+    },
     // 表格条件发生变化时触发
     sendChange (flag) {
       this.request(flag)
@@ -263,31 +347,52 @@ export default {
       this.sendChange()
     },
     // 合并单元格
-    objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
-      if (this.mergeColumns.includes(column.property) && row.count) {
-        return {
-          rowspan: row.count,
-          colspan: 1
-        }
-      } else if (this.mergeColumns.includes(column.property) && !row.count) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        }
-      }
+    objectSpanMethod (o) {
+      return typeof this.spanMethod === 'function'
+        ? this.spanMethod(o)
+        : (function ({ row, column, rowIndex, columnIndex }) {
+          if (this.mergeColumns.includes(column.property) && row.count) {
+            return {
+              rowspan: row.count,
+              colspan: 1
+            }
+          } else if (
+            this.mergeColumns.includes(column.property) &&
+              !row.count
+          ) {
+            return {
+              rowspan: 0,
+              colspan: 0
+            }
+          }
+        }.call(this, o))
     },
+    /* objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
+      return {
+        rowspan: (row.count && row.count[column.property]) || 1,
+        colspan: (row.count && row.count[column.property]) ? 1 : this.mergeColumns.includes(column.property) ? 0 : 1
+      }
+    }, */
     // 设置表尾合计信息
     setSums (data) {
       const sums = ['合计']
-      this.autoColumns.forEach((v, index) => {
+      let step = this.selection ? 2 : 1
+      this.autoColumns.forEach(v => {
         if (v.sumProp) {
-          sums[index + 1] = parseFloat(data[v.sumProp]) || 0
+          sums[step] = parseFloat(data[v.sumProp]) || 0
+        } else if (v.children) {
+          return v.children.forEach((c) => {
+            sums[step] = parseFloat(data[c.sumProp]) || 0
+            step++
+          })
         }
+        step++
       })
+      this.sumsData = data
       this.sums = sums
     },
     toggleRowSelection (row, selected) {
-      this.$refs.searchTable.toggleRowSelection(row, selected)
+      this.$refs.Table.toggleRowSelection(row, selected)
     },
     // 添加行
     addRow (row) {
@@ -333,25 +438,27 @@ export default {
         if (this.api) {
           !this.hideLoading && (this.loading = true)
           this.$emit('reqStart')
-          this.$api[this.api](
-            { ...this.msg, ...this.params, ...this.getSort() },
-            !this.hideLoading
-          )
-            .then((data) => {
-              resolve(true)
-              this.loading = false
-              this.$emit('reqEnd', data.res)
-              this.tableData = data.res
-              !this.hidePagination && (this.count = data.count)
-              if (!this.hideSums) {
-                this.setSums(data)
-                this.sumsData = data
-              }
-            })
-            .catch((e) => {
-              this.loading = false
-              reject(e)
-            })
+          this.$api[this.api]
+            ? this.$api[this.api](
+              { ...this.msg, ...this.params, ...this.getSort() },
+              !this.hideLoading
+            )
+              .then((data) => {
+                resolve(true)
+                this.loading = false
+                this.$emit('reqEnd', data.res)
+                this.tableData = data.res
+                !this.hidePagination && (this.count = data.count)
+                if (!this.hideSums) {
+                  this.setSums(data)
+                  this.sumsData = data
+                }
+              })
+              .catch((e) => {
+                this.loading = false
+                reject(e)
+              })
+            : (this.loading = false)
         }
       })
     },
@@ -369,6 +476,9 @@ export default {
 </script>
 
 <style lang="scss">
+$bg-color-blue: #409eff;
+$text-color-white: white;
+$border-color-gray: #ccc;
 .search-table {
   width: 100%;
   height: 100%;
@@ -376,8 +486,14 @@ export default {
   flex-direction: column;
   flex-shrink: 1;
   .el-table__body tr.current-row > td {
-    background-color: var(--dark-blue);
-    color: white;
+    background-color: $bg-color-blue;
+    color: $text-color-white;
+    > div {
+      color: $text-color-white;
+      > span {
+        color: $text-color-white !important;
+      }
+    }
   }
   .header-cell-class-name {
     padding: 0 !important;
@@ -399,8 +515,12 @@ export default {
         height: 30px;
         line-height: 30px;
       }
+      .el-input__icon {
+        line-height: 30px;
+      }
       .el-date-editor .el-input__inner {
         padding: 0 30px !important;
+        border-radius: 0;
       }
     }
   }
@@ -412,6 +532,14 @@ export default {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      padding: 0 !important;
+      > span {
+        color: #606266;
+        padding: 0 10px;
+      }
+      .el-date-editor {
+        border: none;
+      }
       .el-input {
         display: block !important;
       }
@@ -423,6 +551,7 @@ export default {
       }
       .el-date-editor .el-input__inner {
         padding: 0 30px !important;
+        border-radius: 0;
       }
       .el-input__icon {
         line-height: 30px;
@@ -459,7 +588,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: solid 1px var(--border-gray);
+  border: solid 1px $border-color-gray;
   box-sizing: border-box;
   border-top: none;
   height: 34px;

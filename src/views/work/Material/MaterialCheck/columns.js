@@ -1,4 +1,4 @@
-import { math } from 'aubyn-common'
+// import { math } from 'aubyn-common'
 export const columnsXx = [
   {
     label: '是否打印',
@@ -116,9 +116,9 @@ export const columnsXx = [
     width: 100,
     show: true,
     sumProp: 'je',
-    computed: (r) => {
-      return math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
-    },
+    computed: `
+    return this.$math.multiply(parseFloat(r.sl || 0), parseFloat(r.dj || 0))
+    `,
     readonly: true
   },
   {

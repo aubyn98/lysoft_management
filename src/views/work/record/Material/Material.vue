@@ -44,6 +44,7 @@
             name="MaterialXxTable"
             :columns.sync="columnsXx"
             @row-click="rowClickXx"
+            @row-dblclick="rowDblclick"
           />
         </div>
         <div class="page-RowContent-item" data-main style="flex: 4">
@@ -156,6 +157,7 @@
         :params="{ wlbh: currentRow && currentRow.wlbh }"
       />
       <MaterialAlarm
+        append-to-body
         :params="{ wlbh: currentRow && currentRow.wlbh }"
         :visible.sync="AlarmVisible"
       />
@@ -348,7 +350,6 @@ export default {
       this.$refs.autoForm.submitForm().then(option => {
         const { ys, sh, gg, cf, delys, delsh, delgg, delcf } = this.attachData
         const { bwl, index, rownumber, ...res } = option
-        console.log(option)
         this.updatesaveCommon(
           fn,
           { ...res, ys, sh, gg, cf, delys, delsh, delgg, delcf },

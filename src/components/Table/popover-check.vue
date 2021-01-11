@@ -40,6 +40,11 @@ export default {
       checkAll: false
     }
   },
+  watch: {
+    value (val) {
+      this.handleCheckedListChange(val)
+    }
+  },
   created () {
     this.handleCheckedListChange(this.value)
   },

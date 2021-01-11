@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .rotate-animate {
+        width: 100px;
+        height: 100px;
+        border: 10px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 10px solid #2842d8;
+        animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .dash-border {
+        width: 200px;
+        height: 100px;
+        line-height: 100px;
+        background-color: seagreen;
+        outline: 1px dashed rgb(172, 60, 60);
+        outline-offset: -10px;
+        background: linear-gradient(to left bottom,transparent 50%,rgba(0,0,0,.2) 0,rgba(0,0,0,.4)) 100% 0 no-repeat;
+    }
+
+    .radius-border {
+        margin-top: 20px;
+        width: 180px;
+        height: 80px;
+        box-shadow: 0 0 0 10px gray;
+    }
+    .fold-1{
+  /* margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  position: relative;
+  width: 200px;
+  height: 80px;
+  border-radius: .5em;
+  color: #fff;
+  line-height: 80px;
+  text-align: center;
+  background: linear-gradient(-150deg,transparent 1.5em, #58a 0); */
+}
+.fold-1::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(to left bottom,transparent 50%,rgba(0,0,0,.2) 0,rgba(0,0,0,.4)) 100% 0 no-repeat;
+  width: 1.73em;
+  height: 3em;
+  transform: translateY(-1.3em) rotate(-30deg);
+  transform-origin: bottom right;
+  border-bottom-left-radius: inherit;
+  box-shadow: -.2em .2em .3em -.1em rgba(0,0,0,.15);
+}
+
+
+</style>
+
+<body>
+    <div class="rotate-animate">
+
+    </div>
+    <div class="dash-border"></div>
+    <div class="radius-border"></div>
+    <div class="fold-1">折角效果哦</div>
+    <style>
+        .my-line{
+          line-height: 1.4em;
+          background: linear-gradient(gray,gray) no-repeat;
+          background-size: 100% 1px;
+          background-position: 0 1.15em;
+          text-shadow: .05em 0 #fff, -.05em 0 #fff;
+        }
+        </style>
+        <div class=""><span class="my-line">i have your big apple.you have a too? hi hi hi.</span></div>
+
+</body>
+
+</html>

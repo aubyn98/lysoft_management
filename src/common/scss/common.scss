@@ -21,6 +21,8 @@ body {
   @include fullBox;
   color: #666;
   min-width: 1390px;
+  overflow: hidden;
+  position: relative;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

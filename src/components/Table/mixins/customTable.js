@@ -15,10 +15,9 @@ export default {
     return {
       // 表头搜索条件 和 页码
       msg: { page: 1 },
-      // 选中显示的列
-      checkedList: [],
       // 选择的行
       currentRow: null,
+      selectData: [],
       // 表尾 合计
       sums: [],
       // 表格数据
@@ -83,68 +82,45 @@ export default {
       this.$emit('select-all', selection)
     },
     selectionChange (selection) {
+      this.selectData = selection
       this.$emit('selection-change', selection)
-    },
-    // 设置当前选中行
-    setCurrentRow (val = null) {
-      this.$refs.searchTable.setCurrentRow(val)
     },
     // 当前行变化时触发
     handleCurrentChange (row) {
       this.currentRow = row
     },
-    // 设置表格-行样式
-    tableRowClassName ({ row, rowIndex }) {
-      row.index = rowIndex
-      if ((rowIndex + 1) % 4 === 2) {
-        return 'success-row'
-      }
-      if ((rowIndex + 1) % 2 === 0) {
-        return 'warning-row' // warning-row
-      }
-    },
     // 获取合计信息
     getSummaries (param) {
       return this.sums
+    },
+    // 设置表格-行样式
+    tableRowClassName ({ row, rowIndex }) {
+      row.index = rowIndex
+      let className = ''
+      if (this.rowClassName) {
+        className = this.rowClassName({ row, rowIndex })
+      }
+      if ((rowIndex + 1) % 4 === 2) {
+        return `success-row ${className}`
+      }
+      if ((rowIndex + 1) % 2 === 0) {
+        return `warning-row ${className}`
+      }
+      return className
     }
   },
   created () {
-    this.localforage.getItem(this.name + 'CheackList').then(checkedList => {
-      this.checkedList = checkedList || this.columns.filter(c => {
-        // eslint-disable-next-line no-prototype-builtins
-        const hasShow = c.hasOwnProperty('show')
-        if ((hasShow && c.show) || !hasShow) return true
-      }).map((c) => c.label)
-      this.initMsg()
-    })
     this.initMsg()
   },
   watch: {
-    checkedList: {
-      handler (val) {
-        this.localforage.setItem(this.name + 'CheackList', val)
-        this.setSums && this.setSums(this.sumsData)
-      },
-      deep: true
-    },
-    tableData: {
+    /* tableData: {
       handler (val) {
         // this.doLayout()
       },
       deep: true
-    }
+    } */
   },
   computed: {
-    autoColumns () {
-      const newColumns = this.columns.filter((item) => {
-        return this.checkedList.some((v) => v === item.label)
-      })
-      // this.request && this.request()
-      this.$nextTick(() => {
-        this.doLayout()
-      })
-      return newColumns
-    },
     autoSums () {
       this.$nextTick(() => {
         this.doLayout()

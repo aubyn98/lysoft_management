@@ -1,7 +1,7 @@
 <template>
   <el-container class="home-container">
     <el-aside style="width: auto" class="home-aside">
-      <a class="logoBox" href="http://www.lyerp.net" target="_blank">
+      <!-- <a class="logoBox" href="http://www.lyerp.net" target="_blank">
         <p v-show="!isCollapse">领域软件</p>
         <img src="../assets/img/logo_mini.png" alt="" />
       </a>
@@ -30,38 +30,50 @@
           style="max-width: 150px"
           mode="horizontal"
         >
-          <!-- mode="horizontal" -->
           <tree-menu
             :key="menu.index"
             v-for="menu in menus"
             :menu="menu"
           ></tree-menu>
         </el-menu>
-      </div>
+      </div> -->
     </el-aside>
     <el-container class="home-content">
       <el-header class="home-header">
-        <el-dropdown trigger="click" style="cursor: pointer">
-          <span class="el-dropdown-link">
-            {{ $store.state.account.username }}
-            <i class="el-icon-setting el-icon-setting"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="cipherShowHandle"
-              >更改密码
-            </el-dropdown-item
-            >
-            <!-- <el-dropdown-item @click.native="ipShowHandle"
-              >设置打印IP</el-dropdown-item
-            > -->
-            <el-dropdown-item
-              v-if="$store.state.mobile"
-              @click.native="setBluetoothPrinter"
-              >设置蓝牙打印机</el-dropdown-item
-            >
-            <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <BK-Menu
+          :menus.sync="menus"
+          :default-active="editableTabsValue"
+          mode="horizontal"
+          @select="handleSelect"
+        >
+          <template #left>
+            <a class="logoBox" href="http://www.lyerp.net" target="_blank">
+              <img src="../assets/img/logo_mini.png" alt="" />
+              <p>领域软件</p>
+            </a>
+          </template>
+          <template #right>
+          <el-dropdown trigger="click" class="headerDropdown">
+            <span class="el-dropdown-link">
+              {{ $store.state.account.username }}
+              <i class="el-icon-setting el-icon-setting"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="cipherShowHandle"
+                >更改密码
+              </el-dropdown-item>
+              <el-dropdown-item
+                v-if="$store.state.mobile"
+                @click.native="setBluetoothPrinter"
+                >设置蓝牙打印机</el-dropdown-item
+              >
+              <el-dropdown-item @click.native="logout"
+                >退出登录</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+        </BK-Menu>
       </el-header>
       <el-main class="home-main">
         <el-tabs
@@ -130,7 +142,8 @@ export default {
     }
   },
   created () {
-    this.initMenu(tabData.MaterialSalesBilling, 'MaterialSalesBilling')
+    this.initMenu(tabData.ProductOrder, 'ProductOrder')
+    // this.visibles.Fashion = true
     this.$api.getCompany().then(({ res }) => {
       this.$store.commit('changeCompany', res)
     })
@@ -186,13 +199,13 @@ export default {
         })
       }
       this.editableTabsValue = activeName
-      this.editableTabs = tabs.filter((tab) => tab.name !== targetName)
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName)
     },
     handleSelect (index, { cb }) {
-      if (
-        !this.activeArr.includes(index) &&
-        tabData[index]
-      ) {
+      /* index === 'TicketQuery' && (index = 'ScanTicket') && this.$nextTick(() => {
+        this.$refs[index][0].tabIndex = '交货查询'
+      }) */
+      if (!this.activeArr.includes(index) && tabData[index]) {
         this.activeArr.push(index)
         this.addTab(tabData[index], index)
       }
@@ -200,9 +213,14 @@ export default {
         this.visibles[index] = true
       }
       this.editableTabsValue = index
-      cb && this.$nextTick(() => {
-        cb(this.$refs[index] instanceof Array ? this.$refs[index][0] : this.$refs[index])
-      })
+      cb &&
+        this.$nextTick(() => {
+          cb(
+            this.$refs[index] instanceof Array
+              ? this.$refs[index][0]
+              : this.$refs[index]
+          )
+        })
     }
   }
 }

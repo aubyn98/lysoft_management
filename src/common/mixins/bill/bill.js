@@ -130,6 +130,7 @@ export default {
       this.submit('add', cb)
     },
     addcancel () {
+      this.$refs.autoForm.clearValidate()
       if (this.currentRow) {
         const { tableData, ...msg } = this.currentRow
         this.initData(msg, [msg], tableData, false)
@@ -145,6 +146,7 @@ export default {
       this.currentRow && this.getDataByDh()
     },
     updatecancel () {
+      this.$refs.autoForm.clearValidate()
       const { tableData, ...msg } = this.currentRow
       this.initData(msg, [msg], tableData, false)
     },

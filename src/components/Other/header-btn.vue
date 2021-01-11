@@ -1,7 +1,7 @@
 <template>
   <header
     class="page-header--btn"
-    :style="{ borderBottom: border ? '1px solid var(--border-gray)' : 'none' }"
+    :style="{ borderBottom: border ? '1px solid #ccc' : 'none' }"
   >
     <el-button
       :disabled="disabled"
@@ -125,5 +125,6 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   flex-shrink: 0;
+  background-color: white;
 }
 </style>

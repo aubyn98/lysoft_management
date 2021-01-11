@@ -127,6 +127,8 @@ export default {
     getAccountBooks () {
       this.$api.getAccountBooks({ dh: this.msg.code }).then(res => {
         this.accountBooks = res.res
+      }).catch(e => {
+        this.accountBooks = []
       })
     },
     submit () {
@@ -278,7 +280,7 @@ export default {
   float: left;
   height: 100%;
   width: 360px;
-  background-color: white;
+  background-color: var(--bg-white);
   border-radius: 0 8px 8px 0;
   box-shadow: 0px 1px 15px #716d9c;
   position: relative;

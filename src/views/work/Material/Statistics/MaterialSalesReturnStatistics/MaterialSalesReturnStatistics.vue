@@ -18,9 +18,9 @@
       </div>
       <div class="page-RowContent-item" style="width: 140px;align-items:center;" data-hover>
         <auto-form
-          class="searchForm"
+          class="searchForm-column"
           ref="autoForm"
-          style="width: 100%; justify-content: center; padding-left: 6px"
+
           :formItems="formItems"
           label-position="top"
         />

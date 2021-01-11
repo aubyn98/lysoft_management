@@ -2,6 +2,8 @@
   <!-- eslint-disable -->
   <div
     class="search-table"
+    tabIndex="0"
+    ref="TableBox"
     :class="{ searchTable_black: headerBg }"
     @contextmenu.prevent.stop="contextmenu"
     @click="visible = false"
@@ -11,7 +13,7 @@
       border
       height="20px"
       style="width: 100%"
-      ref="searchTable"
+      ref="Table"
       :data="tableData"
       highlight-current-row
       cell-class-name="cell-class-name-edit"
@@ -38,7 +40,7 @@
         <template slot="header" slot-scope="scope">
           <popover-check
             label="序号"
-            :listData="columns"
+            :listData="autoCheckC"
             prop="label"
             v-model="checkedList"
           />
@@ -60,8 +62,8 @@
       <el-table-column
         :label="column.label"
         align="center"
-        v-for="column in autoColumns"
-        :key="column.prop"
+        v-for="(column, index) in autoColumns"
+        :key="index + column.prop"
         :prop="column.prop"
         :width="column.width"
       >
@@ -69,7 +71,7 @@
           v-if="showSearch"
           :label="column.label"
           align="center"
-          :key="column.prop"
+          :key="index + column.prop"
           :prop="column.prop"
           :width="column.width"
         >
@@ -97,12 +99,18 @@
               v-model="scope.row[column.prop]"
               @contextmenu.stop.prevent="contextmenu"
               @input="input($event, scope.row, column.prop)"
+              @blur="blur($event, scope.row, column.prop)"
             ></el-input>
             <el-checkbox
               :disabled="disabled || column.disabled"
               v-model="scope.row[column.prop]"
               v-else-if="column.elType === 'checkbox'"
-              @change="input($event, scope.row, column.prop)"
+              @change="
+                (event) => {
+                  input(event, scope.row, column.prop);
+                  $emit('check-change', scope.row, column.prop);
+                }
+              "
             ></el-checkbox>
             <el-autocomplete
               :disabled="disabled"
@@ -111,7 +119,7 @@
               placeholder=" "
               v-else-if="column.elType === 'autocomplete'"
               v-model="scope.row[column.prop]"
-              :value-key="column.prop"
+              :value-key="column.sendKey || column.prop"
               :fetch-suggestions="
                 (q, cb) => querySearchAsync(q, cb, column, scope.row)
               "
@@ -119,11 +127,41 @@
                 column.relation && autocompleteSelect($event, column, scope.row)
               "
             ></el-autocomplete>
+            <el-select
+              style="width: 100%"
+              v-model="scope.row[column.prop]"
+              filterable
+              :clearable="!column.hideClearable"
+              :disabled="disabled"
+              placeholder="请选择"
+              v-else-if="column.elType === 'select'"
+              :value-key="column.sendKey || column.prop"
+              @keypress.native.enter="enter"
+              @focus="
+                column.api &&
+                  (remoteFn && column.remoteFn
+                    ? remoteFn(column, scope.row)
+                    : remoteMethod(column, scope.row))
+              "
+              @change="
+                column.relation && autocompleteSelect($event, column, scope.row)
+              "
+            >
+              <el-option
+                v-for="item in column.listData"
+                :key="column.api ? item[column.prop] : item"
+                :label="column.api ? item[column.prop] : item"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
             <el-date-picker
               style="width: 100%"
               :disabled="disabled"
+              value-format="yyyy-MM-dd"
               v-else-if="column.elType === 'date'"
               v-model="scope.row[column.prop]"
+              @change="$emit('date-change', scope.row, column.prop)"
               type="date"
               placeholder="选择日期"
             >
@@ -141,11 +179,17 @@
             @contextmenu.stop.prevent="contextmenu"
             @keypress.native.enter="enter"
             @input="input($event, scope.row, column.prop)"
+            @blur="blur($event, scope.row, column.prop)"
           ></el-input>
           <el-checkbox
             :disabled="disabled || column.disabled"
             v-model="scope.row[column.prop]"
-            @change="input($event, scope.row, column.prop)"
+            @change="
+              (event) => {
+                input(event, scope.row, column.prop);
+                $emit('check-change', scope.row, column.prop);
+              }
+            "
             @keypress.native.enter="enter"
             v-else-if="column.elType === 'checkbox'"
           ></el-checkbox>
@@ -157,14 +201,45 @@
             @keypress.native.enter="enter"
             v-else-if="column.elType === 'autocomplete'"
             v-model="scope.row[column.prop]"
-            :value-key="column.prop"
+            :value-key="column.sendKey || column.prop"
             :fetch-suggestions="
-              (q, cb) => querySearchAsync(q, cb, column, scope.row)
+              (q, cb) =>
+                autocompleteFn && column.autocompleteFn
+                  ? autocompleteFn(q, cb, column, scope.row, querySearchAsync)
+                  : querySearchAsync(q, cb, column, scope.row)
             "
             @select="
               column.relation && autocompleteSelect($event, column, scope.row)
             "
           ></el-autocomplete>
+          <el-select
+            style="width: 100%"
+            v-model="scope.row[column.prop]"
+            filterable
+            :clearable="!column.hideClearable"
+            :disabled="disabled"
+            placeholder="请选择"
+            v-else-if="column.elType === 'select'"
+            :value-key="column.sendKey || column.prop"
+            @keypress.native.enter="enter"
+            @focus="
+              column.api &&
+                (remoteFn && column.remoteFn
+                  ? remoteFn(column, scope.row)
+                  : remoteMethod(column, scope.row))
+            "
+            @change="
+              column.relation && autocompleteSelect($event, column, scope.row)
+            "
+          >
+            <el-option
+              v-for="item in column.listData"
+              :key="column.api ? item[column.prop] : item"
+              :label="column.api ? item[column.prop] : item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
           <el-date-picker
             @keypress.native.enter="enter"
             style="width: 100%"
@@ -172,7 +247,9 @@
             v-else-if="column.elType === 'date'"
             v-model="scope.row[column.prop]"
             type="date"
+            value-format="yyyy-MM-dd"
             placeholder="选择日期"
+            @change="$emit('date-change', scope.row, column.prop)"
           >
           </el-date-picker>
         </template>
@@ -203,6 +280,18 @@ import { dragendTable, customTable } from './mixins'
 export default {
   mixins: [dragendTable, customTable],
   props: {
+    remoteFn: {
+      type: Function,
+      default: null
+    },
+    autocompleteFn: {
+      type: Function,
+      default: null
+    },
+    arrowEvent: {
+      type: Boolean,
+      default: true
+    },
     contextMenus: {
       type: Array,
       default: () => []
@@ -245,6 +334,10 @@ export default {
     includeKeys: {
       type: Array,
       default: () => ['mx', 'xh', 'nblsdh']
+    },
+    stopKeyEvent: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -254,7 +347,8 @@ export default {
       visible: false,
       // 右键菜单定位
       position: { x: '1', y: '1' },
-      valid: null
+      valid: null,
+      computeds: null
     }
   },
   watch: {
@@ -274,43 +368,100 @@ export default {
         })
       },
       deep: true
+    },
+    columns: {
+      handler (val) {
+        this.computeds = val
+          .filter((c) => c.computed)
+          .map(({ prop, computed }) => {
+            if (typeof computed === 'string') {
+              // eslint-disable-next-line no-new-func
+              computed = new Function('r', computed)
+            } else if (typeof computed === 'object') {
+              computed = {
+                props: computed.props,
+                // eslint-disable-next-line no-new-func
+                handler: new Function('r', computed.handler)
+              }
+            }
+            return { prop, computed }
+          })
+      },
+      immediate: true,
+      deep: true
     }
   },
+  beforeDestroy () {
+    !this.stopKeyEvent &&
+      this.$refs.TableBox.removeEventListener('keydown', this.keyEvents)
+  },
   mounted () {
-
+    !this.stopKeyEvent &&
+      this.$refs.TableBox.addEventListener('keydown', this.keyEvents)
+    // window.addEventListener('keydown', this.keyEvents)
   },
   methods: {
+    // 设置当前选中行
+    setCurrentRow (val = null) {
+      typeof val === 'number' && (val = this.tableData[val])
+      this.$refs.Table.setCurrentRow(val)
+    },
+    blur ($event, row, prop) {
+      this.$emit('blur', row, prop, this.tableData)
+    },
+    keyEvents (e) {
+      if (this.disabled || !this.arrowEvent) return
+      switch (e.code) {
+        case 'ArrowDown':
+          this.addRow()
+          break
+        case 'ArrowUp':
+          this.tableData.pop()
+          break
+      }
+    },
     enter (e) {
-      this.$refs.searchTable.$el.querySelectorAll('.el-table__body-wrapper  input.el-input__inner').forEach((it, i, arr) => {
-        if (e.target === it) {
-          const $next = arr[i + 1]
-          $next && $next.focus()
-        }
-      })
+      this.$refs.Table.$el
+        .querySelectorAll('.el-table__body-wrapper  input.el-input__inner')
+        .forEach((it, i, arr) => {
+          if (e.target === it) {
+            const $next = arr[i + 1]
+            $next && $next.focus()
+          }
+        })
     },
     // 单元格关联计算
     input (val, row, prop) {
-      const computeds = this.columns
-        .filter((c) => c.computed)
-        .map(({ prop, computed }) => ({ prop, computed }))
-      computeds.forEach((c) => {
+      this.computeds.forEach((c) => {
         if (typeof c.computed === 'function') {
-          row[c.prop] = c.computed(row)
-        } else if (c.computed.props.includes(prop)) {
-          row[c.prop] = c.computed.handler(row)
+          row[c.prop] = c.computed.call(this, row)
+        } else if (
+          typeof computed === 'object' &&
+          c.computed.props.includes(prop)
+        ) {
+          row[c.prop] = c.computed.handler.call(this, row)
         }
       })
+      this.$emit('input', { row, prop, val })
     },
     // 单元格select下拉列表
-    autocompleteSelect (v, { relation, clearRelation }, row) {
+    autocompleteSelect (v, { relation, clearRelation, prop }, row) {
       relation &&
         relation.forEach((key) => {
-          row[key] = v[key]
+          if (key.indexOf('->') === -1) return (row[key] = v[key])
+          const [oKey, nKey] = key.split('->')
+          row[nKey] = v[oKey]
         })
       clearRelation &&
         clearRelation.forEach((key) => {
           row[key] = ''
         })
+      this.$emit(
+        'autocomplete-select',
+        v,
+        { prop, relation, clearRelation },
+        row
+      )
     },
     // 单元格input下拉列表
     querySearchAsync (q, cb, c, row) {
@@ -332,20 +483,41 @@ export default {
         (e) => {}
       )
     },
+    remoteMethod (item, row) {
+      this.$api[item.api](
+        {
+          [item.sendKey || item.prop]: row[item.prop],
+          ...(item.superKeys
+            ? item.superKeys.reduce((t, k) => {
+              t[k] = row[k] || ''
+              return t
+            }, {})
+            : {})
+        },
+        true
+      ).then((data) => {
+        item.listData = data.res
+      })
+    },
     submitTable () {
-      return this.$format.copy(this.tableData.map(it => {
-        const { index, ...res } = it
-        return Object.keys(res).reduce((t, k) => {
-          if (this.columns.some(c => c.prop === k) || this.includeKeys.includes(k)) {
-            t[k] = res[k]
-          }
-          return t
-        }, {})
-      }))
+      return this.$format.copy(
+        this.tableData.map((it) => {
+          const { index, ...res } = it
+          return Object.keys(res).reduce((t, k) => {
+            if (
+              this.columns.some((c) => c.prop === k) ||
+              this.includeKeys.includes(k)
+            ) {
+              t[k] = res[k]
+            }
+            return t
+          }, {})
+        })
+      )
     },
     // 初始化表格数据
-    initTableData (val = null, flag = true) {
-      this.tableData = this.$format.copy(val || [])
+    initTableData (val = null, flag = true, copy = true) {
+      this.tableData = copy ? this.$format.copy(val || []) : val
       flag && this.addRow()
     },
     setRow (row, index) {
@@ -358,29 +530,46 @@ export default {
         } else if (c.elType === 'date') {
           t[c.prop] = this.getDate()
         } else if (c.defaultVal) {
-          t[c.prop] = typeof c.defaultVal === 'function' ? c.defaultVal() : c.defaultVal
+          t[c.prop] =
+            typeof c.defaultVal === 'function' ? c.defaultVal() : c.defaultVal
         } else {
           t[c.prop] = ''
         }
         return t
       }, {})
     },
-    pushRow (o, type = 'push') {
+    copyRow () {
+      const len = this.tableData.length
+      len >= 1
+        ? this.tableData.push({ ...this.tableData[len - 1] })
+        : this.addRow()
+    },
+    pushRow (o, type = 'push', index) {
       type === 'push' && this.tableData.push(...o)
       type === 'unshift' && this.tableData.unshift(...o)
+      type === 'splice' && this.tableData.splice(index, 0, ...o)
     },
     // 添加行
     addRow () {
       const o = this.getRowBlankData()
       this.tableData.push(o)
-      this.setCurrentRow(o)
     },
     // 删除行
     delRow () {
-      if (this.currentRow) {
-        this.tableData.splice(this.currentRow.index, 1)
+      if (this.selectData.length && this.selection) {
+        const list = this.selectData
+          .sort((a, b) => a.index - b.index)
+          .map((s) => s.index)
+        this.$arr.reverseForEach(this.tableData, (c, i) => {
+          list.indexOf(i) !== -1 && this.tableData.splice(i, 1)
+        })
+        this.selectData = []
       } else {
-        this.tableData.pop()
+        if (this.currentRow) {
+          this.tableData.splice(this.currentRow.index, 1)
+        } else if (this.tableData.length) {
+          this.tableData.pop()
+        }
       }
       this.setCurrentRow()
     },
@@ -391,7 +580,7 @@ export default {
       this.position = { x, y }
     },
     inputEeter (scope) {
-      console.log(scope)
+      this.$emit('send-change', scope)
     },
     // 获取合计信息  独立-非混入
     getSummaries () {
@@ -414,9 +603,12 @@ export default {
       const sums = ['合计', '']
       this.autoColumns.forEach((v, index) => {
         if (v.sumProp) {
-          sums[index + 1 + (this.selection ? 1 : 0)] = this.tableData.reduce((t, r) => {
-            return this.$math.add(t, parseFloat(r[v.sumProp] || 0))
-          }, 0)
+          sums[index + (this.selection ? 2 : 1)] = this.tableData.reduce(
+            (t, r) => {
+              return this.$math.add(t, parseFloat(r[v.sumProp] || 0))
+            },
+            0
+          )
         }
       })
       this.$nextTick(() => {
@@ -429,19 +621,29 @@ export default {
 </script>
 
 <style lang="scss">
+$bg-header-color-black: rgb(68, 68, 68);
+$bg-current-row-color: #c5e2fd;
+$bg-color-white: white;
+$bg-color-blue: #409eff;
+$text-color-white: white;
+$text-color-gray: #999;
+$shadow-color-gray: #ccc;
 .search-table[data-edit] {
-  width: 100%;
+  padding: 1px;
+  outline-color: #bedeff;
+  outline-width: 1px;
+  box-sizing: border-box;
   overflow-y: auto;
   .el-table__body tr.current-row > td {
-    background-color: var(--current-row-bg);
+    background-color: $bg-current-row-color;
   }
 }
 .searchTable_black {
   .header-cell-class-name {
-    background-color: var(--editTable-header-black);
+    background-color: $bg-header-color-black;
     .cell {
-      background-color: var(--editTable-header-black);
-      color: white;
+      background-color: $bg-header-color-black;
+      color: $text-color-white;
     }
   }
 }
@@ -451,18 +653,18 @@ export default {
     min-width: 54px;
     z-index: 666;
     padding: 2px;
-    background-color: white;
-    box-shadow: 0 0 15px #ccc;
+    background-color: $bg-color-white;
+    box-shadow: 0 0 15px $shadow-color-gray;
     li {
       height: 25px;
       line-height: 25px;
       text-align: center;
-      color: #999;
+      color: $text-color-gray;
       padding: 2px;
     }
     li:hover {
-      background-color: var(--dark-blue);
-      color: white;
+      background-color: $bg-color-blue;
+      color: $text-color-white;
     }
   }
   .cell-class-name-edit {

@@ -33,11 +33,18 @@ export default {
 }
 </script>
 <style lang="scss">
+$bg-color-blue:#66b1ff;
+$bg-color-light-blue:#ecf5ff;
+$border-color-blue:#66b1ff;
+$border-color-light-blue:#c6e2ff;
+$text-color-white:white;
+$text-color-blue:#409eff;
 .tabsMini {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   min-height: 20px;
+  flex-shrink: 0;
 }
 .tabsMini-item {
   font-size: 12px;
@@ -52,18 +59,18 @@ export default {
   margin: auto;
 }
 .tabsMini-item-blue {
-  background: #66b1ff;
-  border-color: #66b1ff;
-  color: #ffffff;
+  background: $bg-color-blue;
+  border-color:$border-color-blue;
+  color:$text-color-white;
 }
 .tabsMini-item:hover {
-  color: #409eff;
-  border-color: #c6e2ff;
-  background-color: #ecf5ff;
+  color: $text-color-blue;
+  border-color: $border-color-light-blue;
+  background-color: $bg-color-light-blue;
 }
 .tabsMini-item-blue:hover {
-  background: #66b1ff;
-  border-color: #66b1ff;
-  color: #ffffff;
+  background: $bg-color-blue;
+  border-color:$border-color-blue;
+  color:$text-color-white;
 }
 </style>

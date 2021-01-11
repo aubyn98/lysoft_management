@@ -2,6 +2,7 @@
   <el-dialog
     :visible="visible"
     :title="title"
+    :append-to-body="appendToBody"
     @close="$emit('update:visible', false)"
   >
     <header-btn hideEdit>
@@ -14,14 +15,18 @@
       <el-button type="warning" size="mini" @click="cancel" v-if="edit"
         >撤销</el-button
       >
+      <el-button type="success" size="mini" @click="addRow" v-if="edit && !hideAddMenu"
+        >添加一行</el-button
+      >
     </header-btn>
     <div class="page-RowContent" :style="{ height: '500px', width: '100%' }">
       <edit-table
         hide-sums
-        hideAddMenu
+        :hideAddMenu="hideAddMenu"
         ref="editTable"
         :name="name"
-        :columns.sync="columns"
+        :columns="columns"
+        @columns-change="(c)=>$emit('update:columns',c)"
         :disabled="!edit"
       ></edit-table>
     </div>
@@ -61,6 +66,14 @@ export default {
       type: Boolean,
       required: true
     },
+    appendToBody: {
+      type: Boolean,
+      defualt: false
+    },
+    hideAddMenu: {
+      type: Boolean,
+      defualt: true
+    },
     params: {
       type: Object,
       defualt: () => ({})
@@ -74,11 +87,11 @@ export default {
       this.$api[this.api.get](this.params)
         .then((data) => {
           this.tableData = data.res
-          this.$refs.editTable.initTableData(this.tableData)
+          this.$refs.editTable.initTableData(this.tableData, false)
         })
         .catch((res) => {
           this.tableData = []
-          this.$refs.editTable.initTableData([])
+          this.$refs.editTable.initTableData([], false)
         })
     },
     save () {
@@ -88,9 +101,12 @@ export default {
         this.edit = false
       })
     },
+    addRow () {
+      this.$refs.editTable.addRow()
+    },
     cancel () {
       this.edit = !this.edit
-      this.$refs.editTable.initTableData(this.tableData)
+      this.$refs.editTable.initTableData(this.tableData, false)
     }
   },
   mixins: [dialogRecord]

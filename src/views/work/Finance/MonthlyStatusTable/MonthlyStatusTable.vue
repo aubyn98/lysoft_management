@@ -53,28 +53,28 @@
       >
         <tabs-mini :tabIndex.sync="tabIndex" :tabs="tabs" @change="tabChange" />
         <auto-form
-          class="searchForm"
+          class="searchForm-column"
           ref="autoForm1"
           key="khForm"
-          style="width: 100%; justify-content: center; padding-left: 6px"
+
           :formItems="formItemsKh"
           v-show="tabIndex === '客户'"
           label-position="top"
         />
         <auto-form
-          class="searchForm"
+          class="searchForm-column"
           ref="autoForm3"
           key="ghsForm"
-          style="width: 100%; justify-content: center; padding-left: 6px"
+
           :formItems="formItemsGhs"
           v-show="tabIndex === '供货商'"
           label-position="top"
         />
         <auto-form
-          class="searchForm"
+          class="searchForm-column"
           ref="autoForm2"
           key="jgsForm"
-          style="width: 100%; justify-content: center; padding-left: 6px"
+
           :formItems="formItemsJgs"
           v-show="tabIndex === '加工商'"
           label-position="top"
@@ -169,7 +169,7 @@ export default {
       })
     },
     cellDblclick (row, { property }) {
-      console.log(row, property)
+      // console.log(row, property)
     },
     rowDblclick (r, c, e) {
     },
@@ -234,13 +234,5 @@ export default {
 }
 </script>
 <style lang="scss">
-.searchForm {
-  .el-form-item {
-    height: 56px;
-    margin-bottom: 0px;
-  }
-  .el-form-item__label {
-    padding: 0;
-  }
-}
+
 </style>

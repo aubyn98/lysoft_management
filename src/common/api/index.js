@@ -4,7 +4,7 @@ const { createRequest, createReqInstance } = require('../utils/request')
 const { apiPath } = require('@/config')
 const baseURL = apiPath
 const { Loading, Message, MessageBox } = require('element-ui')
-
+const qs = require('qs')
 const baseConfig = {
   baseURL: baseURL,
   timeout: 60000,
@@ -45,7 +45,7 @@ const interceptors = {
     if (token && config.url !== 'Login/login' && config.url !== 'Login/cxzb') {
       config.headers['x-token'] = token
     }
-    if (/\w+\/[c|w]\w+/.test(config.url)) {
+    if (/\w+\/[c|w]\w+/.test(config.url) && !qs.parse(config.data).pageSize) {
       const pageSize = store.state.company ? store.state.company.mysj : 60
       config.data += `&pageSize=${pageSize}`
     }
@@ -61,7 +61,7 @@ const interceptors = {
     if (response.status === 200) {
       const data = response.data
       /* eslint-disable-next-line */
-      if (data === null || typeof data !== 'object' || (typeof data === 'object' && data.hasOwnProperty('data') && !data.res)) throw errorMsg
+      if (data === null || typeof data !== 'object' || (typeof data === 'object' && data.hasOwnProperty('res') && !data.res)) throw errorMsg
       if (!data.status || data.status !== 1) {
         const nError = { ...errorMsg, ...data }
         throw nError
@@ -92,7 +92,7 @@ function withError (req, mask) {
           e.status = -999
           MessageBox.alert(errorCode[e.response.status])
         } else if (mask) {
-          console.log(e)
+          // console.log(e)
           e.msg && MessageBox.alert(e.msg)
         }
         reject(e)
