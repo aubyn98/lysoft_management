@@ -9,13 +9,6 @@ export const columnsLeft = [
     api: 'getFashion',
     relation: ['sb', 'kslx']
   }, {
-    label: '码数',
-    prop: 'ms',
-    width: 100,
-    show: true,
-    elType: 'autocomplete',
-    api: 'getSize'
-  }, {
     label: '商标',
     prop: 'sb',
     width: 100,
@@ -48,6 +41,7 @@ export const columnsLeft = [
     label: '数量',
     prop: 'sl',
     sumProp: 'sl',
+    readonly: true,
     width: 100,
     show: true
   },
@@ -77,6 +71,12 @@ export const columnsLeft = [
     width: 100,
     show: true
   }, {
+    label: '码数',
+    prop: 'ms',
+    width: 100,
+    readonly: true,
+    show: true
+  }, {
     label: '包装方式',
     prop: 'bzfs',
     width: 100,
@@ -89,7 +89,7 @@ export const columnsLeft = [
   }
 
 ]
-export const columnsRight = [
+/* export const columnsRight = [
   {
     label: '匹数1',
     prop: 'ps1',
@@ -154,13 +154,12 @@ export const columnsRight = [
       }, 0)
     `
   }
-]
+] */
 export const columnsTitle = [
   {
     label: '合同号',
     prop: 'hth',
-    width: 100,
-    readonly: true
+    width: 100
   }, {
     label: '开单单号',
     prop: 'dh',

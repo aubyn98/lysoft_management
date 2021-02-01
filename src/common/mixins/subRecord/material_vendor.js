@@ -27,7 +27,7 @@ export default {
           this.$api
             .getMaterialEnterStoreVendor({ ghsbh: row.ghsbh })
             .then((data) => {
-              data.res.length > 0 &&
+              data.res.length &&
                 this.$refs.autoForm.setFieldsValue({
                   ghsmc: row.ghsmc,
                   ghsbh: row.ghsbh,

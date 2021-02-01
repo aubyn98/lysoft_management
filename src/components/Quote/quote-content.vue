@@ -11,7 +11,7 @@
             :name="name"
             :sourceData="tableData"
             :columns="columns"
-            :attach-columns="attachC"
+            :attach-columns.sync="attachC"
             @columns-change="changeColumns"
             @row-dblclick="rowDblclick"
             @select="select"
@@ -46,6 +46,10 @@ export default {
     formItems: {
       type: Array,
       required: true
+    },
+    params: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -71,16 +75,21 @@ export default {
         const msg = { ...this.searchMsg, columns: { ...this.searchMsg.columns } }
         this.searchMsgHandle(msg)
         this.initAllTableData && this.initAllTableData()
-        this.$api[this.api](msg)
+        this.$api[this.api]({ ...msg, ...this.params })
           .then((data) => {
             this.mergeColumns && this.countMerge(data.res)
             this.count = data.count
             this.requestHandle && this.requestHandle(data)
-            this.tableData = data.res
             this.$refs.searchTable.setSums(data)
-            if (this.attachColumnsFn && this.tableData.length) {
+            if (this.attachColumnsFn && data.res.length) {
               this.attachC = this.attachColumnsFn(data, this.columnKeys)
             }
+            this.tableData = data.res
+          }).catch(e => {
+            console.log(e)
+            this.count = 0
+            this.tableData = []
+            this.attachC = []
           })
       })
     },

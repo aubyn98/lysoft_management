@@ -43,7 +43,8 @@ export const columnsLeft = [
     prop: 'sl',
     sumProp: 'sl',
     width: 100,
-    show: true
+    show: true,
+    readonly: true
   },
   {
     label: '单价',
@@ -64,17 +65,23 @@ export const columnsLeft = [
     label: '码数',
     prop: 'ms',
     width: 100,
+    readonly: true,
+    show: true
+  }, /* {
+    label: '码数',
+    prop: 'ms',
+    width: 100,
     show: true,
     elType: 'autocomplete',
     api: 'getSize'
-  },
+  }, */
   {
     label: '备注',
     prop: 'bz',
     width: 100
   }
 ]
-export const columnsRight = [
+/* export const columnsRight = [
   {
     label: '匹数1',
     prop: 'ps1',
@@ -139,7 +146,7 @@ export const columnsRight = [
       }, 0)
     `
   }
-]
+] */
 export const columnsTitle = [
   {
     label: '开单单号',

@@ -162,7 +162,7 @@ export default {
           subRecord.component = 'Customer'
         } else if (val === '加工商还款') {
           subRecord.prop = 'mc'
-          subRecord.component = 'Customer'
+          subRecord.component = 'Processor'
         } else if (val === '供货商还款') {
           subRecord.prop = 'mc'
           subRecord.component = 'Vendor'

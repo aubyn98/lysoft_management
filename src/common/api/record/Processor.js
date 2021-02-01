@@ -1,16 +1,16 @@
 export default ({ req, reqMask }) => {
   return {
-    getConverter (data, type = false) {
+    getProcessor (data, type = false) {
       const send = ['da/cxjgsda', data]
       return type ? req(...send) : reqMask(...send)
     },
-    addConverter (data) {
+    addProcessor (data) {
       return reqMask('da/tjjgsda', data)
     },
-    updateConverter (data) {
+    updateProcessor (data) {
       return reqMask('da/xgjgsda', data)
     },
-    delConverter (data) {
+    delProcessor (data) {
       return reqMask('da/scjgsda', data)
     }
   }

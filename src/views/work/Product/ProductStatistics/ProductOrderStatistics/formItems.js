@@ -1,0 +1,91 @@
+export default [
+  {
+    label: '开始日期',
+    prop: 'ksrq',
+    style: { width: '130px' },
+    placeholder: '请输入客户名称',
+    elType: 'date'
+  },
+  {
+    label: '结束日期',
+    prop: 'jsrq',
+    placeholder: '请输入来款账号',
+    style: { width: '130px' },
+    elType: 'date'
+  }, {
+    label: '客户',
+    prop: 'khmc',
+    style: { width: '130px' },
+    placeholder: '请输入客户',
+    elType: 'autocomplete',
+    api: 'getCustomer'
+  }, {
+    label: '流水单号',
+    prop: 'lsdh',
+    placeholder: '请输入流水单号',
+    style: { width: '130px' }
+  }, {
+    label: '生产状态',
+    prop: 'sczt',
+    style: { width: '130px' },
+    placeholder: '请输入款式类型',
+    elType: 'select',
+    listData: ['生产安排', '裁床安排', '下车间', '下后道']
+  }, {
+    label: '商标',
+    prop: 'sb',
+    style: { width: '130px' },
+    placeholder: '请输入商标',
+    elType: 'autocomplete',
+    api: 'getTrademark'
+  }, {
+    label: '款号',
+    prop: 'kh',
+    style: { width: '130px' },
+    placeholder: '请输入款号',
+    elType: 'autocomplete',
+    api: 'getFashion'
+  }, {
+    label: '颜色',
+    prop: 'ysmc',
+    style: { width: '130px' },
+    placeholder: '请输入颜色',
+    elType: 'autocomplete',
+    api: 'getColor'
+  }, {
+    label: '结单状态',
+    prop: 'jdzt',
+    style: { width: '130px' },
+    placeholder: '请输入类型',
+    elType: 'select',
+    listData: ['全部', '未结单', '已结单'],
+    defaultVal: '全部',
+    hideClearable: true
+  }, {
+    label: '业务员',
+    prop: 'ywy',
+    style: { width: '130px' },
+    placeholder: '请输入业务员'/* ,
+    elType: 'autocomplete',
+    api: 'getColor' */
+  }, {
+    label: '汇总条件',
+    prop: 'hztj',
+    style: { width: '130px' },
+    placeholder: '请输入码数',
+    elType: 'select',
+    multiple: true,
+    defaultVal: [],
+    objVal: true,
+    listData: [
+      { hztj: '日期', key: 'rq' },
+      { hztj: '客户', key: 'a.khmc' },
+      { hztj: '商标', key: 'sb' },
+      { hztj: '款号', key: 'kh' },
+      { hztj: '颜色', key: 'ysmc' },
+      { hztj: '客户类型', key: 'lx' },
+      { hztj: '业务员', key: 'ywy' },
+      { hztj: '单位', key: 'dw' }
+    ]
+  }
+]

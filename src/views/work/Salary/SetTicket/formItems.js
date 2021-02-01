@@ -14,7 +14,7 @@ export const formItems = [
     style: { width: '160px' },
     elType: 'select',
     api: 'getTicketBedNum',
-    nonObj: true,
+    objVal: true,
     superKeys: ['tmbh'],
     hideClearable: true,
     listData: []
@@ -25,7 +25,7 @@ export const formItems = [
     style: { width: '180px' },
     elType: 'select',
     api: 'getTicketProcess',
-    nonObj: true,
+    objVal: true,
     superKeys: ['tmbh', 'ch'],
     hideClearable: true,
     listData: []

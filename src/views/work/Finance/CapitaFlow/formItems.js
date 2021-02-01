@@ -81,14 +81,14 @@ export const formItemsCustomer = [
     elType: 'textarea'
   }
 ]
-export const formItemsConverter = [
+export const formItemsProcessor = [
   {
     label: '加工商',
     prop: 'mc',
     style: { width: '250px' },
     placeholder: '请输入加工商名称',
     elType: 'autocomplete',
-    api: 'getConverter',
+    api: 'getProcessor',
     sendKey: 'jgsmc',
     relation: ['jgsbh'],
     icon: true,
@@ -251,7 +251,7 @@ export const formItemsVendor = [
 ]
 const formItems = {
   formItemsCustomer,
-  formItemsConverter,
+  formItemsProcessor,
   formItemsVendor
 }
 export function getformItems (type) {

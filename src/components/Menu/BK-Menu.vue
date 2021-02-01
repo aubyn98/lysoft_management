@@ -13,9 +13,11 @@
       v-for="(menu, index) in menus"
       :key="menu.index"
       @click.stop="toggle(index, menu.index)"
-      :style="!(menu.children || $permission([{ mc: menu.label, ll: true }])) && 'display:none;'"
+      :style="!($permission([{ mc: menu.label, ll: true }]) || menu.children) && 'display:none;'"
     >
-      <div class="BK-Menu-Item-Label" v-if="menu.children || $permission([{ mc: menu.label, ll: true }])">
+    <!-- :style="!(menu.children || $permission([{ mc: menu.label, ll: true }])) && 'display:none;'" -->
+    <!-- v-if="menu.children || $permission([{ mc: menu.label, ll: true }])" -->
+      <div class="BK-Menu-Item-Label" v-if="$permission([{ mc: menu.label, ll: true }]) || menu.children">
         <i :class="menu.icon" />
         <span :class="{ 'BK-Menu-active': menu.active }">{{ menu.label }}</span>
         <i

@@ -4,7 +4,7 @@
       border
       @change="editChange"
       :hide-edit="!$permission([{ mc: '销售订单', xg: true }])"
-      :hide-change="currentRow && currentRow.sh"
+      :hide-change="currentRow && currentRow.jd"
       :activeIndex="activeIndex"
       :defaultTab.sync="tabIndex"
       :tabs="['添加列表', '查询列表']"
@@ -17,6 +17,8 @@
         @click="handleStatement"
         >结单</el-button
       >
+      <el-button type="success" size="mini" :disabled="disabled" @click="PVisible = true">多码多价录入</el-button>
+      <el-button type="success" size="mini" @click="refresh" v-show="tabIndex === '查询列表'">刷新</el-button>
     </header-btn>
     <div class="billTitle" v-show="tabIndex === '添加列表'">
       <div class="billTitle-left">
@@ -29,8 +31,8 @@
           @icon-click="fromIconClick"
         />
       </div>
-      <div class="billTitle-right" style="left: 800px;">
-        <div class="billTitle-right-table" style="width:542px;">
+      <div class="billTitle-right" style="left: 760px;">
+        <div class="billTitle-right-table" style="width:640px;">
           <edit-table
             hide-num
             hide-sums
@@ -56,7 +58,7 @@
           name="ProductOrderLeft"
           :columns.sync="columnsLeft"
           :disabled="disabled"
-          :includeKeys="['ms','mx']"
+          :includeKeys="['msC','mx']"
           @autocomplete-select="editAutocompleteSelect"
           @data-change="dataChange"
           @row-click="rowClick_edit_left"
@@ -66,7 +68,8 @@
         <edit-table
           ref="editTable3"
           name="ProductOrderRight"
-          :columns.sync="columnsRight"
+          :columns="[]"
+          :attach-columns="columnsRight"
           :disabled="disabled || !currentRow_Jl"
           @data-change="dataChangeMx"
         />
@@ -76,13 +79,14 @@
       <search-table
         hide-sums
         ref="List"
-        api="getMaterialSalesBilling"
+        api="getProductOrder"
         name="ProductOrderList"
         :columns.sync="columnsList"
         @row-click="rowClickXx"
         @row-dblclick="rowDblclick"
       ></search-table>
     </div>
+    <MultipleSizeMultiplePrices :visible.sync="PVisible" @confirm="multipleConfirm"/>
     <div v-for="item in subRecords" :key="item.prop">
       <component
         append-to-body
@@ -112,9 +116,9 @@ import {
   columnsList
 } from './columns'
 import formItems from './formItems'
-import { bill, billMx, productBill, formIconClick, product_vendor } from '@/common/mixins'
+import { bill, billMx, productBill, formIconClick, product_customer } from '@/common/mixins'
 export default {
-  mixins: [bill, billMx, productBill, formIconClick, product_vendor],
+  mixins: [bill, billMx, productBill, formIconClick, product_customer],
   data () {
     return {
       formItems,
@@ -123,15 +127,11 @@ export default {
       columnsTitle,
       columnsList,
       api: {
-        add: 'addMaterialSalesBilling',
-        update: 'updateMaterialSalesBilling',
-        getByDh: 'getMaterialSalesBillingByDh',
-        del: 'delMaterialSalesBilling',
-        nullify: 'nullifyMaterialSalesBilling',
-        examine: 'examineMaterialSalesBilling'
-      },
-      autocompleteApi: {
-        ghsmc: 'getMaterialSalesBillingCustomer'
+        add: 'addProductOrder',
+        update: 'updateProductOrder',
+        getByDh: 'getProductOrderByDh',
+        del: 'delProductOrder',
+        statement: 'statementProductOrder'
       }
     }
   },

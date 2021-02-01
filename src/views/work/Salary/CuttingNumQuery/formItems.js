@@ -47,6 +47,7 @@ export default [
     placeholder: '请输入颜色',
     elType: 'select',
     multiple: true,
+    defaultVal: [],
     collapseTags: true,
     listData: ['床号', '商标', '款号', '颜色', '日期']
   }

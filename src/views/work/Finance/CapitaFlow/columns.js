@@ -125,7 +125,7 @@ export const columnsCustomer = [
     show: true
   }
 ]
-export const columnsConverter = [
+export const columnsProcessor = [
   {
     label: '开单单号',
     prop: 'dh',
@@ -414,7 +414,7 @@ export const columnsCustomerTitle = [
   },
   ...columnsTitle
 ]
-export const columnsConverterTitle = [
+export const columnsProcessorTitle = [
   {
     label: '汇款人',
     prop: 'fkr',
@@ -424,15 +424,15 @@ export const columnsConverterTitle = [
   ...columnsTitle
 ]
 export const columnsVendorTitle = [
-  ...columnsConverterTitle
+  ...columnsProcessorTitle
 ]
 const columns = {
-  columnsConverter,
+  columnsProcessor,
   columnsCustomer,
   columnsVendor
 }
 const columnsTitles = {
-  columnsConverterTitle,
+  columnsProcessorTitle,
   columnsCustomerTitle,
   columnsVendorTitle
 }

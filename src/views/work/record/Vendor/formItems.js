@@ -39,12 +39,14 @@ export default [{
   label: '公 司 地 址',
   prop: 'dz',
   style: { width: '100%' },
+  labelWidth: '100px',
   placeholder: '请输入公司地址'
 },
 {
   label: '手 机 １',
   prop: 'sj',
   style: { width: '33.3333%' },
+  labelWidth: '100px',
   placeholder: '请输入手机号码'
 },
 {
@@ -63,6 +65,7 @@ export default [{
   label: '联 系 人',
   prop: 'lxr',
   style: { width: '33.3333%' },
+  labelWidth: '100px',
   placeholder: '请输入联系人'
 },
 {
@@ -76,11 +79,30 @@ export default [{
   prop: 'yx',
   style: { width: '33.333%' },
   placeholder: '请输入邮箱地址'
+}, {
+  label: '网   址',
+  prop: 'wz',
+  style: { width: '33.3333%' },
+  labelWidth: '100px',
+  placeholder: '请输入网址'
+},
+{
+  label: '传   真',
+  prop: 'cz',
+  style: { width: '33.3333%' },
+  placeholder: '请输入传真号码'
+},
+{
+  label: '邮 政 编 码',
+  prop: 'yzbm',
+  style: { width: '33.333%' },
+  placeholder: '请输入邮政编码'
 },
 {
   label: '开 户 银 行',
   prop: 'khyh',
   style: { width: '33.333%' },
+  labelWidth: '100px',
   placeholder: '请输入开户银行'
 },
 {
@@ -100,6 +122,7 @@ export default [{
   prop: 'ljqk',
   placeholder: '请选择创建时间',
   style: { width: '33.333%' },
+  labelWidth: '100px',
   num: true,
   rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
 },
@@ -114,5 +137,6 @@ export default [{
   prop: 'bz',
   placeholder: '请选择输入备注',
   style: { width: '100%' },
+  labelWidth: '100px',
   elType: 'textarea'
 }]

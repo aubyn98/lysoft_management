@@ -2,16 +2,16 @@ import { math } from 'aubyn-common'
 import { num } from '@/common/utils/pattern'
 export default [
   {
-    label: '供货商名称',
-    prop: 'ghsmc',
+    label: '客户名称',
+    prop: 'khmc',
     style: { width: '250px' },
-    placeholder: '请输入供货商名称',
+    placeholder: '请输入客户名称',
     labelWidth: '100px',
     elType: 'autocomplete',
-    api: 'getVendor',
-    relation: ['ghsbh'],
+    api: 'getSalesCustomer',
+    relation: ['khbh'],
     icon: true,
-    rules: [{ trigger: 'focus', required: true, message: '请输入供货商名称' }]
+    rules: [{ trigger: 'focus', required: true, message: '请输入客户名称' }]
   },
   {
     label: '仓库名称',
@@ -23,11 +23,18 @@ export default [
     icon: true
   }, {
     label: '',
-    prop: 'ghsbh',
+    prop: 'khbh',
     style: { width: '0px' },
     placeholder: '',
     labelWidth: '0px',
     elType: 'blank'
+  }, {
+    label: '之前来款情况',
+    prop: 'lkmx',
+    placeholder: '请输入之前来款情况',
+    labelWidth: '110px',
+    style: { width: '360px' },
+    readonly: true
   }, /* {
     label: '',
     prop: 'sfjck',
@@ -40,7 +47,7 @@ export default [
     label: '',
     prop: 'blank1',
     placeholder: '',
-    style: { width: 'calc(100% - 630px)' },
+    style: { width: 'calc(100% - 860px)' },
     elType: 'blank'
   },
   {
@@ -71,26 +78,13 @@ export default [
     style: { width: '250px' },
     readonly: true,
     rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
-  }, {
-    label: '之前来款情况',
-    prop: 'lkmx',
-    placeholder: '请输入之前来款情况',
-    labelWidth: '110px',
-    style: { width: '360px' },
-    readonly: true
-  }, {
-    label: '',
-    prop: 'blank3',
-    placeholder: '',
-    style: { width: 'calc(100% - 860px)' },
-    elType: 'blank'
   },
   {
     label: '上单销售日期',
     prop: 'qdxsrq',
     placeholder: '请选择日期',
+    labelWidth: '110px',
     style: { width: '250px' },
-    labelWidth: '100px',
     elType: 'date'
   }, {
     label: '',
@@ -113,13 +107,13 @@ export default [
     label: '收款金额',
     prop: 'skje',
     placeholder: '请输入收款金额',
-    style: { width: '250px' },
+    style: { width: '230px' },
     rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
   }, {
     label: '结欠金额',
     prop: 'ljqk',
     placeholder: '请输入结欠金额',
-    style: { width: '250px' },
+    style: { width: '240px' },
     readonly: true,
     computed (form) {
       return math.add(math.subtract(math.add(parseFloat(form.kdje || 0), parseFloat(form.qtje || 0)), parseFloat(form.skje || 0)), parseFloat(form.ljqk1 || 0))

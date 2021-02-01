@@ -16,7 +16,8 @@ export default {
   data () {
     return {
       // 选中显示的列
-      checkedList: []
+      checkedList: [],
+      checkedListAC: []
     }
   },
   created () {
@@ -63,11 +64,21 @@ export default {
         const etemp = this.autoColumns[ev.target.dataset.index - num]
         const start = stemp.index
         const end = etemp.index
-        const columns = [...this.columns]
-        columns[end] = stemp
-        columns[start] = etemp
-        this.columnsHandle(columns)
-        this.initCheckList(null, this.columns.filter(c => this.checkedList.includes(c.label)).map(c => c.label))
+        const lastIndex = this.columns.length - 1
+        let columns = [...this.columns]
+        if (start > lastIndex && end > lastIndex) {
+          columns = [...this.attachColumns]
+          columns[start - lastIndex - 1] = etemp
+          columns[end - lastIndex - 1] = stemp
+          this.attachColumnsHandle(columns)
+        } else if (start <= lastIndex && end <= lastIndex) {
+          columns[end] = stemp
+          columns[start] = etemp
+          this.columnsHandle(columns)
+          this.initCheckList(null, this.columns.filter(c => this.checkedList.includes(c.label)).map(c => c.label))
+        } else {
+          return
+        }
         this.doLayout()
       }
     },
@@ -75,6 +86,10 @@ export default {
       this.$emit('update:columns', columns)
       this.$emit('columns-change', columns)
       this.localforage.setItem(this.name, columns)
+    },
+    attachColumnsHandle (columns) {
+      this.$emit('update:attach-columns', columns)
+      this.$emit('attach-columns-change', columns)
     },
     // 宽度拖拽
     dragend (newWidth, oldWidth, column) {
@@ -107,6 +122,16 @@ export default {
         this.setSums && this.setSums(this.sumsData)
       },
       deep: true
+    },
+    attachColumns: {
+      handler (val) {
+        this.checkedListAC = val.filter(c => {
+          // eslint-disable-next-line no-prototype-builtins
+          const hasShow = c.hasOwnProperty('show')
+          return ((hasShow && c.show) || !hasShow) && !c.dynamic
+        }).map((c) => c.label)
+      },
+      deep: true
     }
   },
   computed: {
@@ -114,15 +139,22 @@ export default {
       this.$nextTick(() => {
         this.doLayout()
       })
-      return this.columns.map((item, i) => {
+      return this.columns.filter((item) => {
+        return this.checkedList.some((v) => v === item.label) || item.dynamic
+      }).concat(this.attachColumns.filter((item) => {
+        return this.checkedListAC.some((v) => v === item.label) || item.dynamic
+      })).map((item, i) => {
         item.index = i
         return item
-      }).filter((item) => {
-        return this.checkedList.some((v) => v === item.label) || item.dynamic
-      }).concat(this.attachColumns)
+      })
     },
     autoCheckC () {
       return this.columns.filter((item) => {
+        return !item.dynamic
+      })
+    },
+    attachCheckC () {
+      return this.attachColumns.filter((item) => {
         return !item.dynamic
       })
     }

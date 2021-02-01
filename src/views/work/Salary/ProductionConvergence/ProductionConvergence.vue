@@ -33,7 +33,7 @@
           name="ProductionConvergenceDetail"
           :sourceData="tableData"
           :columns.sync="columnsDetail"
-          :attach-columns="attachColumns"
+          :attach-columns.sync="attachColumns"
           :sourceCount="count"
         />
       </template>

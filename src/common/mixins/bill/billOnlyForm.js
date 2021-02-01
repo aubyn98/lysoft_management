@@ -4,6 +4,7 @@ export default {
   },
   methods: {
     rowclick (row) {
+      if (!this.disabled) return
       this.$refs.autoForm.initForm(row)
       this.$refs.editTable2 && this.$refs.editTable2.initTableData([row], false)
       this.currentRow = row

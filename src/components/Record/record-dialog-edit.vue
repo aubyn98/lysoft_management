@@ -3,7 +3,7 @@
     :visible="visible"
     :title="title"
     :append-to-body="appendToBody"
-    @close="$emit('update:visible', false)"
+    @close="closeHandle"
   >
     <header-btn hideEdit>
       <el-button
@@ -83,6 +83,10 @@ export default {
     this.request()
   },
   methods: {
+    closeHandle () {
+      this.$emit('update:visible', false)
+      this.$emit('close', false)
+    },
     request () {
       this.$api[this.api.get](this.params)
         .then((data) => {

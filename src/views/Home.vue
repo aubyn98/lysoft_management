@@ -142,9 +142,9 @@ export default {
     }
   },
   created () {
-    this.initMenu(tabData.ProductOrder, 'ProductOrder')
-    // this.visibles.Fashion = true
-    this.$api.getCompany().then(({ res }) => {
+    this.initMenu(tabData.ProductInventoryAdjust, 'ProductInventoryAdjust')
+    // this.visibles.Size = true
+    this.$api.getCompany({}, true).then(({ res }) => {
       this.$store.commit('changeCompany', res)
     })
   },

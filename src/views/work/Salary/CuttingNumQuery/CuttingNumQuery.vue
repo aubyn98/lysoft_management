@@ -10,7 +10,7 @@
           :sourceData="tableData"
           :columns.sync="columnsXx"
           :sourceCount="count"
-          :attach-columns="attachColumns"
+          :attach-columns.sync="attachColumns"
           @row-dblclick="rowDblclick"
           @send-change="sendChange"
         />

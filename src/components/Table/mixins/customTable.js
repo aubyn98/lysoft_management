@@ -26,6 +26,14 @@ export default {
     }
   },
   methods: {
+    getMsg () {
+      return Object.keys(this.msg).reduce((t, k) => {
+        if (this.msg[k]) {
+          t[k] = this.msg[k]
+        }
+        return t
+      }, {})
+    },
     // 防抖
     debounce () {
       if (this.valid) {

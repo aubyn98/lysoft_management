@@ -89,7 +89,10 @@ export const columnsXx = [
     label: '结单',
     prop: 'jd',
     width: 100,
-    show: true
+    show: true,
+    elType: 'checkbox',
+    align: 'center',
+    disabled: true
   },
   {
     label: '规格',

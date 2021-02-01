@@ -17,6 +17,7 @@
         v-if="$permission([{ mc: '物料盘点_反审核', xg: true }])"
         >{{ currentRow && currentRow.sh ? "反审核" : "审核" }}</el-button
       >
+      <el-button type="success" size="mini" @click="refresh" v-show="tabIndex === '查询列表'">刷新</el-button>
     </header-btn>
     <div class="billTitle" v-show="tabIndex === '添加列表'">
       <div class="billTitle-left">

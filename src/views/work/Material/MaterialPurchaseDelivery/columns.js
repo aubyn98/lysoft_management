@@ -17,12 +17,12 @@ export const columnsXx = [
     width: 100,
     show: true
   },
-  {
+  /* {
     label: '款号',
     prop: 'kh',
     width: 100,
     show: true
-  },
+  }, */
   {
     label: '供货商',
     prop: 'ghsmc',

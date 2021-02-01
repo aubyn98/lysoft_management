@@ -71,7 +71,7 @@ export default ({ req, reqMask }) => {
     addCapitaFlowVendor (data) {
       return reqMask('cw/tjzjwlghshk', data)
     },
-    addCapitaFlowConverter (data) {
+    addCapitaFlowProcessor (data) {
       return reqMask('cw/tjzjwljgshk', data)
     },
     examineCapitaFlow (data) {

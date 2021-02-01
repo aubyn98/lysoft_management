@@ -4,6 +4,10 @@ export default ({ req, reqMask }) => {
       const send = ['da/cxksda', data]
       return type ? req(...send) : reqMask(...send)
     },
+    getFashion2 (data) {
+      const send = ['da/cxkskhda', data]
+      return req(...send)
+    },
     addFashion (data) {
       return reqMask('da/tjksda', data)
     },

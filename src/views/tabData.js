@@ -25,6 +25,11 @@ const sourceTree = {
         closable: true,
         dialog: true
       },
+      Processor: {
+        label: "加工商档案",
+        closable: true,
+        dialog: true
+      },
       Material: {
         label: "物料档案",
         closable: true,
@@ -35,11 +40,11 @@ const sourceTree = {
         closable: true,
         dialog: true
       },
-      ListOfFashionMaterials:{
+      /* ListOfFashionMaterials:{
         label: "款式用料清单",
         closable: true,
         dialog: true
-      },
+      }, */
       other: {
         label: "其他档案",
         icon: "el-icon-folder",
@@ -99,7 +104,7 @@ const sourceTree = {
     }
   },
   Product:{
-    label: "产品",
+    label: "产品", // 36
     icon:'el-icon-shopping-bag-2',
     show: false,
     children: {
@@ -131,6 +136,130 @@ const sourceTree = {
         label: "销售退货",
         closable: true
       },
+      ProductTicketSetting: {
+        label: "产品条码设置",
+        closable: true
+      },
+      TicketView: {
+        label: "条码查看",
+        closable: true
+      },
+      ProductStore: {
+        label: "产品仓库",
+        closable: true
+      },
+      ProductCheck: {
+        label: "产品盘点",
+        closable: true
+      },
+      ProductAllot: {
+        label: "产品调拨",
+        closable: true
+      },
+      ProductInventoryAdjust: {
+        label: "库存调整",
+        closable: true
+      },
+      ProductOffer: {
+        label: "产品报价",
+        closable: true
+      },
+      ProductRecordStatistics: {
+        label: "产品记录统计",
+        closable: true
+      },
+      ProductStatistics: {
+        label: "产品统计",
+        icon: "el-icon-tickets",
+        show: false,
+        children: {
+          ProductPurchaseStatistics: {
+            label: "产品采购统计",
+            closable: true
+          },
+          ProductEnterStatistics: {
+            label: "产品入库统计",
+            closable: true
+          },
+          ProductReturnStatistics: {
+            label: "产品退货统计",
+            closable: true
+          },
+          ProductOrderStatistics: {
+            label: "销售订单统计",
+            closable: true
+          },
+          ProductShipmentsStatistics: {
+            label: "销售发货统计",
+            closable: true
+          },
+          ProductSalesBillingStatistics: {
+            label: "销售开单统计",
+            closable: true
+          },
+          ProductSalesReturnStatistics: {
+            label: "销售退货统计",
+            closable: true
+          },
+          ProductCheckStatistics: {
+            label: "产品盘点统计",
+            closable: true
+          },
+          ProductAllotStatistics: {
+            label: "产品调拨统计",
+            closable: true
+          },
+          ProductInventoryAdjustStatistics: {
+            label: "库存调整统计",
+            closable: true
+          },
+        }
+      },
+      ProductPurchaseDelivery: {
+        label: "产品采购来货情况",
+        closable: true
+      },
+      OrderShipments: {
+        label: "订单发货情况",
+        closable: true
+      },
+      TicketShipments: {
+        label: "条码发货情况表",
+        closable: true
+      },
+      ProductStallQuery: {
+        label: "产品档位查询",
+        closable: true
+      },
+      CustomerSales: {
+        label: "客户销售情况",
+        closable: true
+      },
+      ProductRecycleBin: {
+        label: "产品回收站",
+        closable: true
+      },
+      ProductNewStyleQuery: {
+        label: "产品新款查询",
+        closable: true
+      },
+      LastSalesTime: {
+        label: "最后销售时间",
+        closable: true
+      },
+      ProductActivityTable: {
+        label: "产品活动表",
+        closable: true
+      },
+      ProductTicketActivityTable: {
+        label: "产品条码活动表",
+        closable: true
+      },
+      SalesPriceAlarmTip: {
+        label: "销售价报警提示",
+        closable: true,
+        dialog: true
+      }
     }
   },
   MaterialAll: {
@@ -337,6 +466,33 @@ const sourceTree = {
       },
       MaterialReconciliation: {
         label: "物料对账表",
+        closable: true
+      }
+    }
+  },
+  Funds:{
+    label: "财务会计",
+    icon: "el-icon-money",
+    show: false,
+    children: {
+      BalanceSheet: {
+        label: "资产负债表",
+        closable: true
+      },
+      ProfitStatement : {
+        label: "利润表",
+        closable: true
+      },
+      Loans:{
+        label: "借贷",
+        closable: true
+      },
+      FixedAssets:{
+        label: "固定资产",
+        closable: true
+      },
+      Investment:{
+        label: "投资",
         closable: true
       }
     }

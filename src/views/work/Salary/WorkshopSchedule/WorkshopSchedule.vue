@@ -44,7 +44,7 @@
                         name="WorkshopCutDetailTop"
                         :sourceData="tableData.MX1"
                         :columns.sync="columnsCutDetailTop"
-                        :attach-columns="attachColumns"
+                        :attach-columns.sync="attachColumns"
                         @row-click="rowClick_MX1" />
                 </div>
                 <div class="hierarchyBox_Left_item">

@@ -21,7 +21,7 @@
             :readonly="item.readonly"
             @input="input($event, item.prop)"
             @keypress.native.enter="$emit('enter', item.prop,ruleForm)"
-            :type="item.type || 'text'"></el-input>
+            :type="item.type || 'text'"><i v-if="item.icon" class="el-icon-more-outline el-input__icon" slot="suffix" @click="$emit('icon-click', item.prop)"></i></el-input>
         <el-button v-else-if="item.elType === 'button'" type="primary" :disabled="disabled" @click="$emit('btn-click', item.prop)">{{ item.elText }}</el-button>
         <el-button v-else-if="item.elType === 'ndbutton'" type="primary" @click="$emit('btn-click', item.prop)">{{ item.elText }}</el-button>
         <el-input
@@ -76,7 +76,7 @@
             @keypress.native.enter="$emit('enter', item.prop)"
             @change="autocompleteSelect($event, item)"
             @focus="item.api && remoteMethod(item)">
-            <el-option v-for="it in item.listData" :key="item.api ? it[item.sendKey || item.prop] : it" :label="item.api ? it[item.sendKey || item.prop] : it" :value="item.api && item.nonObj ? it[item.sendKey || item.prop]: it"></el-option>
+            <el-option v-for="it in item.listData" :key="item.objVal ? (it.key || it[item.sendKey || item.prop]) : it" :label="item.objVal ? it[item.sendKey || item.prop] : it" :value="item.objVal ? (it.key || it[item.sendKey || item.prop]) : it"></el-option>
         </el-select>
         <el-checkbox :disabled="disabled" v-else-if="item.elType === 'checkbox'" v-model="ruleForm[item.prop]" @change="checkboxChange($event, item)">{{ item.elText }}</el-checkbox>
         <el-date-picker
@@ -90,7 +90,7 @@
             :readonly="item.readonly"
             placeholder="选择日期"
             value-format="yyyy-MM-dd"
-            @change="$emit('date-change', $event, item.prop)"></el-date-picker>
+            @change="(v)=>{$emit('date-change', v, item.prop);input(v, item.prop)}"></el-date-picker>
         <div v-else-if="item.elType === 'blank'">{{ item.elText }}</div>
     </el-form-item>
 </el-form>
@@ -202,22 +202,37 @@ export default {
         ...this.shortcuts(prop),
         ...this.getMonthShortcuts(prop)
       ]
-      if (prop === 'ksrq') return { shortcuts }
-      if (prop === 'jsrq') {
-        const ksrq = this.ruleForm.ksrq
+      if (prop.startsWith('ksrq')) return { shortcuts }
+      if (prop.startsWith('jsrq')) {
+        const ksrq = this.ruleForm['ksrq' + prop.substring(4)]
         return {
-          ...(prop === 'jsrq'
-            ? ksrq
+          ...(
+            ksrq
               ? {
                 disabledDate: (time) => {
                   return time.getTime() < new Date(ksrq).getTime() - 28800000
                 }
               }
               : { disabledDate: () => true }
-            : {}),
+          ),
           shortcuts
         }
       }
+      /* if (prop === 'ksrq') return { shortcuts }
+      if (prop === 'jsrq') {
+        const ksrq = this.ruleForm.ksrq
+        return {
+          ...(ksrq
+            ? {
+              disabledDate: (time) => {
+                return time.getTime() < new Date(ksrq).getTime() - 28800000
+              }
+            }
+            : { disabledDate: () => true }
+          ),
+          shortcuts
+        }
+      } */
       return {}
     },
     getMonthShortcuts (prop) {
@@ -241,9 +256,13 @@ export default {
           text: (month < 10 ? '0' + month : month) + ' 月',
           onClick: (picker) => {
             const { startDate, endDate } = this.monthDict[month]
-            this.ruleForm.ksrq = startDate
+            const str = prop.substring(4)
+            this.ruleForm['ksrq' + str] = startDate
+            this.ruleForm['jsrq' + str] = endDate
+            picker.$emit('pick', prop.startsWith('ksrq') ? startDate : endDate)
+            /* this.ruleForm.ksrq = startDate
             this.ruleForm.jsrq = endDate
-            picker.$emit('pick', prop === 'ksrq' ? startDate : endDate)
+            picker.$emit('pick', prop === 'ksrq' ? startDate : endDate) */
           }
         })
       }
@@ -255,9 +274,13 @@ export default {
           text: k,
           onClick: (picker) => {
             const { startDate, endDate } = this.$format.dateDict[k]
-            this.ruleForm.ksrq = startDate
+            const str = prop.substring(4)
+            this.ruleForm['ksrq' + str] = startDate
+            this.ruleForm['jsrq' + str] = endDate
+            picker.$emit('pick', prop.startsWith('ksrq') ? startDate : endDate)
+            /* this.ruleForm.ksrq = startDate
             this.ruleForm.jsrq = endDate
-            picker.$emit('pick', prop === 'ksrq' ? startDate : endDate)
+            picker.$emit('pick', prop === 'ksrq' ? startDate : endDate) */
           }
         }
       })
@@ -277,9 +300,9 @@ export default {
         .map(({ prop, computed }) => ({ prop, computed }))
       computeds.forEach((c) => {
         if (typeof c.computed === 'function') {
-          this.ruleForm[c.prop] = c.computed(this.ruleForm)
+          this.ruleForm[c.prop] = c.computed.call(this, this.ruleForm)
         } else if (c.computed.props.includes(prop)) {
-          this.ruleForm[c.prop] = c.computed.handler(this.ruleForm)
+          this.ruleForm[c.prop] = c.computed.handler.call(this, this.ruleForm)
         }
       })
     },

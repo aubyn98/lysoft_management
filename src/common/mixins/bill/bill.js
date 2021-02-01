@@ -10,10 +10,14 @@ export default {
     this.initData()
   },
   methods: {
+    refresh () {
+      this.$refs.List.request()
+    },
     autocompleteSelect ({ v, prop }) {
+      const api = this.autocompleteApi && this.autocompleteApi[prop] ? this.$api[this.autocompleteApi[prop]] : null
       switch (prop) {
         case 'ghsmc':
-          this.$api[this.autocompleteApi[prop]]({ ghsbh: v.ghsbh })
+          api && api({ ghsbh: v.ghsbh })
             .then((data) => {
               data.res.length > 0 &&
                 this.$refs.autoForm.setFieldsValue({
@@ -24,7 +28,7 @@ export default {
             })
           break
         case 'khmc':
-          this.$api[this.autocompleteApi[prop]]({ khbh: v.khbh })
+          api && api({ khbh: v.khbh })
             .then((data) => {
               data.res.length > 0 &&
                 this.$refs.autoForm.setFieldsValue({
@@ -91,11 +95,12 @@ export default {
     request () {
       this.$refs.List && this.$refs.List.request()
     },
-    handleExamine () {
+    handleExamine (data = {}) {
       if (!this.currentRow) {
         return this.$message.info('请选择要审核的单据！')
       }
       this.$api[this.api.examine]({
+        ...data,
         dh: this.currentRow.dh,
         sh: !this.currentRow.sh
       })
@@ -104,20 +109,21 @@ export default {
           this.request && this.request()
         })
     },
-    handleStatement () {
+    handleStatement (data = {}) {
       if (!this.currentRow) {
         return this.$message.info('请选择要结单的单据！')
       }
-      this.$api[this.api.statement]({ dh: this.currentRow.dh, jd: !this.currentRow.jd }).then(res => {
+      this.$api[this.api.statement]({ ...data, dh: this.currentRow.dh, jd: !this.currentRow.jd }).then(res => {
         this.currentRow.jd = !this.currentRow.jd
         this.request && this.request()
       })
     },
-    handleNullify () {
+    handleNullify (data = {}) {
       if (!this.currentRow) {
         return this.$message.info('请选择要作废的单据！')
       }
       this.$api[this.api.nullify]({
+        ...data,
         dh: this.currentRow.dh,
         ch: !this.currentRow.ch
       })
@@ -142,8 +148,8 @@ export default {
       this.submit('update', cb)
     },
     update () {
+      this.currentRow && this.tabIndex === '查询列表' && this.getDataByDh()
       this.tabIndex = '添加列表'
-      this.currentRow && this.getDataByDh()
     },
     updatecancel () {
       this.$refs.autoForm.clearValidate()

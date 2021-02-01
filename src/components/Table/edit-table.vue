@@ -338,6 +338,10 @@ export default {
     stopKeyEvent: {
       type: Boolean,
       default: false
+    },
+    params: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -369,7 +373,7 @@ export default {
       },
       deep: true
     },
-    columns: {
+    autoColumns: {
       handler (val) {
         this.computeds = val
           .filter((c) => c.computed)
@@ -467,6 +471,7 @@ export default {
     querySearchAsync (q, cb, c, row) {
       this.$api[c.api](
         {
+          ...this.params,
           [c.sendKey || c.prop]: q,
           ...(c.superKeys
             ? c.superKeys.reduce((t, k) => {
@@ -499,13 +504,13 @@ export default {
         item.listData = data.res
       })
     },
-    submitTable () {
+    submitTable (cType = 'autoColumns') {
       return this.$format.copy(
         this.tableData.map((it) => {
           const { index, ...res } = it
           return Object.keys(res).reduce((t, k) => {
             if (
-              this.columns.some((c) => c.prop === k) ||
+              this[cType].some((c) => c.prop === k) ||
               this.includeKeys.includes(k)
             ) {
               t[k] = res[k]
@@ -523,8 +528,8 @@ export default {
     setRow (row, index) {
       this.tableData.splice(index, 1, row)
     },
-    getRowBlankData () {
-      return this.columns.reduce((t, c) => {
+    getRowBlankData (cType = 'autoColumns') {
+      return this[cType].reduce((t, c) => {
         if (c.elType === 'checkbox') {
           t[c.prop] = false
         } else if (c.elType === 'date') {
@@ -643,7 +648,7 @@ $shadow-color-gray: #ccc;
     background-color: $bg-header-color-black;
     .cell {
       background-color: $bg-header-color-black;
-      color: $text-color-white;
+      color: $text-color-white !important;
     }
   }
 }

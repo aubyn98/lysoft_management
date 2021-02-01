@@ -60,6 +60,12 @@ function compose (...fns) {
   )
 }
 module.exports = {
+  toRawType: (function () {
+    const _toString = Object.prototype.toString
+    return function (val) {
+      return _toString.call(val).slice(8, -1)
+    }
+  })(),
   compose,
   copy: function (params) {
     return JSON.parse(JSON.stringify(params))

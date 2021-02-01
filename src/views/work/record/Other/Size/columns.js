@@ -6,9 +6,16 @@ export const columnsPp = [
     show: true
   },
   {
+    label: '排序',
+    prop: 'px',
+    width: 180,
+    show: true
+  },
+  {
     label: '条码编号',
     prop: 'tmbh',
     width: 180,
-    show: true
+    show: true,
+    readonly: true
   }
 ]

@@ -12,11 +12,29 @@
       <el-button
         type="info"
         size="mini"
-        v-if="$permission([{ mc: '产品入库_结单', xg: true }])"
-        :disabled="!disabled || !currentRow || currentRow.jd"
-        @click="handleStatement"
-        >结单</el-button
+        :disabled="!disabled || !currentRow || currentRow.sh"
+        @click="handleExamine(currentRow)"
+        v-if="$permission([{ mc: '产品入库审核与作废', xg: true }])"
+        >审核</el-button
       >
+      <el-button
+        type="info"
+        size="mini"
+        :disabled="!disabled || !currentRow || currentRow.ch || !currentRow.sh"
+        @click="handleNullify(currentRow)"
+        v-if="$permission([{ mc: '产品入库审核与作废', xg: true }])"
+        >作废</el-button
+      >
+      <el-button type="success" size="mini" :disabled="disabled" @click="PVisible = true">多码多价录入</el-button>
+      <el-button
+        type="info"
+        size="mini"
+        :disabled="disabled"
+        @click="quoteDh"
+        v-if="$permission([{ mc: '产品入库', xg: true }])"
+        >引用单号</el-button
+      >
+      <el-button type="success" size="mini" @click="refresh" v-show="tabIndex === '查询列表'">刷新</el-button>
     </header-btn>
     <div class="billTitle" v-show="tabIndex === '添加列表'">
       <div class="billTitle-left">
@@ -25,7 +43,6 @@
           :disabled="disabled"
           style="width: 100%"
           :formItems="formItems"
-          @autocomplete-select="autocompleteSelect"
           @icon-click="fromIconClick"
         />
       </div>
@@ -56,7 +73,7 @@
           name="ProductEnterStoreBillingLeft"
           :columns.sync="columnsLeft"
           :disabled="disabled"
-          :includeKeys="['ms','mx']"
+          :includeKeys="['msC','mx']"
           @autocomplete-select="editAutocompleteSelect"
           @data-change="dataChange"
           @row-click="rowClick_edit_left"
@@ -66,7 +83,8 @@
         <edit-table
           ref="editTable3"
           name="ProductEnterStoreBillingRight"
-          :columns.sync="columnsRight"
+          :columns="[]"
+          :attach-columns="columnsRight"
           :disabled="disabled || !currentRow_Jl"
           @data-change="dataChangeMx"
         />
@@ -76,13 +94,20 @@
       <search-table
         hide-sums
         ref="List"
-        api="getMaterialSalesBilling"
+        api="getProductEnterStore"
         name="ProductEnterStoreBillingList"
         :columns.sync="columnsList"
         @row-click="rowClickXx"
         @row-dblclick="rowDblclick"
       ></search-table>
     </div>
+    <QuoteProductPurchase
+      :visible.sync="visible"
+      @select-end="quoteSelectEnd"
+      :params="params"
+      :attachColumnsFn="attachColumnsFn"
+    />
+    <MultipleSizeMultiplePrices :visible.sync="PVisible" @confirm="multipleConfirm"/>
     <div v-for="item in subRecords" :key="item.prop">
       <component
         append-to-body
@@ -112,9 +137,9 @@ import {
   columnsList
 } from './columns'
 import formItems from './formItems'
-import { bill, billMx, productBill, formIconClick, product_vendor } from '@/common/mixins'
+import { bill, billMx, productBill, formIconClick, product_vendor, productQuote } from '@/common/mixins'
 export default {
-  mixins: [bill, billMx, productBill, formIconClick, product_vendor],
+  mixins: [bill, billMx, productBill, formIconClick, product_vendor, productQuote],
   data () {
     return {
       formItems,
@@ -123,22 +148,20 @@ export default {
       columnsTitle,
       columnsList,
       api: {
-        add: 'addMaterialSalesBilling',
-        update: 'updateMaterialSalesBilling',
-        getByDh: 'getMaterialSalesBillingByDh',
-        del: 'delMaterialSalesBilling',
-        nullify: 'nullifyMaterialSalesBilling',
-        examine: 'examineMaterialSalesBilling'
+        add: 'addProductEnterStore',
+        update: 'updateProductEnterStore',
+        getByDh: 'getProductEnterStoreByDh',
+        del: 'delProductEnterStore',
+        nullify: 'nullifyProductEnterStore',
+        examine: 'examineProductEnterStore'
       },
       autocompleteApi: {
-        ghsmc: 'getMaterialSalesBillingCustomer'
+        ghsmc: 'getProductEnterStoreVendor'
+      },
+      params: {
+        ghsbh: ''
       }
     }
-  },
-  created () {
-  },
-  methods: {
-
   }
 }
 </script>

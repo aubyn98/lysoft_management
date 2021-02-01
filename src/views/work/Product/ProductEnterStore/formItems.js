@@ -8,8 +8,8 @@ export default [
     placeholder: '请输入供货商名称',
     labelWidth: '100px',
     elType: 'autocomplete',
-    api: 'getVendor',
-    relation: ['ghsbh'],
+    api: 'getProductEnterStoreVendor',
+    relation: ['ghsbh', 'ljqk', 'templjqk->qdqk'],
     icon: true,
     rules: [{ trigger: 'focus', required: true, message: '请输入供货商名称' }]
   },
@@ -74,7 +74,7 @@ export default [
   },
   {
     label: '付款金额',
-    prop: 'fkje',
+    prop: 'skje',
     placeholder: '请输入付款金额',
     style: { width: '250px' },
     rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
@@ -85,7 +85,8 @@ export default [
     style: { width: '250px' },
     readonly: true,
     computed (form) {
-      return math.add(math.subtract(math.add(parseFloat(form.kdje || 0), parseFloat(form.qtje || 0)), parseFloat(form.skje || 0)), parseFloat(form.ljqk1 || 0))
+      const total = math.add(math.add(form.kdje || 0, form.qdqk || 0), form.qtje || 0)
+      return math.subtract(total, parseFloat(form.skje || 0))
     },
     rules: [{ trigger: 'focus', pattern: num, message: '请输入数字' }]
   }, {

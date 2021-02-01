@@ -18,11 +18,11 @@
       :params="{ lx: '加工商' }"
       :tabs="tabs"
       :api="{
-        add: 'addCapitaFlowConverter',
+        add: 'addCapitaFlowProcessor',
         update: 'updateCapitaFlow',
         del: 'delCapitaFlow',
       }"
-      name="Converter"
+      name="Processor"
     />
     <CapitaFlowPage
       :tabIndex.sync="tabIndex"

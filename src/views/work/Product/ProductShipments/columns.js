@@ -9,13 +9,6 @@ export const columnsLeft = [
     api: 'getFashion',
     relation: ['sb', 'kslx']
   }, {
-    label: '码数',
-    prop: 'ms',
-    width: 100,
-    show: true,
-    elType: 'autocomplete',
-    api: 'getSize'
-  }, {
     label: '商标',
     prop: 'sb',
     width: 100,
@@ -40,12 +33,19 @@ export const columnsLeft = [
     label: '数量',
     prop: 'sl',
     sumProp: 'sl',
+    readonly: true,
     width: 100,
     show: true
   }, {
     label: '档位',
     prop: 'ckdw',
     width: 100,
+    show: true
+  }, {
+    label: '码数',
+    prop: 'ms',
+    width: 100,
+    readonly: true,
     show: true
   },
   /* {
@@ -67,9 +67,7 @@ export const columnsLeft = [
     label: '引用单号',
     prop: 'yydh',
     width: 100,
-    show: true,
-    elType: 'autocomplete',
-    api: 'getSize'
+    show: true
   },
   {
     label: '备注',
@@ -77,7 +75,7 @@ export const columnsLeft = [
     width: 100
   }
 ]
-export const columnsRight = [
+/* export const columnsRight = [
   {
     label: '匹数1',
     prop: 'ps1',
@@ -142,7 +140,7 @@ export const columnsRight = [
       }, 0)
     `
   }
-]
+] */
 export const columnsTitle = [
   {
     label: '外发条码号',
@@ -209,13 +207,14 @@ export const columnsList = [
     elType: 'checkbox',
     align: 'center',
     disabled: true
-  }, {
+  }, /* {
     label: '结单',
     prop: 'jd',
     width: 100,
     elType: 'checkbox',
     align: 'center',
-    disabled: true
-  },
+    disabled: true,
+    show: false
+  }, */
   { label: '备注', prop: 'bz', width: 100 }
 ]

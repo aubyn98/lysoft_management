@@ -45,10 +45,15 @@ const interceptors = {
     if (token && config.url !== 'Login/login' && config.url !== 'Login/cxzb') {
       config.headers['x-token'] = token
     }
-    if (/\w+\/[c|w]\w+/.test(config.url) && !qs.parse(config.data).pageSize) {
+    const data = qs.parse(config.data) || {}
+    // eslint-disable-next-line no-prototype-builtins
+    if (/\w+\/[c|w]\w+/.test(config.url) && (data && !data.hasOwnProperty('pageSize'))) {
       const pageSize = store.state.company ? store.state.company.mysj : 60
-      config.data += `&pageSize=${pageSize}`
+      data.pageSize = pageSize
+    } else if (data.pageSize === '') {
+      delete data.pageSize
     }
+    config.data = qs.stringify(data)
     return config
   }, function (error) {
     return Promise.reject(error)

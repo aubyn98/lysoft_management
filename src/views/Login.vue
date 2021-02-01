@@ -135,11 +135,17 @@ export default {
       this.$api.sign_in(this.msg).then(({ status, qx }) => {
         if (status === 1) {
           const { password, ...account } = this.msg
+          const title = {}
           qx = qx.reduce((t, it) => {
+            !title[it.bt] ? (title[it.bt] = [it]) : title[it.bt].push(it)
             // eslint-disable-next-line
             t[it.mc] = { ll: it.ll == 1, xg: it.xg == 1 }
             return t
           }, {})
+          Object.keys(title).forEach(k => {
+            // eslint-disable-next-line
+             qx[k] = { ll: title[k].some(it => it.ll == 1), xg: title[k].some(it => it.ll == 1) }
+          })
           const accountMsg = { ...account, qx }
           this.keepPassword ? (accountMsg.password = password) : (accountMsg.password = '')
           localStorage.setItem('account', JSON.stringify(accountMsg))

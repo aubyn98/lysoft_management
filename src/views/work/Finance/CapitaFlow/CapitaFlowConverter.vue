@@ -14,7 +14,7 @@
           ref="autoForm"
           :disabled="disabled"
           style="width: 100%"
-          :formItems="formItemsConverter"
+          :formItems="formItemsProcessor"
         />
       </div>
       <div class="billTitle-right" style="left: 750px">
@@ -25,8 +25,8 @@
             hideContext
             headerBg
             ref="editTable2"
-            name="CapitaFlowConverterTitle"
-            :columns.sync="columnsConverterTitle"
+            name="CapitaFlowProcessorTitle"
+            :columns.sync="columnsProcessorTitle"
             :disabled="disabled"
           />
         </div>
@@ -34,10 +34,10 @@
     </div>
     <div style="flex: 1; height: 0">
       <search-table
-        api="getCapitaFlowConverter"
-        name="CapitaFlowConverterTable"
+        api="getCapitaFlowProcessor"
+        name="CapitaFlowProcessorTable"
         ref="searchTable"
-        :columns.sync="columnsConverter"
+        :columns.sync="columnsProcessor"
       />
     </div>
   </div>
@@ -45,15 +45,15 @@
 
 <script type="text/javascript">
 import { capitaFlow } from '@/common/mixins'
-import { columnsConverter, columnsConverterTitle } from './columns'
-import { formItemsConverter } from './formItems'
+import { columnsProcessor, columnsProcessorTitle } from './columns'
+import { formItemsProcessor } from './formItems'
 export default {
   mixins: [capitaFlow],
   data () {
     return {
-      formItemsConverter,
-      columnsConverter,
-      columnsConverterTitle,
+      formItemsProcessor,
+      columnsProcessor,
+      columnsProcessorTitle,
       disabled: false
     }
   },

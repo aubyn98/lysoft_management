@@ -11,6 +11,7 @@
     >
     <el-button type="info" v-if="$permission([{ mc: '物料采购_结单', xg: true }])" size="mini" :disabled="!disabled" @click="handleStatement">{{currentRow && currentRow.jd ? '反结单':'结单'}}</el-button>
     <el-button type="primary" size="mini" :disabled="!disabled" @click="copyOrder">复制此单</el-button>
+    <el-button type="success" size="mini" @click="refresh" v-show="tabIndex === '查询列表'">刷新</el-button>
     </header-btn>
     <div class="billTitle" v-show="tabIndex === '添加列表'">
       <div class="billTitle-left">

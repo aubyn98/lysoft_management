@@ -19,9 +19,9 @@
 html,
 body {
   @include fullBox;
-  color: #666;
+  color: #333;
   min-width: 1390px;
-  overflow: hidden;
+  overflow-y: hidden;
   position: relative;
 }
 #app {
