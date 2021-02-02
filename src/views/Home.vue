@@ -142,7 +142,7 @@ export default {
     }
   },
   created () {
-    this.initMenu(tabData.ProductInventoryAdjust, 'ProductInventoryAdjust')
+    // this.initMenu(tabData.ProductInventoryAdjust, 'ProductInventoryAdjust')
     // this.visibles.Size = true
     this.$api.getCompany({}, true).then(({ res }) => {
       this.$store.commit('changeCompany', res)

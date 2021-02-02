@@ -162,7 +162,7 @@ export const columnsZxhz = [
   },
   {
     label: '成品数',
-    prop: 'cpsl',
+    prop: 'zsl',
     width: 100,
     show: true
   },

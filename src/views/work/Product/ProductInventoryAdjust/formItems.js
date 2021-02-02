@@ -5,7 +5,8 @@ export default [
     style: { width: '130px' },
     placeholder: '请输入款号',
     elType: 'autocomplete',
-    api: 'getFashion'
+    api: 'getFashion',
+    relation: ['kslx', 'sb', 'dw']
   }, {
     label: '仓库名称',
     prop: 'ckmc',
