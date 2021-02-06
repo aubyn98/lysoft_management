@@ -18,7 +18,7 @@ export default [
     labelWidth: '80px',
     prop: 'lsdh',
     style: { width: '200px' }
-  }, /* {
+  }, {
     label: '款号',
     prop: 'kh',
     labelWidth: '50px',
@@ -26,7 +26,7 @@ export default [
     placeholder: '请输入款号',
     elType: 'autocomplete',
     api: 'getFashion'
-  }, {
+  }, /*  {
     label: '记录备注',
     prop: 'jlbz',
     labelWidth: '80px',

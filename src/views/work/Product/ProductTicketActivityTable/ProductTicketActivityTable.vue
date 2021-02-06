@@ -12,9 +12,11 @@
           :sourceCount="count"
           :merge-columns="mergeColumns"
           @row-dblclick="rowDblclick"
+          @row-click="rowclick"
           @send-change="sendChange"
           @check-change="checkChange"
           @sort-change="sortChange"
+          @selection-change="handleSelect"
         />
       </div>
       <div
@@ -32,33 +34,21 @@
           type="primary"
           size="mini"
           class="search-form-btn"
-          @click="
-            () => {
-              (attach.cq = 0), request();
-            }
-          "
+          @click="request"
           >查询</el-button
         >
         <el-button
           type="primary"
           size="mini"
           class="search-form-btn"
-          @click="
-            () => {
-              (attach.cq = 1), request();
-            }
-          "
+          @click="nullify"
           >作废所选条码</el-button
         >
         <el-button
           type="primary"
           size="mini"
           class="search-form-btn"
-          @click="
-            () => {
-              (attach.cq = 1), request();
-            }
-          "
+          @click="cancelNullify"
           >取消作废条码</el-button
         >
         <el-button type="primary" size="mini" class="search-form-btn"
@@ -98,15 +88,36 @@ export default {
       },
       groupKey: ['rklx', 'kh', 'sb', 'ysmc', 'ms'],
       mergeColumns: ['rklx', 'kh', 'sb', 'ysmc', 'ms'],
-      checkChangeApi: 'statementMaterialPurchase'
+      checkChangeApi: 'statementMaterialPurchase',
+      selected: [],
+      currentRow: null
     }
   },
   mixins: [statistics, excel_statistics],
   methods: {
+    rowclick (row) {
+      this.currentRow = row
+    },
+    handleSelect (rows) {
+      this.selected = rows
+    },
     sortChange () {
 
+    },
+    nullify () {
+      if (!this.currentRow) return this.$alert('请先选择数据！')
+      this.$authentication().then(() => {
+        this.$api.nullifyProductTicketActivityTable(this.currentRow).then(() => {
+          this.request()
+        })
+      })
+    },
+    cancelNullify () {
+      if (!this.currentRow) return this.$alert('请先选择数据！')
+      this.$api.cancelNullifyProductTicketActivityTable(this.currentRow).then(() => {
+        this.request()
+      })
     }
-
   }
 }
 </script>

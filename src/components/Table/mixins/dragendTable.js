@@ -123,6 +123,12 @@ export default {
       },
       deep: true
     },
+    checkedListAC: {
+      handler (val) {
+        this.setSums && this.setSums(this.sumsData)
+      },
+      deep: true
+    },
     attachColumns: {
       handler (val) {
         this.checkedListAC = val.filter(c => {

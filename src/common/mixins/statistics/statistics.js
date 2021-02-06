@@ -39,6 +39,7 @@ export default {
         this.initAllTableData && this.initAllTableData()
         this.$api[this.api](msg)
           .then((data) => {
+            this.currentRow = null
             this.mergeColumns && this.countMerge(data.res)
             this.count = data.count
             this.requestHandle && this.requestHandle(data)
@@ -120,6 +121,13 @@ export default {
           it.count = false
         }
       })
+      /* data.forEach(item => {
+        const key = ['rq', 'khmc', 'kh', 'dw', 'lsh', 'dh'].reduce((t, k) => {
+          t.push(item[k])
+          return t
+        }, [])
+        console.log(key.join('-'), item)
+      }) */
     }
   }
 }

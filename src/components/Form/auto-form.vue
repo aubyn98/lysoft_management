@@ -33,6 +33,17 @@
             :readonly="item.readonly"
             @keypress.native.enter="$emit('enter', item.prop)"
             v-model="ruleForm[item.prop]"></el-input>
+        <!-- <autocomplete
+            v-else-if="item.elType === 'autocomplete'"
+            style="width: 100%"
+            v-model="ruleForm[item.prop]"
+            :fetch-suggestions="(q, cb) => querySearchAsync(q, cb, item)"
+            placeholder="请输入内容"
+            :disabled="disabled"
+            :value-key="item.sendKey || item.prop"
+            @keypress.native.enter="$emit('enter', item.prop)"
+            @select="autocompleteSelect($event, item)">
+            <i v-if="item.icon" class="el-icon-more-outline el-input__icon" slot="suffix" @click="$emit('icon-click', item.prop)"></i></autocomplete> -->
         <el-autocomplete
             style="width: 100%"
             v-else-if="item.elType === 'autocomplete'"

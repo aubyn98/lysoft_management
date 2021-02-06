@@ -74,6 +74,7 @@ export default {
     }, isNull2, isNull),
     disassemble: compose(function () {
       if (!num.test(this.cjVal) || !this.cjVal) return this.$alert('请输入数字！')
+      if (this.cjVal > this.ListData.sl) return this.$alert('不能大于等于当前数量！')
       this.$api.disassembleTicket({ tmbh: this.tmbh, sl: this.cjVal, zsl: this.ListData.sl })
     }, isNull2, isNull),
     request: compose(function () {

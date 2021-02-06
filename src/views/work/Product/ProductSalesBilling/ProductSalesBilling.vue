@@ -20,6 +20,7 @@
                 <el-dropdown-item @click.native="quoteDh('shipments')" size="mini">销售发货</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
+        <el-button type="success" size="mini" @click="showInventory = !showInventory">{{showInventory?'隐藏':'显示'}}库存信息</el-button>
         <el-button type="success" size="mini" @click="refresh" v-show="tabIndex === '查询列表'">刷新</el-button>
     </header-btn>
     <div class="billTitle" v-show="tabIndex === '添加列表'">
@@ -46,28 +47,33 @@
             </div>
         </div>
     </div>
-    <content-table ref="contentTable" :columns.sync="contentColumn" name="ProductSalesBillingContentTable" v-show="tabIndex === '添加列表'">
-        <template #a>
-            <edit-table
-                ref="editTable"
-                name="ProductSalesBillingLeft"
-                :columns.sync="columnsLeft"
-                :disabled="disabled"
-                :includeKeys="['msC','mx']"
-                @autocomplete-select="editAutocompleteSelect"
-                @data-change="dataChange"
-                @row-click="rowClick_edit_left" />
-        </template>
-        <template #b>
-            <edit-table
-                ref="editTable3"
-                name="ProductSalesBillingRight"
-                :columns="[]"
-                :attach-columns="columnsRight"
-                :disabled="disabled || !currentRow_Jl"
-                @data-change="dataChangeMx" />
-        </template>
-    </content-table>
+    <div class="InventoryContentBox">
+        <div class="InventoryContent">
+            <content-table ref="contentTable" :columns.sync="contentColumn" name="ProductSalesBillingContentTable" v-show="tabIndex === '添加列表'">
+                <template #a>
+                    <edit-table
+                        ref="editTable"
+                        name="ProductSalesBillingLeft"
+                        :columns.sync="columnsLeft"
+                        :disabled="disabled"
+                        :includeKeys="['msC','mx']"
+                        @autocomplete-select="editAutocompleteSelect"
+                        @data-change="dataChange"
+                        @row-click="rowClick_edit_left" />
+                </template>
+                <template #b>
+                    <edit-table
+                        ref="editTable3"
+                        name="ProductSalesBillingRight"
+                        :columns="[]"
+                        :attach-columns="columnsRight"
+                        :disabled="disabled || !currentRow_Jl"
+                        @data-change="dataChangeMx" />
+                </template>
+            </content-table>
+        </div>
+        <InventoryMsg :kh="currentRow_Jl ? currentRow_Jl.kh : ''" v-show="showInventory" />
+    </div>
     <div class="billList" v-show="tabIndex === '查询列表'">
         <search-table
             hide-sums
@@ -133,7 +139,8 @@ export default {
       visibleQuote: {
         order: false,
         shipments: false
-      }
+      },
+      showInventory: false
     }
   },
   created () {

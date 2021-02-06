@@ -342,7 +342,9 @@ export default {
           sums[step] = parseFloat(data[v.sumProp]) || 0
         } else if (v.children) {
           return v.children.forEach((c) => {
-            sums[step] = parseFloat(data[c.sumProp]) || 0
+            if (c.sumProp) {
+              sums[step] = parseFloat(data[c.sumProp]) || 0
+            }
             step++
           })
         }

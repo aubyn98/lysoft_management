@@ -111,7 +111,7 @@ export default {
         selection: false,
         api: 'getProductOffer_jgbjjgs'
       }, {
-        label: '未发销售报价',
+        label: '外发销售报价',
         key: 'wfxsbj',
         selection: false,
         api: 'getProductOffer_wfxsbjjgs'

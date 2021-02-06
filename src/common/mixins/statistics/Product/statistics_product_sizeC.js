@@ -19,6 +19,7 @@ export default {
         this.initAllTableData && this.initAllTableData()
         this.$api[this.api](msg)
           .then((data) => {
+            this.currentRow = null
             this.mergeColumns && this.countMerge(data.res)
             this.count = data.count
             this.requestHandle && this.requestHandle(data)

@@ -117,7 +117,8 @@ export default {
                   }
                 })
               })
-              filterArr = filterArr.reduce((t, k) => {
+              const excludeNulls = Object.keys(sums).filter(k => sums[k])
+              filterArr = filterArr.filter(k => excludeNulls.includes(k)).reduce((t, k) => {
                 const [tKey, tKey2] = k.split('_')
                 const temp = {
                   label: this.cmmxDict[tKey2],

@@ -11,6 +11,7 @@
         <el-button type="info" size="mini" :disabled="!disabled || !currentRow || currentRow.sh" @click="handleExamine(currentRow)" v-if="$permission([{ mc: '销售退货审核与作废', xg: true }])">审核</el-button>
         <el-button type="info" size="mini" :disabled="!disabled || !currentRow || currentRow.ch || !currentRow.sh" @click="handleNullify(currentRow)" v-if="$permission([{ mc: '销售退货审核与作废', xg: true }])">作废</el-button>
         <el-button type="success" size="mini" :disabled="disabled" @click="PVisible = true">多码多价录入</el-button>
+        <!-- <el-button type="success" size="mini" :disabled="disabled" @click="PVisible2 = true">库存比较录入</el-button> -->
         <el-button type="info" size="mini" :disabled="disabled" @click="quoteDh" v-if="$permission([{ mc: '销售退货', xg: true }])">引用单号</el-button>
         <el-button type="success" size="mini" @click="refresh" v-show="tabIndex === '查询列表'">刷新</el-button>
     </header-btn>
@@ -71,6 +72,7 @@
             @row-dblclick="rowDblclick"></search-table>
     </div>
     <MultipleSizeMultiplePrices :visible.sync="PVisible" @confirm="multipleConfirm" />
+    <CompareInventory :visible.sync="PVisible2" @confirm="multipleConfirm" />
     <QuoteProductCheckEnter :visible.sync="visible" @select-end="quoteSelectEnd" :params="params" :attachColumnsFn="attachColumnsFn" />
     <div v-for="item in subRecords" :key="item.prop">
         <component
@@ -123,7 +125,8 @@ export default {
       }, */
       params: {
         khbh: ''
-      }
+      },
+      PVisible2: false
     }
   },
   created () {

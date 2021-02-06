@@ -10,6 +10,7 @@
         :tabs="['添加列表', '查询列表']">
         <el-button type="info" size="mini" :disabled="!disabled || !currentRow" @click="handleExamine(currentRow)" v-if="$permission([{ mc: '产品盘点_反审核', xg: true }])">{{currentRow && currentRow.sh ? '反审核' : '审核'}}</el-button>
         <el-button type="success" size="mini" :disabled="disabled" @click="PVisible = true">多码多价录入</el-button>
+        <el-button type="success" size="mini" @click="showInventory = !showInventory">{{showInventory?'隐藏':'显示'}}库存信息</el-button>
         <el-button type="success" size="mini" @click="refresh" v-show="tabIndex === '查询列表'">刷新</el-button>
     </header-btn>
     <div class="billTitle" v-show="tabIndex === '添加列表'">
@@ -36,28 +37,33 @@
             </div>
         </div>
     </div>
-    <content-table ref="contentTable" :columns.sync="contentColumn" name="ProductCheckContentTable" v-show="tabIndex === '添加列表'">
-        <template #a>
-            <edit-table
-                ref="editTable"
-                name="ProductCheckLeft"
-                :columns.sync="columnsLeft"
-                :disabled="disabled"
-                :includeKeys="['msC','mx']"
-                @autocomplete-select="editAutocompleteSelect"
-                @data-change="dataChange"
-                @row-click="rowClick_edit_left" />
-        </template>
-        <template #b>
-            <edit-table
-                ref="editTable3"
-                name="ProductCheckRight"
-                :columns="[]"
-                :attach-columns="columnsRight"
-                :disabled="disabled || !currentRow_Jl"
-                @data-change="dataChangeMx" />
-        </template>
-    </content-table>
+    <div class="InventoryContentBox">
+        <div class="InventoryContent">
+            <content-table ref="contentTable" :columns.sync="contentColumn" name="ProductCheckContentTable" v-show="tabIndex === '添加列表'">
+                <template #a>
+                    <edit-table
+                        ref="editTable"
+                        name="ProductCheckLeft"
+                        :columns.sync="columnsLeft"
+                        :disabled="disabled"
+                        :includeKeys="['msC','mx']"
+                        @autocomplete-select="editAutocompleteSelect"
+                        @data-change="dataChange"
+                        @row-click="rowClick_edit_left" />
+                </template>
+                <template #b>
+                    <edit-table
+                        ref="editTable3"
+                        name="ProductCheckRight"
+                        :columns="[]"
+                        :attach-columns="columnsRight"
+                        :disabled="disabled || !currentRow_Jl"
+                        @data-change="dataChangeMx" />
+                </template>
+            </content-table>
+        </div>
+        <InventoryMsg :kh="currentRow_Jl ? currentRow_Jl.kh : ''" v-show="showInventory" />
+    </div>
     <div class="billList" v-show="tabIndex === '查询列表'">
         <search-table
             hide-sums
@@ -130,7 +136,8 @@ export default {
           api: 'getVendor',
           sendKey: 'ghsmc'
         }
-      }
+      },
+      showInventory: false
     }
   },
   created () {

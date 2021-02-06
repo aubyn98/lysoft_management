@@ -20,7 +20,7 @@ export const columnsHxhz = [
   },
   {
     label: '尺码',
-    prop: 'cm',
+    prop: 'ms',
     width: 100,
     show: true
   },
@@ -88,8 +88,8 @@ export const columnsHxhz = [
   },
   {
     label: '小计',
-    prop: 'hj',
-    sumProp: 'hj',
+    prop: 'zsl',
+    sumProp: 'zsl',
     width: 100,
     show: true
   }
@@ -138,85 +138,99 @@ export const columnsZxhz = [
   },
   {
     label: '临时库存',
-    prop: 'lskc',
+    prop: 'lssl',
+    sumProp: 'lssl',
     width: 100,
     show: true
   },
   {
     label: '实际库存',
-    prop: 'sjkc',
+    prop: 'sjsl',
+    sumProp: 'sjsl',
     width: 100,
     show: true
   },
   {
     label: '采购中',
     prop: 'cgsl',
+    sumProp: 'cgsl',
     width: 100,
     show: true
   },
   {
     label: '订单数',
     prop: 'ddsl',
+    sumProp: 'ddsl',
     width: 100,
     show: true
   },
   {
     label: '成品数',
     prop: 'zsl',
+    sumProp: 'zsl',
     width: 100,
     show: true
   },
   {
     label: '发货数',
     prop: 'fhsl',
+    sumProp: 'fhsl',
     width: 100,
     show: true
   },
   {
     label: '仓库欠数',
     prop: 'ckqs',
+    sumProp: 'ckqs',
     width: 100,
     show: true
   },
   {
     label: '裁床数1',
-    prop: 'ccsl',
+    prop: 'ccck',
+    sumProp: 'ccck',
     width: 100,
     show: true
   },
   {
     label: '裁床欠数',
     prop: 'ccqs',
+    sumProp: 'ccqs',
     width: 100,
     show: true
   },
   {
     label: '裁床数2',
-    prop: 'ccsl2',
+    prop: 'ccck2',
+    sumProp: 'ccck2',
     width: 100,
     show: true
   },
   {
     label: '半成品数',
     prop: 'bcpsl',
+    sumProp: 'bcpsl',
     width: 100,
     show: true
   },
   {
     label: '后道数',
-    prop: 'hdsl',
+    prop: 'hdck',
+    // sumProp: 'hdck',
     width: 100,
     show: true
   },
   {
     label: '生产数',
-    prop: 'scsl',
+    prop: 'scs',
+    // sumProp: 'scs',
     width: 100,
     show: true
   },
   {
     label: '外发数',
     prop: 'wfsl',
+    sumProp: 'wfsl',
     width: 100,
     show: true
   },
@@ -234,7 +248,7 @@ export const columnsZxhz = [
   },
   {
     label: '布料',
-    prop: 'wlmc',
+    prop: 'bl',
     width: 100,
     show: true
   },
@@ -270,7 +284,7 @@ export const columnsZxhz = [
   },
   {
     label: '档案备注',
-    prop: 'dabz',
+    prop: 'bz',
     width: 100,
     show: true
   }

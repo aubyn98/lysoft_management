@@ -23,8 +23,8 @@ export default {
   data: function () {
     return {
       api: {
-        get: 'getMaterialAlarm',
-        update: 'updateMaterialAlarm'
+        get: 'getSalesPriceAlarmTip',
+        update: 'updateProductReturn'
       },
       columns,
       formItems

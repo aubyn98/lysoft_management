@@ -6,6 +6,12 @@ export default ({ req, reqMask }) => {
     getMultipleSizeMultiplePrices (data) {
       return reqMask('cp/dmdjlr', data)
     },
+    getCompareInventory (data) {
+      return reqMask('cp/cxkcbjlr', data)
+    },
+    getInventoryMsg (data) {
+      return req('cp/cxkcxx', data)
+    },
     // 条码查看
     getTicketView (data) {
       return reqMask('cp/cxtmck', data)
@@ -49,14 +55,25 @@ export default ({ req, reqMask }) => {
     getProductAllotStatistics (data) {
       return reqMask('cp/cxcptbtj', data)
     },
+    // ------------产品入库统计
     getProductEnterStatistics (data) {
       return reqMask('cp/cxcprktj', data)
+    },
+    getProductEnterStatisticsQuote (data) {
+      return reqMask('cp/cxcprktjyydh', data)
     },
     getProductInventoryAdjustStatistics (data) {
       return reqMask('cp/cxkctztj', data)
     },
+    // -------销售订单统计
     getProductOrderStatistics (data) {
       return reqMask('cp/cxxsddtj', data)
+    },
+    updateOrderProductState (data) {
+      return reqMask('cp/xgsczt', data)
+    },
+    updateOrderProductCutNum (data) {
+      return reqMask('cp/xgscs', data)
     },
     getProductPurchaseStatistics (data) {
       return reqMask('cp/cxcpcgtj', data)
@@ -119,6 +136,12 @@ export default ({ req, reqMask }) => {
     },
     getProductTicketActivityTable (data) {
       return reqMask('cp/cxcptmhdb', data)
+    },
+    nullifyProductTicketActivityTable (data) {
+      return reqMask('cp/zfsxtm', data)
+    },
+    cancelNullifyProductTicketActivityTable (data) {
+      return reqMask('cp/qxzftm', data)
     }
   }
 }

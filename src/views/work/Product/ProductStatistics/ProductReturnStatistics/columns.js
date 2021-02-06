@@ -57,7 +57,7 @@ export const columnsXx = [
     width: 100,
     show: true
   },
-  {
+  /* {
     label: '结单',
     prop: 'jd',
     width: 100,
@@ -65,7 +65,7 @@ export const columnsXx = [
     elType: 'checkbox',
     align: 'center',
     disabled: true
-  },
+  }, */
   {
     label: '图片',
     prop: 'tp',

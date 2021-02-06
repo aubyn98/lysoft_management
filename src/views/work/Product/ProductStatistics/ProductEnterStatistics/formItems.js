@@ -41,6 +41,13 @@ export default [
     elType: 'autocomplete',
     api: 'getColor'
   }, {
+    label: '引用单号',
+    prop: 'yydh',
+    style: { width: '130px' },
+    placeholder: '请输入引用单号',
+    elType: 'autocomplete',
+    api: 'getProductEnterStatisticsQuote'
+  }, /* {
     label: '结单状态',
     prop: 'jdzt',
     style: { width: '130px' },
@@ -49,7 +56,7 @@ export default [
     listData: ['全部', '未结单', '已结单'],
     defaultVal: '全部',
     disabled: true
-  }, {
+  }, */ {
     label: '汇总条件',
     prop: 'hztj',
     style: { width: '130px' },

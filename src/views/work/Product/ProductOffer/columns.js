@@ -103,6 +103,11 @@ export const columnsDialog = [{
   readonly: true,
   elType: 'autocomplete',
   api: 'getFashionType'
+}, {
+  label: '码数',
+  prop: 'ms',
+  width: 100,
+  show: true
 },
 {
   label: '价格',

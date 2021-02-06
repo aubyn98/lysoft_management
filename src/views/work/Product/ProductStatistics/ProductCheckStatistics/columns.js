@@ -12,7 +12,7 @@ export const columnsXx = [
     show: true
   }, {
     label: '盘点类型',
-    prop: 'pdlx',
+    prop: 'lx',
     width: 100,
     show: true
   }, {
