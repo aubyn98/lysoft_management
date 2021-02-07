@@ -33,7 +33,8 @@
                     :sourceData="tableDict[item.key].tableData"
                     :columns.sync="columns['columnsRight_'+item.key]"
                     :sourceCount="tableDict[item.key].count"
-                    @row-click="rowClick_r(item.key,$event)" />
+                    @row-click="rowClick_r(item.key,$event)"
+                    @send-change="sendChange(item.key,$event)" />
                 <!--  @send-change="sendChange(item.key,$event)" -->
             </div>
             <el-dialog :visible="tableDict[item.key].visible" :title="item.label" @close="closeHandle" class="record_dialog">
@@ -45,6 +46,7 @@
                             span-method
                             selection
                             hide-search
+                            v-if="tableDict[item.key].visible"
                             :ref="'searchTable3_'+item.key"
                             :name="'ProductOfferRight_'+item.key"
                             :sourceData="tableDict[item.key].tableData3"
@@ -59,6 +61,7 @@
                             small
                             span-method
                             hide-sums
+                            hide-add-menu
                             :includeKeys="['id']"
                             :ref="'editTable_'+item.key"
                             :name="'ProductOfferDialog_'+item.key"
@@ -167,6 +170,9 @@ export default {
         currentData.currentRow = res[0]
         this.get2()
       }
+    },
+    sendChange (key, e) {
+      this.get2()
     },
     get () {
       this.$refs['searchTable_' + this.tabsIndex][0].request().then(({ res }) => {

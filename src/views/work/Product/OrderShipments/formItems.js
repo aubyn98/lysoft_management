@@ -22,7 +22,7 @@ export default [
     api: 'getCustomer'
   }, {
     label: '客户类型',
-    prop: 'lx',
+    prop: 'khlx',
     style: { width },
     placeholder: '请输入客户类型',
     elType: 'autocomplete',

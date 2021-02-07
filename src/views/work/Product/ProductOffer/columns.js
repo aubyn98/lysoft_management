@@ -100,14 +100,15 @@ export const columnsDialog = [{
   prop: 'kslx',
   width: 100,
   show: true,
-  readonly: true,
-  elType: 'autocomplete',
-  api: 'getFashionType'
+  readonly: true
+  // elType: 'autocomplete',
+  // api: 'getFashionType'
 }, {
   label: '码数',
   prop: 'ms',
   width: 100,
-  show: true
+  show: true,
+  readonly: true
 },
 {
   label: '价格',

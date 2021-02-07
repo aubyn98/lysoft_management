@@ -148,7 +148,7 @@ export const columnsDdfhmxqk = [
   },
   {
     label: '占用',
-    prop: 'sfzy',
+    prop: 'rgzy',
     width: 100,
     show: true,
     elType: 'checkbox',

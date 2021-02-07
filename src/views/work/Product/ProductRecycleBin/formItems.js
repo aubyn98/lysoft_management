@@ -24,8 +24,8 @@ export default [
     prop: 'lx',
     style: { width: '130px' },
     placeholder: '请输入类型',
-    elType: 'autocomplete',
-    api: 'getType'
+    elType: 'select',
+    listData: ['销售开单', '销售退货', '产品入库', '产品退货', '产品盘点', '外发裁片', '外发来货', '外发销售', '外发收货', '产品采购']
   }, {
     label: '商标',
     prop: 'sb',

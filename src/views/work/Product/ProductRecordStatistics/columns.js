@@ -63,7 +63,7 @@ export const columnsXstj = [
     show: true
   }, {
     label: '不减库存',
-    prop: 'sfkc',
+    prop: 'bjkc',
     width: 100,
     show: true,
     elType: 'checkbox',

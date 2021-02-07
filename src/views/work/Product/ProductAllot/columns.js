@@ -76,7 +76,7 @@ export const columnsList = [
   { label: '开单单号', prop: 'dh', width: 100 },
   { label: '开单日期', prop: 'rq', width: 100 },
   { label: '款号预览', prop: 'kh_bz', width: 100 },
-  { label: '调出仓库', prop: 'dcck', width: 100 },
+  { label: '调出仓库', prop: 'ckmc', width: 100 },
   { label: '调入仓库', prop: 'drck', width: 100 },
   { label: '制单人', prop: 'zdr', width: 100 },
   /* { label: '开单金额', prop: 'kdje', width: 100 },

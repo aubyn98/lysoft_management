@@ -33,9 +33,9 @@
             </div>
         </div>
     </div>
-    <div class="InventoryContentBox">
+    <div class="InventoryContentBox" v-show="tabIndex === '添加列表'">
         <div class="InventoryContent">
-            <content-table ref="contentTable" :columns.sync="contentColumn" name="ProductEnterStoreBillingContentTable" v-show="tabIndex === '添加列表'">
+            <content-table ref="contentTable" :columns.sync="contentColumn" name="ProductEnterStoreBillingContentTable">
                 <template #a>
                     <edit-table
                         ref="editTable"

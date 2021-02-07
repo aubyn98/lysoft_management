@@ -63,6 +63,15 @@ export default {
         xstj: { tableData: [], columns: columnsXstj, count: 0, attachColumns: [], api: 'getProductRecord_xstj' },
         rktj: { tableData: [], columns: columnsRktj, count: 0, attachColumns: [], api: 'getProductRecord_rktj' },
         pdtj: { tableData: [], columns: columnsPdtj, count: 0, attachColumns: [], api: 'getProductRecord_pdtj' }
+      },
+      lxDict: {
+        销售开单: 'ProductSalesBilling',
+        销售发货: 'ProductShipments',
+        销售退货: 'ProductSalesReturn',
+        销售订单: 'ProductOrder',
+        产品入库: 'ProductEnterStore',
+        盘盈: 'ProductCheck',
+        盘亏: 'ProductCheck'
       }
     }
   },
@@ -70,7 +79,14 @@ export default {
 
   },
   methods: {
-    rowDblclick () {}
+    rowDblclick ($e, row) {
+      const jumpTab = this.lxDict[row.lx]
+      jumpTab && this.$emit('select', jumpTab, {
+        cb (ref) {
+          ref.getDataByDh(true, row.dh)
+        }
+      })
+    }
   }
 }
 </script>
